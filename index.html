@@ -184,6 +184,39 @@ h3{font-size:1.15rem}
 .tipsbox ul{margin:6px 0 0;padding-left:18px}.tipsbox li{margin:5px 0;font-size:.92rem}
 #credits{padding-left:16px;margin:0}#credits li{margin:3px 0;word-break:break-word}
 
+
+.jump{display:flex;gap:6px;overflow-x:auto;padding:0 14px 4px;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:0 0 auto;text-decoration:none;font-weight:700;font-size:.8rem;color:var(--jungle);background:var(--paper2);padding:7px 12px;border-radius:999px}
+.card{scroll-margin-top:16px}
+.card h4{font-family:var(--serif);font-size:1rem;margin:12px 0 2px}
+.conv{display:flex;align-items:flex-end;gap:8px;margin-top:6px}
+.conv label{flex:1;display:flex;flex-direction:column;gap:4px;font-size:.75rem;font-weight:700;color:var(--muted)}
+.conv input,.tcrow input,#cvRate{font:600 1.15rem var(--sans);padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);width:100%}
+.conv .swap{padding-bottom:12px;color:var(--muted)}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.quick span{background:var(--paper2);border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:600}
+.sos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.sos a{display:flex;flex-direction:column;text-decoration:none;background:#fbe3db;color:#8a2f1c;border-radius:14px;padding:10px 12px}
+.sos a b{font-family:var(--serif);font-size:1.5rem;line-height:1.1}
+.sos a span{font-size:.78rem;font-weight:600}
+.wxrow{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.88rem}
+.wxrow:last-child{border:0}
+.wxrow .wd{flex:0 0 56px;font-weight:700}
+.tipcalc{background:var(--paper);border-radius:12px;padding:12px;margin-top:10px;font-size:.9rem}
+.tcrow{display:flex;gap:8px;margin-top:8px}
+.tcrow label{flex:1;display:flex;flex-direction:column;gap:4px;font-size:.72rem;font-weight:700;color:var(--muted)}
+.tcrow input{font-size:1rem;padding:8px 10px}
+.phr{display:grid;gap:8px}
+.ph1{background:var(--paper);border-radius:12px;padding:8px 12px;display:grid;grid-template-columns:1fr auto;column-gap:10px}
+.ph1 .es{font-size:.8rem;color:var(--muted);grid-column:1/3}
+.ph1 b{font-family:var(--serif);font-size:1.15rem}
+.ph1 .pr{font-size:.78rem;color:var(--terra);align-self:center;font-style:italic}
+.ph1 .nt{grid-column:1/3;font-size:.78rem;color:var(--muted)}
+.fz{margin-top:10px}
+.fz .mk{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra)}
+.fz p{margin:4px 0;font-size:.9rem}
+
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -253,8 +286,84 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 <!-- INFO -->
 <section class="view" id="v-info">
   <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
-    <span class="eyebrow">Antes de salir</span>
+    <span class="eyebrow">Antes de salir y durante el viaje</span>
     <h2 style="margin-top:4px">Lo práctico</h2>
+  </div>
+
+
+  <nav class="jump" aria-label="Secciones">
+    <a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
+  </nav>
+
+  <div class="card" id="t-conv">
+    <h3>Conversor euro ↔ rupia</h3>
+    <div class="conv">
+      <label><span>€ euros</span><input id="cvEur" type="number" inputmode="decimal" min="0" step="any" value="10"></label>
+      <span class="swap">⇄</span>
+      <label><span>Rs rupias</span><input id="cvLkr" type="number" inputmode="decimal" min="0" step="any"></label>
+    </div>
+    <div class="quick" id="cvQuick"></div>
+    <p class="small muted" id="cvInfo" style="margin:8px 0 0"></p>
+    <details class="small" style="margin-top:6px"><summary style="cursor:pointer;font-weight:700;color:var(--jungle2)">Ajustar el cambio a mano</summary>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">1 € = <input id="cvRate" type="number" inputmode="decimal" step="any" style="width:110px"> Rs <button class="lk" id="cvReset" type="button" style="border:0;cursor:pointer">Usar el automático</button></div>
+      <p class="muted" style="margin:6px 0 0">Útil para poner el cambio real que os den en la casa de cambio o el cajero.</p>
+    </details>
+  </div>
+
+  <div class="card" id="t-sos">
+    <h3>Emergencias</h3>
+    <div class="sos">
+      <a href="tel:119"><b>119</b><span>Policía (emergencias)</span></a>
+      <a href="tel:1990"><b>1990</b><span>Ambulancia gratuita Suwa Seriya</span></a>
+      <a href="tel:110"><b>110</b><span>Bomberos y rescate</span></a>
+      <a href="tel:1912"><b>1912</b><span>Línea de turismo (24 h)</span></a>
+    </div>
+    <p class="small" style="margin:10px 0 4px"><b>Policía turística (Colombo):</b> <a href="tel:+94112421052">+94 11 242 1052</a></p>
+    <p class="small muted" style="margin:0 0 10px">Los números cortos solo funcionan desde un teléfono de Sri Lanka o con roaming.</p>
+    <h4>España en Sri Lanka</h4>
+    <p class="small" style="margin:4px 0">No hay embajada en el país: lo cubre la <b>Embajada de España en Nueva Delhi</b>.</p>
+    <ul class="small">
+      <li><b>Emergencia consular 24 h</b> (solo casos graves: accidente, robo con violencia, detención…): <a href="tel:+919810174160">+91 98101 74160</a></li>
+      <li><b>Consulado honorario en Colombo:</b> Aitken Spence Building, Tower 1, 315 Vauxhall Street, Colombo 2 · <a href="tel:+94112478197">+94 11 247 8197</a> · consul_spain@sltnet.lk · L–V de 8:30 a 15:00</li>
+      <li>Antes de salir, apuntaos en el <a href="https://registroviajeros.exteriores.gob.es/" target="_blank" rel="noopener">Registro de Viajeros</a> de Exteriores: así os localizan si pasa algo.</li>
+    </ul>
+    <p class="small muted" style="margin:6px 0 0">Fuentes: <a href="https://www.exteriores.gob.es/Embajadas/nuevadelhi/es/Embajada/tambien-somos-tu-embajada-en/Paginas/Sri-Lanka.aspx" target="_blank" rel="noopener">Embajada en Nueva Delhi</a> · <a href="https://www.gov.uk/foreign-travel-advice/sri-lanka/getting-help" target="_blank" rel="noopener">GOV.UK</a>. Comprobado el 7 nov 2026.</p>
+  </div>
+
+  <div class="card" id="t-wx">
+    <h3>El tiempo en la ruta</h3>
+    <p class="small muted" style="margin:0 0 8px" id="wxNote">Previsión de Open-Meteo para cada día del viaje en su destino. Solo hay previsión para los próximos 16 días: hasta unos días antes de salir no aparecerá.</p>
+    <div id="wxList"></div>
+  </div>
+
+  <div class="card" id="t-tip">
+    <h3>Propinas</h3>
+    <p class="small" style="margin:4px 0 8px">Las propinas no están incluidas en el viaje. En Sri Lanka no son obligatorias, pero son habituales y para guías y conductores son una parte importante del sueldo.</p>
+    <ul class="small">
+      <li><b>Guía y conductor:</b> una referencia habitual es 3.500–4.500 Rs al día por grupo para un conductor-guía. Con guía y conductor por separado y 10 personas, lo práctico es hacer un <b>bote común</b>.</li>
+      <li><b>Hoteles:</b> unos 0,50 US$ por maleta al maletero y hasta 1 US$ al día para limpieza.</li>
+      <li><b>Restaurantes:</b> muchas cuentas ya incluyen un 10% de servicio. Miradlo antes de dejar nada.</li>
+      <li><b>Templos y aparcamientos:</b> a la salida de los templos suele haber quien guarda el calzado. Se le deja una moneda o un billete pequeño (20–100 Rs).</li>
+    </ul>
+    <div class="tipcalc">
+      <b>Calculadora del bote</b>
+      <div class="tcrow"><label>Rs por día para el guía <input id="tcG" type="number" inputmode="numeric" value="4000"></label><label>Rs por día para el conductor <input id="tcD" type="number" inputmode="numeric" value="3000"></label></div>
+      <div class="tcrow"><label>Días de servicio <input id="tcN" type="number" inputmode="numeric" value="8"></label><label>Personas <input id="tcP" type="number" inputmode="numeric" value="10"></label></div>
+      <p id="tcOut" style="margin:8px 0 0"></p>
+    </div>
+    <p class="small muted" style="margin:8px 0 0">Las cifras son orientativas. Fuentes: <a href="https://www.experiencetravelgroup.com/blog/tipping-sri-lanka" target="_blank" rel="noopener">Experience Travel Group</a> · <a href="https://intrepidtravel.com/be/sri-lanka/tipping-in-sri-lanka" target="_blank" rel="noopener">Intrepid</a>. La calculadora es solo una ayuda: cambiad los valores a lo que decida el grupo.</p>
+  </div>
+
+  <div class="card" id="t-fr">
+    <h3>Frases útiles</h3>
+    <p class="small muted" style="margin:0 0 8px">En cingalés, la lengua mayoritaria. En las zonas de té mucha gente habla tamil. En hoteles y sitios turísticos el inglés funciona bien.</p>
+    <div class="phr" id="phr"></div>
+  </div>
+
+  <div class="card" id="t-food">
+    <h3>Qué comer y dónde</h3>
+    <div id="food"></div>
+    <p class="small muted" style="margin:8px 0 0">El picante suele suavizarse para turistas. Si lo queréis de verdad, pedid «local spicy».</p>
   </div>
 
   <div class="card">
@@ -612,7 +721,7 @@ function renderDay(dn){
   $('#day').innerHTML = `
    <div class="dayhead ph" data-n="${x.title}">${photo(x.ph,x.title,true)}<span class="tag">Día ${i+1} de 10 · ${x.wd} ${x.d} dic</span></div>
    <div class="daytitle"><span class="eyebrow">${x.route}</span><h2>${x.title}</h2></div>
-   <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}</div>
+   <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}</div>
    <p class="lead">${x.lead}</p>
    ${x.note?`<div class="note">${x.note}</div>`:''}
    ${x.tips?`<div class="tipsbox"><span class="mk">Lo que conviene saber hoy</span><ul>${x.tips.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
@@ -621,6 +730,7 @@ function renderDay(dn){
      <div class="body"><div class="vph ph" data-n="${v.n}">${photo(v.ph,v.n,true)}</div><p>${v.p}</p>${v.more?`<div class="more"><span class="mk">Para saber más</span><ul>${v.more.map(m=>`<li>${m}</li>`).join('')}</ul></div>`:''}<div class="lnks"><a class="mapbtn" href="${gm(v.q)}" target="_blank" rel="noopener">📍 Mapa</a>${(v.links||[]).map(l=>`<a class="lk" href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')}</div></div></details>`).join('')}</div>`:''}
    ${h?`<div class="hotelbox"><div style="flex:1"><span class="k">${x.hotel==='earls'?'Para refrescarse':'Dormimos en'}</span><b>${h.n}</b><span class="small">${'★'.repeat(h.st)} · ${h.room}</span></div><div style="display:flex;flex-direction:column;gap:6px;text-align:right"><a href="${h.web}" target="_blank" rel="noopener">${h.webLabel?'Reseña':'Web'} ›</a><a href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ›</a></div></div>`:''}
    <div class="daynav"><button ${i===0?'disabled':''} data-go="${i>0?DAYS[i-1].d:''}">‹ ${i>0?DAYS[i-1].wd+' '+DAYS[i-1].d:''}</button><button ${i===DAYS.length-1?'disabled':''} data-go="${i<DAYS.length-1?DAYS[i+1].d:''}">${i<DAYS.length-1?DAYS[i+1].wd+' '+DAYS[i+1].d:''} ›</button></div>`;
+  if(WX_LOC[dn]) wxFor(dn).then(w=>{ const el=$('#dwx'); if(el && lastDay===dn) el.textContent = wxText(w).replace(/^([^ ]+) [^:]+: /,'$1 '); });
   $('#day').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ if(b.dataset.go) go('dia-'+pad2(+b.dataset.go)); });
 }
 
@@ -659,6 +769,139 @@ function renderCheck(){
   upd();
 }
 
+
+/* ---------- Herramientas ---------- */
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+const fmt = (n,d=0) => isFinite(n) ? n.toLocaleString('es-ES',{maximumFractionDigits:d,minimumFractionDigits:0}) : '';
+
+/* Conversor */
+const FX_FALLBACK = 380, FX_FALLBACK_DATE = 'aprox. sep 2026';
+let fx = { rate: FX_FALLBACK, src: 'aproximado (' + FX_FALLBACK_DATE + ')', manual: false };
+(function initFx(){
+  const man = parseFloat(store.get('slk-fx-manual'));
+  const cached = JSON.parse(store.get('slk-fx') || 'null');
+  if(cached && cached.rate) fx = { rate: cached.rate, src: 'automático del ' + cached.date, manual:false };
+  if(man > 0) fx = { rate: man, src: 'puesto a mano', manual:true };
+})();
+function fxPaint(from){
+  const e = $('#cvEur'), l = $('#cvLkr');
+  if(from === 'lkr'){ e.value = l.value === '' ? '' : (+(+l.value / fx.rate).toFixed(2)); }
+  else { l.value = e.value === '' ? '' : Math.round(+e.value * fx.rate); }
+  $('#cvRate').value = (+fx.rate).toFixed(2);
+  $('#cvInfo').textContent = `1 € = ${fmt(fx.rate,2)} Rs · 1.000 Rs = ${fmt(1000/fx.rate,2)} € · Cambio ${fx.src}. Las casas de cambio dan algo menos.`;
+  $('#cvQuick').innerHTML = [100,500,1000,2000,5000].map(r=>`<span>${fmt(r)} Rs ≈ ${fmt(r/fx.rate,2)} €</span>`).join('');
+}
+function initConverter(){
+  $('#cvEur').addEventListener('input', ()=>fxPaint('eur'));
+  $('#cvLkr').addEventListener('input', ()=>fxPaint('lkr'));
+  $('#cvRate').addEventListener('change', ()=>{ const v=parseFloat($('#cvRate').value); if(v>0){ fx={rate:v,src:'puesto a mano',manual:true}; store.set('slk-fx-manual',v); fxPaint('eur'); } });
+  $('#cvReset').addEventListener('click', ()=>{ store.set('slk-fx-manual',''); const c=JSON.parse(store.get('slk-fx')||'null'); fx = c ? {rate:c.rate,src:'automático del '+c.date,manual:false} : {rate:FX_FALLBACK,src:'aproximado ('+FX_FALLBACK_DATE+')',manual:false}; fxPaint('eur'); fetchFx(); });
+  fxPaint('eur');
+  fetchFx();
+}
+function fetchFx(){
+  fetch('https://open.er-api.com/v6/latest/EUR').then(r=>r.json()).then(j=>{
+    const r = j && j.rates && j.rates.LKR; if(!r) return;
+    const date = new Date((j.time_last_update_unix||Date.now()/1000)*1000).toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+    store.set('slk-fx', JSON.stringify({rate:r,date}));
+    if(!fx.manual){ fx = {rate:r, src:'automático del '+date, manual:false}; fxPaint('eur'); }
+  }).catch(()=>{});
+}
+
+/* Propinas */
+function initTipCalc(){
+  const ids=['tcG','tcD','tcN','tcP'];
+  const run=()=>{
+    const [g,d,n,p]=ids.map(i=>+$('#'+i).value||0);
+    const tot=(g+d)*n, pp=p?tot/p:0;
+    $('#tcOut').innerHTML = `Total del bote: <b>${fmt(tot)} Rs</b> (≈ ${fmt(tot/fx.rate)} €) · Por persona: <b>${fmt(pp)} Rs</b> (≈ ${fmt(pp/fx.rate,1)} €)`;
+  };
+  ids.forEach(i=>$('#'+i).addEventListener('input',run)); run();
+}
+
+/* Frases */
+const PHRASES = [
+ ["Hola / bienvenido","Ayubowan","a-yu-bo-uan","Se dice con las palmas juntas; vale para saludar y despedirse."],
+ ["Gracias","Istuti","is-tu-ti","«Bohoma istuti» = muchas gracias."],
+ ["Sí / No","Ow / Nehe","ou / ne-je",""],
+ ["No, gracias (no lo quiero)","Epa, istuti","e-pa is-tu-ti","Útil con vendedores insistentes."],
+ ["¿Cuánto cuesta?","Kiyada?","ki-ya-da",""],
+ ["Vale / de acuerdo","Hari","ja-ri",""],
+ ["Está muy rico","Hari rasai","ja-ri ra-sai","Lo agradecen mucho en los restaurantes."],
+ ["Agua","Wathura","ua-tu-ra",""],
+ ["Perdón","Samawenna","sa-ma-uen-na",""],
+ ["¡Ayuda!","Udav karanna","u-dau ka-ran-na",""],
+ ["Hola (en tamil)","Vanakkam","va-nak-kam","En las zonas de té y el norte."],
+ ["Gracias (en tamil)","Nandri","nan-dri",""]
+];
+function renderPhrases(){
+  $('#phr').innerHTML = PHRASES.map(p=>`<div class="ph1"><span class="es">${p[0]}</span><b>${p[1]}</b><span class="pr">${p[2]}</span>${p[3]?`<span class="nt">${p[3]}</span>`:''}</div>`).join('');
+}
+
+/* Comida */
+const FOOD = [
+ ["En todas partes",[
+  ["Rice & curry","Arroz con 4–8 currys pequeños: dal de lentejas, verduras, pescado o pollo y pol sambol (coco rallado con guindilla). Es la comida típica del mediodía."],
+  ["Hoppers (appa)","Crepes de harina de arroz y coco con forma de cuenco. El «egg hopper» lleva un huevo dentro. Habitual en los desayunos de hotel."],
+  ["Kottu roti","Pan roti picado en la plancha con verduras, huevo y carne. Se oye desde lejos por el golpeteo de las espátulas."],
+  ["String hoppers","Nidos de fideos de arroz al vapor, para mojar en curry o en kiri hodi (salsa de leche de coco)."],
+  ["Thambili","Coco rey, de color naranja. Lo abren delante de ti en los puestos de la carretera."]]],
+ ["Triángulo Cultural (6–8 dic)",[
+  ["Curd & treacle","Yogur de leche de búfala con sirope de palma kithul. Se vende en puestos de carretera con vasijas de barro."],
+  ["Fruta de temporada","Mango, papaya, piña y rambután en los puestos de carretera."]]],
+ ["Kandy y las tierras altas (9–12 dic)",[
+  ["Té de altura","En las fábricas se puede probar y comprar té en hoja suelta."],
+  ["Dulces cingaleses","Kavum (bocados fritos de harina de arroz y melaza) y kokis (crujientes en forma de flor)."],
+  ["Verdura de las tierras altas","Puerros, zanahorias y coles de la zona de Nuwara Eliya, en currys más suaves."]]],
+ ["Negombo y la costa (6 y 13 dic)",[
+  ["Curry de cangrejo","Cangrejo de laguna en salsa espesa y picante. Para la cena libre del día 13."],
+  ["Gambas o calamares «devilled»","Salteados picantes con cebolla y pimiento."],
+  ["Pescado del día a la parrilla","En los restaurantes de la playa."]]]
+];
+function renderFood(){
+  $('#food').innerHTML = FOOD.map(z=>`<div class="fz"><span class="mk">${z[0]}</span>${z[1].map(f=>`<p><b>${f[0]}.</b> ${f[1]}</p>`).join('')}</div>`).join('');
+}
+
+/* Tiempo (Open-Meteo, sin clave) */
+const WX_LOC = {6:["Anuradhapura",8.31,80.40],7:["Dambulla",7.86,80.65],8:["Sigiriya",7.96,80.76],9:["Kandy",7.29,80.63],10:["Nuwara Eliya",6.97,80.78],11:["Ella",6.87,81.05],12:["Ella",6.87,81.05],13:["Negombo",7.21,79.84]};
+const WMO = c => c===0?['☀️','Despejado']:c<=2?['🌤️','Poco nuboso']:c===3?['☁️','Nublado']:c<=48?['🌫️','Niebla']:c<=57?['🌦️','Llovizna']:c<=67?['🌧️','Lluvia']:c<=82?['🌦️','Chubascos']:c<=99?['⛈️','Tormenta']:['❓','—'];
+const wxCache = {};
+function wxFor(day){
+  const L = WX_LOC[day]; if(!L) return Promise.resolve(null);
+  const date = `2026-12-${pad2(day)}`;
+  const key = L[0];
+  if(!wxCache[key]){
+    const u = `https://api.open-meteo.com/v1/forecast?latitude=${L[1]}&longitude=${L[2]}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FColombo&forecast_days=16`;
+    wxCache[key] = fetch(u).then(r=>r.json()).catch(()=>null);
+  }
+  return wxCache[key].then(j=>{
+    if(!j || !j.daily) return {err:true, place:L[0]};
+    const i = j.daily.time.indexOf(date);
+    if(i<0) return {pending:true, place:L[0]};
+    return {place:L[0], code:j.daily.weather_code[i], max:j.daily.temperature_2m_max[i], min:j.daily.temperature_2m_min[i], rain:j.daily.precipitation_probability_max[i]};
+  });
+}
+function wxText(w){
+  if(!w) return '';
+  if(w.err) return `${w.place}: sin conexión`;
+  if(w.pending) return `${w.place}: previsión aún no disponible`;
+  const [ic,tx]=WMO(w.code);
+  return `${ic} ${w.place}: ${Math.round(w.min)}–${Math.round(w.max)} °C · ${tx}${w.rain!=null?` · lluvia ${w.rain}%`:''}`;
+}
+function renderWxList(){
+  const days = Object.keys(WX_LOC).map(Number);
+  $('#wxList').innerHTML = days.map(d=>`<div class="wxrow"><span class="wd">${DAYS.find(x=>x.d===d).wd} ${d}</span><span id="wx-${d}" class="muted">Cargando…</span></div>`).join('');
+  days.forEach(d=>wxFor(d).then(w=>{ const el=$('#wx-'+d); if(el){ el.textContent=wxText(w); el.classList.toggle('muted', !!(w&&(w.err||w.pending))); } }));
+}
+
+function initTools(){
+  initConverter(); initTipCalc(); renderPhrases(); renderFood(); renderWxList();
+  document.querySelectorAll('.jump a').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); const t=document.getElementById(a.dataset.j); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }));
+}
+
 /* ---------- Navegación ---------- */
 const TABS = [
  ["inicio","Inicio",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
@@ -682,7 +925,7 @@ function route(){
   if(view==='dias') renderDay(lastDay);
   window.scrollTo(0,0);
 }
-renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck();
+renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); initTools();
 window.addEventListener('hashchange', route);
 route();
 </script>
