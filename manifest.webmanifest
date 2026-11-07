@@ -1,0 +1,16 @@
+{
+  "name": "Sri Lanka · Diciembre 2026",
+  "short_name": "Sri Lanka",
+  "description": "Plan del viaje en grupo a Sri Lanka, 5–14 de diciembre de 2026",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6efe2",
+  "theme_color": "#1f4d3f",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

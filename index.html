@@ -5,6 +5,13 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sri Lanka · Diciembre 2026</title>
+<meta name="theme-color" content="#1f4d3f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sri Lanka">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -217,6 +224,15 @@ h3{font-size:1.15rem}
 .fz .mk{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra)}
 .fz p{margin:4px 0;font-size:.9rem}
 
+
+.offline{margin:12px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:12px 14px;display:flex;gap:12px;align-items:center}
+.offline .oi{flex:0 0 38px;height:38px;border-radius:10px;background:var(--paper2);display:grid;place-items:center;font-size:1.1rem}
+.offline.ready .oi{background:var(--tea);color:#fff}
+.offline .prog{margin:6px 0 4px}
+.install{margin:10px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:12px 16px;font-size:.9rem}
+.install summary{cursor:pointer;font-weight:700;color:var(--jungle)}
+.install p{margin:8px 0 0}
+
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -242,6 +258,20 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div class="status" id="status"></div>
   </header>
   <button class="today" id="todayCard"></button>
+  <div class="offline" id="offline" hidden>
+    <div class="oi" id="offIcon">⬇</div>
+    <div style="flex:1">
+      <b id="offTitle">Preparando la app sin conexión…</b>
+      <div class="prog"><i id="offBar"></i></div>
+      <span class="small muted" id="offText"></span>
+    </div>
+  </div>
+  <details class="install" id="install" hidden>
+    <summary>📲 Instalarla en el móvil como una app</summary>
+    <p><b>iPhone (Safari):</b> botón Compartir <span aria-hidden="true">⬆︎</span> → «Añadir a pantalla de inicio».</p>
+    <p><b>Android (Chrome):</b> menú ⋮ → «Instalar aplicación» o «Añadir a pantalla de inicio».</p>
+    <p class="muted">Abridla una vez en casa, con wifi, antes de viajar: así se guardan las fotos y todo funciona sin datos en Sri Lanka.</p>
+  </details>
 
   <h2 class="pad">La ruta</h2>
   <div class="strip" id="strip"></div>
@@ -439,11 +469,15 @@ const IMG = {"arches": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDA
 /* ---------- Fotos ---------- */
 const fp = (f,w=960) => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(f) + '?width=' + w;
 const cp = f => 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(f.replace(/ /g,'_'));
+function imgFail(el){
+  if(el.dataset.fb && el.src !== el.dataset.fb){ el.removeAttribute('crossorigin'); el.src = el.dataset.fb; el.dataset.fb=''; return; }
+  el.parentNode.classList.add('noimg');
+}
 function photo(key, alt, credit){
   if(key==='@arches') return `<img src="${IMG.arches}" alt="${alt}">${credit?'<span class="pc">Foto: Norakai Travel</span>':''}`;
   if(key==='@dambulla') return `<img src="${IMG.dambulla}" alt="${alt}">${credit?'<span class="pc">Foto: Norakai Travel</span>':''}`;
   const p = PH[key]; if(!p) return '';
-  return `<img src="${fp(p[0])}" alt="${alt}" loading="lazy" onerror="this.parentNode.classList.add('noimg')">${credit?`<span class="pc">Foto: ${p[1]} · Wikimedia Commons</span>`:''}`;
+  return `<img src="${PHU[key]}" data-fb="${fp(p[0])}" alt="${alt}" loading="lazy" crossorigin="anonymous" onerror="imgFail(this)">${credit?`<span class="pc">Foto: ${p[1]} · Wikimedia Commons</span>`:''}`;
 }
 /* ---------- Datos del viaje ---------- */
 const gm = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
@@ -480,6 +514,7 @@ const PH = {
   ella1:["SL Ella asv2020-01 img22 View from Little Adams Peak.jpg","A.Savin"],
   ella2:["SL Ella asv2020-01 img26 View from Little Adams Peak.jpg","A.Savin"]
 };
+const PHU = {"airport1": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Runway_of_Bandaranaike_International_Airport.jpg/960px-Runway_of_Bandaranaike_International_Airport.jpg", "airport2": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Bandaranaike_International_Airport.JPG/960px-Bandaranaike_International_Airport.JPG", "lagoon": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Negombo,_Lagoon,_2025-08_CN-01.jpg/960px-Negombo,_Lagoon,_2025-08_CN-01.jpg", "negbeach": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Negombo,_Beach,_2025-08_CN-02.jpg/960px-Negombo,_Beach,_2025-08_CN-02.jpg", "negbeach2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Negombo_beach_1.jpg/960px-Negombo_beach_1.jpg", "ruwan1": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/SL_Anuradhapura_asv2020-01_img11_Ruwanwelisaya_Stupa.jpg/960px-SL_Anuradhapura_asv2020-01_img11_Ruwanwelisaya_Stupa.jpg", "ruwan2": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Ruwanweli_Maha_Seya_-_Anuradhapura.jpg/960px-Ruwanweli_Maha_Seya_-_Anuradhapura.jpg", "ruwan3": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Ruwanwelisaya.jpg/960px-Ruwanwelisaya.jpg", "sigi1": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Sigiriya_rock_viewpoint.jpg/960px-Sigiriya_rock_viewpoint.jpg", "sigi2": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Lion_Rock_-_Sigiriya,_Sri_Lanka.jpg/960px-Lion_Rock_-_Sigiriya,_Sri_Lanka.jpg", "sigi3": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Sigiriya_depuis_Pidurangala_(2).jpg/960px-Sigiriya_depuis_Pidurangala_(2).jpg", "galv": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Gal_Vihara_Polonnaruwa_1.jpg/960px-Gal_Vihara_Polonnaruwa_1.jpg", "tooth1": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Front_view_of_Temple_of_the_Tooth,_Kandy.jpg/960px-Front_view_of_Temple_of_the_Tooth,_Kandy.jpg", "tooth2": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/The_Temple_of_the_Sacred_Tooth_Relic_(Kandy)_(5479265068).jpg/960px-The_Temple_of_the_Sacred_Tooth_Relic_(Kandy)_(5479265068).jpg", "tooth3": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Zahntempel_Kandy.jpg/960px-Zahntempel_Kandy.jpg", "spice": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Matale_Spice_Garden.jpg/960px-Matale_Spice_Garden.jpg", "pera": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Botanical_Garden_of_Peradeniya_03.jpg/960px-Botanical_Garden_of_Peradeniya_03.jpg", "dance": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Kandyan_Dance_Kandy_Sri_Lanka_1.jpg/960px-Kandyan_Dance_Kandy_Sri_Lanka_1.jpg", "tea1": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Sri_Lanka,_Tea_plantations,_Nuwara_Eliya.jpg/960px-Sri_Lanka,_Tea_plantations,_Nuwara_Eliya.jpg", "tea2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Tea_Estate_Nuwara_Eliya.jpg/960px-Tea_Estate_Nuwara_Eliya.jpg", "tea3": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Sri_Lanka,_Tea_plantations_near_Nuwara_Eliya,_Tea_estate.jpg/960px-Sri_Lanka,_Tea_plantations_near_Nuwara_Eliya,_Tea_estate.jpg", "ramboda": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ramboda_water_falls.jpg/960px-Ramboda_water_falls.jpg", "hanuman": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Hanuman_Temple-1-ramboda-Sri_Lanka.jpg/960px-Hanuman_Temple-1-ramboda-Sri_Lanka.jpg", "gregory": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Gregory_Lake_Nuwara_Eliya.jpg/960px-Gregory_Lake_Nuwara_Eliya.jpg", "train1": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Train_ride_thru_Sri_Lanka_Upcountry_tea_garden.JPG/960px-Train_ride_thru_Sri_Lanka_Upcountry_tea_garden.JPG", "train2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Railway_between_Badulla_and_NanuOya_-_panoramio.jpg/960px-Railway_between_Badulla_and_NanuOya_-_panoramio.jpg", "ella1": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/SL_Ella_asv2020-01_img22_View_from_Little_Adams_Peak.jpg/960px-SL_Ella_asv2020-01_img22_View_from_Little_Adams_Peak.jpg", "ella2": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/SL_Ella_asv2020-01_img26_View_from_Little_Adams_Peak.jpg/960px-SL_Ella_asv2020-01_img26_View_from_Little_Adams_Peak.jpg"};
 const HOTELS = {
   ulagalla:{n:"Uga Ulagalla",st:5,city:"Anuradhapura",room:"Ulagalla Pool Villa",q:"Uga Ulagalla Anuradhapura",nights:"6 dic · 1 noche",ph:"ruwan3",
     web:"https://www.ugaresorts.com/ulagalla/",
@@ -902,6 +937,34 @@ function initTools(){
   document.querySelectorAll('.jump a').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); const t=document.getElementById(a.dataset.j); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }));
 }
 
+
+/* ---------- Sin conexión ---------- */
+function initOffline(){
+  const standalone = window.matchMedia && matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if(!('serviceWorker' in navigator) || location.protocol !== 'https:' || !/github\.io$/.test(location.hostname)) return;
+  if(!standalone) $('#install').hidden = false;
+  const card = $('#offline'); card.hidden = false;
+  const items = Object.keys(PHU).map(k=>({primary:PHU[k], fallback:fp(PH[k][0])}));
+  const paint = (ok,total,done)=>{
+    $('#offBar').style.width = (100*done/total)+'%';
+    if(done >= total){
+      card.classList.add('ready'); $('#offIcon').textContent='✓';
+      $('#offTitle').textContent = 'Lista para usar sin conexión';
+      $('#offText').textContent = ok===total ? `Plan, herramientas y las ${total} fotos guardadas en este móvil.` : `Plan y herramientas guardados. Fotos: ${ok} de ${total}; el resto se guardará al verlas con conexión.`;
+      try{ localStorage.setItem('slk-offline', JSON.stringify({ok,total})); }catch(e){}
+    } else {
+      $('#offText').textContent = `Guardando fotos: ${done} de ${total}`;
+    }
+  };
+  let prev=null; try{ prev=JSON.parse(localStorage.getItem('slk-offline')||'null'); }catch(e){}
+  if(prev) paint(prev.ok,prev.total,prev.total);
+  navigator.serviceWorker.addEventListener('message', e=>{ const d=e.data||{}; if(d.type==='precache-progress') paint(d.ok,d.total,d.done); });
+  navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(reg=>{
+    if(!navigator.onLine){ if(!prev){ $('#offTitle').textContent='Sin conexión'; $('#offText').textContent='Abre la app con conexión una vez para guardarla.'; } return; }
+    reg.active && reg.active.postMessage({type:'precache-photos', items});
+  }).catch(()=>{ card.hidden = true; });
+}
+
 /* ---------- Navegación ---------- */
 const TABS = [
  ["inicio","Inicio",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
@@ -925,7 +988,7 @@ function route(){
   if(view==='dias') renderDay(lastDay);
   window.scrollTo(0,0);
 }
-renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); initTools();
+renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); initTools(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
