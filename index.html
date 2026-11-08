@@ -307,6 +307,7 @@ h3{font-size:1.15rem}
 .dellist{border:0;background:none;color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer}
 .dellist.sure{color:var(--terra)}
 
+[hidden]{display:none!important}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -332,6 +333,11 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div class="status" id="status"></div>
   </header>
   <button class="today" id="todayCard"></button>
+  <a class="ckhome" id="ckHome" href="#checklist" hidden>
+    <div class="ring sm"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--paper2)" stroke-width="4"/><circle id="ckArcH" cx="18" cy="18" r="15.9" fill="none" stroke="var(--tea)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 100" transform="rotate(-90 18 18)"/></svg><b id="ckPctH">0%</b></div>
+    <div style="flex:1"><span class="eyebrow">Antes de salir</span><b id="ckCountH" style="display:block"></b><span class="small muted" id="ckNextH"></span></div>
+    <span class="chev">›</span>
+  </a>
   <div class="offline" id="offline" hidden>
     <div class="oi" id="offIcon">⬇</div>
     <div style="flex:1">
@@ -346,11 +352,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <p><b>Android (Chrome):</b> menú ⋮ → «Instalar aplicación» o «Añadir a pantalla de inicio».</p>
     <p class="muted">Abridla una vez en casa, con wifi, antes de viajar: así se guardan las fotos y todo funciona sin datos en Sri Lanka.</p>
   </details>
-  <a class="ckhome" id="ckHome" href="#checklist" hidden>
-    <div class="ring sm"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--paper2)" stroke-width="4"/><circle id="ckArcH" cx="18" cy="18" r="15.9" fill="none" stroke="var(--tea)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 100" transform="rotate(-90 18 18)"/></svg><b id="ckPctH">0%</b></div>
-    <div style="flex:1"><span class="eyebrow">Antes de salir</span><b id="ckCountH" style="display:block"></b><span class="small muted" id="ckNextH"></span></div>
-    <span class="chev">›</span>
-  </a>
+
 
   <h2 class="pad">La ruta</h2>
   <div class="strip" id="strip"></div>
@@ -375,22 +377,21 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 <!-- VUELOS -->
 <section class="view" id="v-vuelos">
   <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
-    <span class="eyebrow">Turkish via Estambul</span>
-    <h2 style="margin-top:4px">Vuelos</h2>
+    <span class="eyebrow">Vuelos y hoteles</span>
+    <h2 style="margin-top:4px">Reservas</h2>
+  </div>
+  <nav class="jump" aria-label="Secciones de reservas" style="margin-bottom:6px"><a href="#" data-j="r-vuelos">✈ Vuelos</a><a href="#" data-j="r-hoteles">🛏 Hoteles</a></nav>
+  <div class="pad" id="r-vuelos" style="scroll-margin-top:12px">
+    <h3 style="font-size:1.3rem;margin:10px 0 2px">Vuelos <span class="small muted" style="font-family:var(--sans);font-weight:600">· Turkish vía Estambul</span></h3>
     <p class="muted small" style="margin:-4px 0 14px">Elige tu ciudad de salida. Horas locales de cada aeropuerto.</p>
   </div>
   <div class="seg" id="seg"></div>
   <div id="legs"></div>
-</section>
-
-<!-- HOTELES -->
-<section class="view" id="v-hoteles">
-  <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
-    <span class="eyebrow">Confirmados</span>
-    <h2 style="margin-top:4px">Hoteles</h2>
-  </div>
+  <div class="pad" id="r-hoteles" style="scroll-margin-top:12px"><h3 style="font-size:1.3rem;margin:26px 0 2px">Hoteles <span class="small muted" style="font-family:var(--sans);font-weight:600">· confirmados</span></h3></div>
   <div id="hotels"></div>
 </section>
+
+
 
 
 <!-- COMPRAS -->
@@ -620,11 +621,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     </ul>
   </div>
 
-  <div class="card">
-    <h3>Créditos de las fotos</h3>
-    <p class="small muted" style="margin:0 0 6px">Fotos de Wikimedia Commons con licencias libres (CC BY, CC BY-SA, Free Art). Necesitan conexión para verse. Las de Dambulla, Nueve Arcos y el mapa son de Norakai Travel.</p>
-    <ul class="small" id="credits"></ul>
-  </div>
+
   <div class="card">
     <h3>Agencia: Norakai Travel</h3>
     <p style="margin:4px 0">Portuetxe K., 53A, oficina 103 · 20018 Donostia</p>
@@ -1256,9 +1253,9 @@ function initOffline(){
 const TABS = [
  ["inicio","Inicio",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
  ["dias","Día a día",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
- ["vuelos","Vuelos",'<path d="M2 16l20-6-3-2-7 2-5-5-2 1 3 5-4 1-2-2-1 1z"/>'],
- ["hoteles","Hoteles",'<path d="M3 20V8l9-4 9 4v12M3 20h18M8 20v-6h8v6"/>'],
+ ["vuelos","Reservas",'<path d="M2 16l20-6-3-2-7 2-5-5-2 1 3 5-4 1-2-2-1 1z"/>'],
  ["compras","Compras",'<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'],
+ ["checklist","Listas",'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>'],
  ["info","Práctico",'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>']
 ];
 $('#tabs').innerHTML = TABS.map(([k,l,ic])=>`<a href="#${k}" data-k="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg>${l}</a>`).join('');
@@ -1270,13 +1267,15 @@ function route(){
   let view = h;
   if(h.startsWith('dia-')){ view='dias'; lastDay = +h.slice(4) || lastDay; }
   if(h==='dias') view='dias';
-  if(!TABS.some(t=>t[0]===view) && view!=='checklist') view='inicio';
+  let jumpTo=null; if(h==='hoteles'){ view='vuelos'; jumpTo='r-hoteles'; }
+  if(!TABS.some(t=>t[0]===view)) view='inicio';
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+view));
   document.querySelectorAll('#tabs a').forEach(a=>{ a.classList.toggle('on', a.dataset.k===view); if(a.dataset.k==='dias') a.setAttribute('href','#dia-'+pad2(lastDay)); });
   if(view==='dias') renderDay(lastDay);
   window.scrollTo(0,0);
+  if(jumpTo) setTimeout(()=>{ const el=document.getElementById(jumpTo); el && el.scrollIntoView({block:'start'}); },30);
 }
-renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); initOffline();
+renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
