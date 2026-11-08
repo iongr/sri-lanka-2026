@@ -1,5 +1,5 @@
 /* Service worker: la app funciona sin conexión tras la primera visita */
-const VERSION = 'slk-v1';
+const VERSION = 'slk-v2';
 const SHELL = 'shell-' + VERSION;
 const PHOTOS = 'photos-v1';      // las fotos no cambian: se conserva entre versiones
 const RUNTIME = 'runtime-v1';    // fuentes, tiempo y cambio de moneda
@@ -18,7 +18,7 @@ self.addEventListener('activate', e => {
 });
 
 const isPhoto = u => u.hostname === 'upload.wikimedia.org' || u.hostname === 'commons.wikimedia.org';
-const isFont = u => u.hostname === 'fonts.googleapis.com' || u.hostname === 'fonts.gstatic.com';
+const isFont = u => u.hostname === 'fonts.googleapis.com' || u.hostname === 'fonts.gstatic.com' || u.hostname === 'cdnjs.cloudflare.com';
 const isApi = u => u.hostname === 'api.open-meteo.com' || u.hostname === 'open.er-api.com';
 
 self.addEventListener('fetch', e => {

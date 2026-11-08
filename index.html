@@ -308,6 +308,29 @@ h3{font-size:1.15rem}
 .dellist.sure{color:var(--terra)}
 
 [hidden]{display:none!important}
+
+.clocks{margin:12px 14px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.clocks>div{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:10px 12px}
+.clocks span{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.clocks b{font-family:var(--serif);font-size:1.5rem;line-height:1.2}
+.clocks .sun{grid-column:1/-1}
+.clocks .sun b{font-family:var(--sans);font-size:.98rem}
+.sharebtn{display:block;width:calc(100% - 28px);margin:12px 14px 0;border:1.5px dashed var(--jungle2);background:none;color:var(--jungle);font-weight:700;border-radius:14px;padding:12px;cursor:pointer;font-size:.95rem}
+.sharebox{margin:8px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:16px;text-align:center}
+.qr{display:flex;justify-content:center;min-height:60px}
+.qr img,.qr canvas{border-radius:8px}
+.ctl{list-style:none;padding:0;margin:4px 0 0}
+.ctl li{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.ctl li:last-child{border:0}
+.ctl li>span{flex:1;min-width:140px}
+.ctl li b{display:block;font-size:.92rem}
+.ctl li small{color:var(--muted);font-size:.78rem;word-break:break-all}
+.ctl .tel{font-weight:700;font-size:.84rem;text-decoration:none;background:var(--jungle);color:#fff;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.ctl .edit{border:0;background:var(--paper2);border-radius:999px;padding:6px 10px;font-weight:700;font-size:.78rem;cursor:pointer;color:var(--jungle2)}
+.mycf{display:flex;gap:6px;width:100%}
+.mycf input{flex:1;min-width:0;font:600 .9rem var(--sans);padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.mycf button{border:0;background:var(--jungle);color:#fff;font-weight:700;border-radius:10px;padding:0 12px;cursor:pointer}
+
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -338,6 +361,14 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div style="flex:1"><span class="eyebrow">Antes de salir</span><b id="ckCountH" style="display:block"></b><span class="small muted" id="ckNextH"></span></div>
     <span class="chev">›</span>
   </a>
+  <div class="clocks" id="clocks"></div>
+  <button class="sharebtn" id="shareBtn" type="button">📤 Compartir la app con el grupo</button>
+  <div class="sharebox" id="shareBox" hidden>
+    <div id="qr" class="qr"></div>
+    <p class="small muted" style="margin:6px 0 2px">Que lo escaneen con la cámara, o mándales el enlace:</p>
+    <p class="small" id="shareUrl" style="margin:0 0 10px;word-break:break-all;font-weight:700"></p>
+    <div class="lnks" style="justify-content:center"><a class="mapbtn" id="shareWa" href="#" target="_blank" rel="noopener">WhatsApp</a><button class="lk" id="shareCopy" type="button" style="border:0;cursor:pointer">Copiar enlace</button><button class="lk" id="shareNative" type="button" style="border:0;cursor:pointer" hidden>Más opciones</button></div>
+  </div>
   <div class="offline" id="offline" hidden>
     <div class="oi" id="offIcon">⬇</div>
     <div style="flex:1">
@@ -503,8 +534,20 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 
 
   <nav class="jump" aria-label="Secciones">
-    <a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
+    <a href="#" data-j="t-ct">Contactos</a><a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
   </nav>
+
+  <div class="card" id="t-ct">
+    <h3>Contactos del viaje</h3>
+    <h4>Agencia</h4>
+    <ul class="ctl"><li><span><b>Norakai Travel</b><small>Donostia · info@norakai.com</small></span><a class="tel" href="tel:+34628263259">+34 628 263 259</a></li></ul>
+    <h4>Guía, conductor y enlaces del grupo</h4>
+    <p class="small muted" style="margin:2px 0 4px">Rellénalo cuando os los den. Se guarda solo en este móvil.</p>
+    <ul class="ctl" id="ctMine"></ul>
+    <h4>Hoteles</h4>
+    <ul class="ctl" id="ctHotels"></ul>
+    <p class="small muted" style="margin:6px 0 0">Teléfonos de las webs de los hoteles y de las principales webs de reservas. Los de Earl's Regent y Uga Ulagalla no los he podido confirmar en una web oficial. Para emergencias, ver más abajo.</p>
+  </div>
 
   <div class="card" id="t-conv">
     <h3>Conversor euro ↔ rupia</h3>
@@ -688,27 +731,27 @@ const PH = {
 };
 const PHU = {"airport1": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Runway_of_Bandaranaike_International_Airport.jpg/960px-Runway_of_Bandaranaike_International_Airport.jpg", "airport2": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Bandaranaike_International_Airport.JPG/960px-Bandaranaike_International_Airport.JPG", "lagoon": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Negombo,_Lagoon,_2025-08_CN-01.jpg/960px-Negombo,_Lagoon,_2025-08_CN-01.jpg", "negbeach": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Negombo,_Beach,_2025-08_CN-02.jpg/960px-Negombo,_Beach,_2025-08_CN-02.jpg", "negbeach2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Negombo_beach_1.jpg/960px-Negombo_beach_1.jpg", "ruwan1": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/SL_Anuradhapura_asv2020-01_img11_Ruwanwelisaya_Stupa.jpg/960px-SL_Anuradhapura_asv2020-01_img11_Ruwanwelisaya_Stupa.jpg", "ruwan2": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Ruwanweli_Maha_Seya_-_Anuradhapura.jpg/960px-Ruwanweli_Maha_Seya_-_Anuradhapura.jpg", "ruwan3": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Ruwanwelisaya.jpg/960px-Ruwanwelisaya.jpg", "sigi1": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Sigiriya_rock_viewpoint.jpg/960px-Sigiriya_rock_viewpoint.jpg", "sigi2": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Lion_Rock_-_Sigiriya,_Sri_Lanka.jpg/960px-Lion_Rock_-_Sigiriya,_Sri_Lanka.jpg", "sigi3": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Sigiriya_depuis_Pidurangala_(2).jpg/960px-Sigiriya_depuis_Pidurangala_(2).jpg", "galv": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Gal_Vihara_Polonnaruwa_1.jpg/960px-Gal_Vihara_Polonnaruwa_1.jpg", "tooth1": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Front_view_of_Temple_of_the_Tooth,_Kandy.jpg/960px-Front_view_of_Temple_of_the_Tooth,_Kandy.jpg", "tooth2": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/The_Temple_of_the_Sacred_Tooth_Relic_(Kandy)_(5479265068).jpg/960px-The_Temple_of_the_Sacred_Tooth_Relic_(Kandy)_(5479265068).jpg", "tooth3": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Zahntempel_Kandy.jpg/960px-Zahntempel_Kandy.jpg", "spice": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Matale_Spice_Garden.jpg/960px-Matale_Spice_Garden.jpg", "pera": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Botanical_Garden_of_Peradeniya_03.jpg/960px-Botanical_Garden_of_Peradeniya_03.jpg", "dance": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Kandyan_Dance_Kandy_Sri_Lanka_1.jpg/960px-Kandyan_Dance_Kandy_Sri_Lanka_1.jpg", "tea1": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Sri_Lanka,_Tea_plantations,_Nuwara_Eliya.jpg/960px-Sri_Lanka,_Tea_plantations,_Nuwara_Eliya.jpg", "tea2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Tea_Estate_Nuwara_Eliya.jpg/960px-Tea_Estate_Nuwara_Eliya.jpg", "tea3": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Sri_Lanka,_Tea_plantations_near_Nuwara_Eliya,_Tea_estate.jpg/960px-Sri_Lanka,_Tea_plantations_near_Nuwara_Eliya,_Tea_estate.jpg", "ramboda": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ramboda_water_falls.jpg/960px-Ramboda_water_falls.jpg", "hanuman": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Hanuman_Temple-1-ramboda-Sri_Lanka.jpg/960px-Hanuman_Temple-1-ramboda-Sri_Lanka.jpg", "gregory": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Gregory_Lake_Nuwara_Eliya.jpg/960px-Gregory_Lake_Nuwara_Eliya.jpg", "train1": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Train_ride_thru_Sri_Lanka_Upcountry_tea_garden.JPG/960px-Train_ride_thru_Sri_Lanka_Upcountry_tea_garden.JPG", "train2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Railway_between_Badulla_and_NanuOya_-_panoramio.jpg/960px-Railway_between_Badulla_and_NanuOya_-_panoramio.jpg", "ella1": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/SL_Ella_asv2020-01_img22_View_from_Little_Adams_Peak.jpg/960px-SL_Ella_asv2020-01_img22_View_from_Little_Adams_Peak.jpg", "ella2": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/SL_Ella_asv2020-01_img26_View_from_Little_Adams_Peak.jpg/960px-SL_Ella_asv2020-01_img26_View_from_Little_Adams_Peak.jpg"};
 const HOTELS = {
-  ulagalla:{n:"Uga Ulagalla",st:5,city:"Anuradhapura",room:"Ulagalla Pool Villa",q:"Uga Ulagalla Anuradhapura",nights:"6 dic · 1 noche",ph:"ruwan3",
+  ulagalla:{tel:"+94 25 211 7100",addr:"Ulagalla Walawwa, Thirappane, Anuradhapura 50072",n:"Uga Ulagalla",st:5,city:"Anuradhapura",room:"Ulagalla Pool Villa",q:"Uga Ulagalla Anuradhapura",nights:"6 dic · 1 noche",ph:"ruwan3",
     web:"https://www.ugaresorts.com/ulagalla/",
     facts:["Villas con piscina privada en una finca de 58 acres, alrededor de una mansión (walawwa) de unos 150 años que fue casa de un jefe local.","25 villas en total; la Ulagalla Pool Villa ronda los 1.380 pies² (unos 128 m²), con cama con dosel.","Actividades en el propio hotel: paseos a caballo, tiro con arco, kayak en el embalse de Wannamaduwa, bicicleta y paseos nocturnos."],
     tip:"Solo es una noche y se llega tras casi 4 h de coche. Si llegáis con luz, la bici por la finca merece la pena."},
-  jetwing:{n:"Jetwing Lake",st:5,city:"Dambulla",room:"Deluxe",q:"Jetwing Lake Dambulla",nights:"7 y 8 dic · 2 noches",ph:"sigi3",
+  jetwing:{tel:"+94 66 204 0700",addr:"Yapagama, Wijaya Kumaratunga Mawatha, Dambulla 21100",n:"Jetwing Lake",st:5,city:"Dambulla",room:"Deluxe",q:"Jetwing Lake Dambulla",nights:"7 y 8 dic · 2 noches",ph:"sigi3",
     web:"https://www.jetwinghotels.com/jetwinglake/",
     facts:["94 habitaciones, todas con balcón, frente al embalse de Siyambalawewa y rodeadas de bosque seco.","Cinco opciones para comer y spa con masajes y tratamientos.","Organizan el «Loris Night Trail» para ver el loris esbelto gris, un pequeño primate nocturno."],
     tip:"A 10 minutos de las cuevas de Dambulla y a unos 45 de Sigiriya: buena base para las dos noches del Triángulo."},
-  mahaweli:{n:"Mahaweli Reach",st:5,city:"Kandy",room:"Deluxe",q:"Mahaweli Reach Hotel Kandy",nights:"9 dic · 1 noche",ph:"tooth3",
+  mahaweli:{tel:"+94 81 247 2727",addr:"35 P.B.A. Weerakoon Mawatha, Kandy",n:"Mahaweli Reach",st:5,city:"Kandy",room:"Deluxe",q:"Mahaweli Reach Hotel Kandy",nights:"9 dic · 1 noche",ph:"tooth3",
     web:"https://www.mahaweli.com/",
     facts:["A orillas del río Mahaweli, a unos 5 km del centro de Kandy y del Templo del Diente.","Abrió en 1973 y en el año 2000 se convirtió en el primer cinco estrellas de Kandy. Sigue siendo un negocio familiar.","Piscina sobre el río, spa Nivara junto a un estanque de lotos y cenas en barca por el río."],
     tip:"Llegaréis tarde después del espectáculo de danzas. La piscina con vistas al río es mejor por la mañana, antes de salir."},
-  heritance:{n:"Heritance Tea Factory",st:5,city:"Nuwara Eliya (Kandapola)",room:"Superior",q:"Heritance Tea Factory Nuwara Eliya",nights:"10 dic · 1 noche",ph:"tea3",
+  heritance:{tel:"+94 52 555 5000",addr:"Kandapola, Nuwara Eliya 22220",n:"Heritance Tea Factory",st:5,city:"Nuwara Eliya (Kandapola)",room:"Superior",q:"Heritance Tea Factory Nuwara Eliya",nights:"10 dic · 1 noche",ph:"tea3",
     web:"https://www.heritancehotels.com/teafactory/",
     facts:["Una antigua fábrica de té del siglo XIX, en la finca Hethersett, a más de 2.000 m de altitud.","Conserva la maquinaria original. Abrió como hotel en 1996 y en 2001 ganó un premio de la UNESCO de conservación del patrimonio en Asia-Pacífico.","Ofrece recogida de té con las recolectoras, cata y visita a una mini fábrica de té."],
     tip:"Está en Kandapola, a unos 14 km de Nuwara Eliya, y no tiene piscina. Por la noche hace frío de verdad: llevad abrigo."},
-  acres:{n:"98 Acres Resort & Spa",st:5,city:"Ella",room:"Premium Deluxe",q:"98 Acres Resort Ella",nights:"11 y 12 dic · 2 noches",ph:"ella2",
+  acres:{tel:"+94 57 205 0050",addr:"Greenland Estate, Passara Road, Ella 90090",n:"98 Acres Resort & Spa",st:5,city:"Ella",room:"Premium Deluxe",q:"98 Acres Resort Ella",nights:"11 y 12 dic · 2 noches",ph:"ella2",
     web:"https://www.resort98acres.com/",
     facts:["Chalés sobre una plantación de té de 98 acres, de ahí el nombre. Construido en gran parte con materiales reciclados y madera local.","Vistas a Little Adam's Peak, que queda justo enfrente, y a Ella Rock.","Piscina, spa y bar con vistas. El Puente de los Nueve Arcos está a unos 10–15 minutos a pie."],
     tip:"Las dos excursiones del día 12 se pueden hacer andando desde el hotel."},
-  earls:{n:"Earl's Regent",st:4,city:"Negombo",room:"Deluxe",q:"Earl's Regent Negombo",nights:"6 y 13 dic · uso de día para refrescarse",ph:"negbeach2",
+  earls:{tel:"+94 31 203 0700",addr:"05 Carron Place, Negombo",n:"Earl's Regent",st:4,city:"Negombo",room:"Deluxe",q:"Earl's Regent Negombo",nights:"6 y 13 dic · uso de día para refrescarse",ph:"negbeach2",
     web:"https://themorning.lk/articles/HU65HmeOy0Ud8XguSDO9", webLabel:"Reseña (The Morning)",
     facts:["En primera línea de la playa de Negombo, a unos 25 minutos del aeropuerto.","Abrió en noviembre de 2022 y pertenece al mismo grupo que el Earl's Regency de Kandy.","La piscina da directamente a la playa y tiene bar en la azotea."],
     tip:"No hemos encontrado web oficial; el enlace lleva a una reseña de prensa local."}
@@ -957,7 +1000,7 @@ function renderDay(dn){
   $('#day').innerHTML = `
    <div class="dayhead ph" data-n="${x.title}">${photo(x.ph,x.title,true)}<span class="tag">Día ${i+1} de 10 · ${x.wd} ${x.d} dic</span></div>
    <div class="daytitle"><span class="eyebrow">${x.route}</span><h2>${x.title}</h2></div>
-   <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}</div>
+   <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}${WX_LOC[x.d]?(s=>`<span class="fact">🌅 ${s.rise} · 🌇 ${s.set}</span>`)(sunFor(x.d)):''}</div>
    <p class="lead">${x.lead}</p>
    ${x.note?`<div class="note">${x.note}</div>`:''}
    ${SHOP[x.d]?`<div class="shopbox"><span class="mk">🛍 Compras hoy</span><p>${SHOP[x.d]}</p><a href="#compras">Ver la guía de compras ›</a></div>`:''}
@@ -965,7 +1008,7 @@ function renderDay(dn){
    ${x.visits.length?`<div class="visits">${x.visits.map((v,k)=>`
      <details class="visit" ${k===0?'open':''}><summary><div class="th ph" data-n="">${photo(v.ph,v.n,false)}</div><div class="vt"><b>${v.n}</b><span>${v.t}</span></div><span class="pl">+</span></summary>
      <div class="body"><div class="vph ph" data-n="${v.n}">${photo(v.ph,v.n,true)}</div><p>${v.p}</p>${v.more?`<div class="more"><span class="mk">Para saber más</span><ul>${v.more.map(m=>`<li>${m}</li>`).join('')}</ul></div>`:''}<div class="lnks"><a class="mapbtn" href="${gm(v.q)}" target="_blank" rel="noopener">📍 Mapa</a>${(v.links||[]).map(l=>`<a class="lk" href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')}</div></div></details>`).join('')}</div>`:''}
-   ${h?`<div class="hotelbox"><div style="flex:1"><span class="k">${x.hotel==='earls'?'Para refrescarse':'Dormimos en'}</span><b>${h.n}</b><span class="small">${'★'.repeat(h.st)} · ${h.room}</span></div><div style="display:flex;flex-direction:column;gap:6px;text-align:right"><a href="${h.web}" target="_blank" rel="noopener">${h.webLabel?'Reseña':'Web'} ›</a><a href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ›</a></div></div>`:''}
+   ${h?`<div class="hotelbox"><div style="flex:1"><span class="k">${x.hotel==='earls'?'Para refrescarse':'Dormimos en'}</span><b>${h.n}</b><span class="small">${'★'.repeat(h.st)} · ${h.room}</span></div><div style="display:flex;flex-direction:column;gap:6px;text-align:right"><a href="tel:${h.tel.replace(/[^+\d]/g,'')}">Llamar ›</a><a href="${h.web}" target="_blank" rel="noopener">${h.webLabel?'Reseña':'Web'} ›</a><a href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ›</a></div></div>`:''}
    <div class="daynav"><button ${i===0?'disabled':''} data-go="${i>0?DAYS[i-1].d:''}">‹ ${i>0?DAYS[i-1].wd+' '+DAYS[i-1].d:''}</button><button ${i===DAYS.length-1?'disabled':''} data-go="${i<DAYS.length-1?DAYS[i+1].d:''}">${i<DAYS.length-1?DAYS[i+1].wd+' '+DAYS[i+1].d:''} ›</button></div>`;
   if(WX_LOC[dn]) wxFor(dn).then(w=>{ const el=$('#dwx'); if(el && lastDay===dn) el.textContent = wxText(w).replace(/^([^ ]+) [^:]+: /,'$1 '); });
   $('#day').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ if(b.dataset.go) go('dia-'+pad2(+b.dataset.go)); });
@@ -996,7 +1039,7 @@ function renderHotels(){
     <div class="hbody"><div class="hmeta"><span class="fact">🛏 ${h.room}</span><span class="fact">🗓 ${h.nights}</span></div>
     <ul>${h.facts.map(f=>`<li>${f}</li>`).join('')}</ul>
     ${h.tip?`<p class="htip">💡 ${h.tip}</p>`:''}
-    <div class="lnks"><a class="mapbtn" href="${h.web}" target="_blank" rel="noopener">🌐 ${h.webLabel||'Web del hotel'}</a><a class="lk" href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ↗</a></div></div></article>`}).join('');
+    <p class="small" style="margin:0 0 10px">📍 ${h.addr}</p><div class="lnks"><a class="mapbtn" href="tel:${h.tel.replace(/[^+\d]/g,'')}">📞 ${h.tel}</a><a class="lk" href="${h.web}" target="_blank" rel="noopener">${h.webLabel?'Reseña':'Web'} ↗</a><a class="lk" href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ↗</a></div></div></article>`}).join('');
 }
 let ckFilter='all';
 function ckState(){ try{ return JSON.parse(localStorage.getItem('slk-check2')||'{}'); }catch(e){ return {}; } }
@@ -1222,6 +1265,89 @@ function initBuys(){
   paint();
 }
 
+
+/* ---------- Amanecer y atardecer (cálculo local, sin conexión) ---------- */
+function sunTimes(y,m,d,lat,lon){
+  const rad=Math.PI/180, J2000=2451545;
+  const toJ = (Date.UTC(y,m-1,d,12)/86400000) + 2440587.5;
+  const n = Math.round(toJ - J2000 - 0.0009 - (-lon)/360);
+  const Js = J2000 + 0.0009 + (-lon)/360 + n;
+  const M = (357.5291 + 0.98560028*(Js-J2000)) % 360;
+  const C = 1.9148*Math.sin(M*rad) + 0.02*Math.sin(2*M*rad) + 0.0003*Math.sin(3*M*rad);
+  const L = (M + 102.9372 + C + 180) % 360;
+  const Jt = Js + 0.0053*Math.sin(M*rad) - 0.0069*Math.sin(2*L*rad);
+  const dec = Math.asin(Math.sin(L*rad)*Math.sin(23.44*rad));
+  const cosH = (Math.sin(-0.833*rad) - Math.sin(lat*rad)*Math.sin(dec)) / (Math.cos(lat*rad)*Math.cos(dec));
+  const H = Math.acos(Math.max(-1,Math.min(1,cosH)))/rad;
+  const toDate = J => new Date((J - 2440587.5)*86400000);
+  return { rise: toDate(Jt - H/360), set: toDate(Jt + H/360) };
+}
+const hm = (dt,tz) => dt.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',timeZone:tz});
+function sunFor(day){
+  const L = WX_LOC[day]; if(!L) return null;
+  const s = sunTimes(2026,12,day,L[1],L[2]);
+  return { place:L[0], rise:hm(s.rise,'Asia/Colombo'), set:hm(s.set,'Asia/Colombo') };
+}
+
+/* ---------- Reloj doble ---------- */
+function paintClocks(){
+  const now=new Date();
+  const lk=hm(now,'Asia/Colombo'), es=hm(now,'Europe/Madrid');
+  const el=$('#clocks'); if(!el) return;
+  const td=tripDay(); const sun = sunFor(td && WX_LOC[td] ? td : 6);
+  el.innerHTML = `<div><span>Sri Lanka</span><b>${lk}</b></div><div><span>España</span><b>${es}</b></div>
+    <div class="sun"><span>${td&&WX_LOC[td]?'Hoy en '+sun.place:'6 dic · '+sun.place}</span><b>🌅 ${sun.rise} · 🌇 ${sun.set}</b></div>`;
+}
+
+/* ---------- Compartir ---------- */
+const APP_URL = 'https://iongr.github.io/sri-lanka-2026/';
+let qrLoaded=false;
+function openShare(){
+  const box=$('#shareBox'); box.hidden=!box.hidden; if(box.hidden) return;
+  if(!qrLoaded){
+    qrLoaded=true;
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s.onload=()=>{ try{ new QRCode($('#qr'),{text:APP_URL,width:180,height:180,colorDark:'#1f4d3f',colorLight:'#fffaf1',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ $('#qr').textContent='No se pudo crear el código QR.'; } };
+    s.onerror=()=>{ $('#qr').innerHTML='<span class="small muted">El código QR necesita conexión. Usa el enlace.</span>'; };
+    document.head.appendChild(s);
+  }
+}
+function initShare(){
+  $('#shareBtn').onclick=openShare;
+  $('#shareUrl').textContent=APP_URL;
+  $('#shareCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(APP_URL); $('#shareCopy').textContent='¡Copiado!'; }catch(e){ $('#shareCopy').textContent='Mantén pulsado el enlace para copiarlo'; } setTimeout(()=>$('#shareCopy').textContent='Copiar enlace',2500); };
+  const ns=$('#shareNative');
+  if(navigator.share){ ns.hidden=false; ns.onclick=()=>navigator.share({title:'Sri Lanka · Diciembre 2026',text:'La app de nuestro viaje a Sri Lanka. Ábrela una vez con wifi antes de salir y añádela a la pantalla de inicio.',url:APP_URL}).catch(()=>{}); }
+  const msg = `La app de nuestro viaje a Sri Lanka 🇱🇰\n${APP_URL}\nÁbrela una vez con wifi antes de salir y añádela a la pantalla de inicio: así funciona sin datos allí.`;
+  $('#shareWa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+}
+
+/* ---------- Contactos ---------- */
+const MYC_SLOTS = [["guia","Guía","tel"],["cond","Conductor","tel"],["wa","Grupo de WhatsApp","url"],["album","Álbum de fotos compartido","url"]];
+function mycGet(){ try{ return JSON.parse(localStorage.getItem('slk-myc')||'{}'); }catch(e){ return {}; } }
+function renderContacts(){
+  const telLink = t => `<a class="tel" href="tel:${t.replace(/[^+\d]/g,'')}">${t}</a>`;
+  const keys=['ulagalla','jetwing','mahaweli','heritance','acres','earls'];
+  $('#ctHotels').innerHTML = keys.map(k=>{const h=HOTELS[k]; return `<li><span><b>${h.n}</b><small>${h.nights}</small></span>${telLink(h.tel)}</li>`}).join('');
+  const c=mycGet();
+  $('#ctMine').innerHTML = MYC_SLOTS.map(([k,label,type])=>{
+    const v=c[k]||'';
+    const shown = v ? (type==='tel' ? telLink(v) : `<a class="tel" href="${esc(v)}" target="_blank" rel="noopener">Abrir ↗</a>`) : '';
+    return `<li class="myc" data-k="${k}"><span><b>${label}</b><small>${v?esc(v):'Sin rellenar'}</small></span>${shown}<button type="button" class="edit">${v?'Editar':'Añadir'}</button>
+      <form class="mycf" hidden><input type="${type==='tel'?'tel':'url'}" ${type==='tel'?'inputmode="tel" placeholder="+94 …"':'placeholder="https://…"'} value="${esc(v)}"><button type="submit">Guardar</button></form></li>`;
+  }).join('');
+  $('#ctMine').querySelectorAll('.myc').forEach(li=>{
+    const f=li.querySelector('form'), k=li.dataset.k;
+    li.querySelector('.edit').onclick=()=>{ f.hidden=!f.hidden; if(!f.hidden) f.querySelector('input').focus(); };
+    f.onsubmit=e=>{ e.preventDefault(); const c=mycGet(); const v=f.querySelector('input').value.trim(); if(v) c[k]=v; else delete c[k]; try{ localStorage.setItem('slk-myc',JSON.stringify(c)); }catch(e){} renderContacts(); };
+  });
+}
+function initExtra(){
+  paintClocks(); setInterval(paintClocks,30000);
+  initShare(); renderContacts();
+}
+
 /* ---------- Sin conexión ---------- */
 function initOffline(){
   const standalone = window.matchMedia && matchMedia('(display-mode: standalone)').matches || navigator.standalone;
@@ -1275,7 +1401,7 @@ function route(){
   window.scrollTo(0,0);
   if(jumpTo) setTimeout(()=>{ const el=document.getElementById(jumpTo); el && el.scrollIntoView({block:'start'}); },30);
 }
-renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); initOffline();
+renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); initExtra(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
