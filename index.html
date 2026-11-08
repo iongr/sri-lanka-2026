@@ -258,6 +258,35 @@ h3{font-size:1.15rem}
 .tabbar a{font-size:.64rem}
 
 .card.warn{border-left:4px solid var(--terra)}
+
+.ckhome{margin:12px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:12px 14px;display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}
+.ring{position:relative;width:64px;height:64px;flex:0 0 auto}
+.ring.sm{width:50px;height:50px}
+.ring svg{width:100%;height:100%;display:block}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:.8rem}
+.ckhead{margin:4px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px;display:flex;gap:14px;align-items:center}
+.ckhead b{display:block;font-family:var(--serif);font-size:1.2rem}
+.ckfilter{display:flex;gap:6px;margin:12px 14px 0}
+.ckfilter button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.82rem;cursor:pointer;color:var(--muted)}
+.ckfilter button.on{background:var(--jungle);border-color:var(--jungle);color:#fff}
+.ckgroup{margin:12px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:12px 16px 6px}
+.ckgh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+.ckgh b{font-family:var(--serif);font-size:1.05rem}
+.ckdue,.cklate,.ckok{font-size:.72rem;font-weight:700;border-radius:999px;padding:3px 9px}
+.ckdue{background:var(--paper2);color:var(--muted)}
+.cklate{background:#fbe3db;color:#8a2f1c}
+.ckok{background:#e3eedb;color:#3d6b2a}
+.check label{display:flex;flex-direction:column;flex:1}
+.check label small{color:var(--muted);font-size:.8rem;margin-top:1px}
+.check input:checked+label small{text-decoration:none}
+.check li{align-items:flex-start}
+.cka{font-size:.76rem;font-weight:700;text-decoration:none;color:var(--jungle2);white-space:nowrap;margin-top:2px}
+.cklink{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}
+.cklink>span:first-child{font-size:1.4rem}
+.cklink b{display:block}
+.back{font-weight:700;text-decoration:none;color:var(--jungle2);font-size:.9rem}
+
+.ckhead .ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--sans);font-size:.85rem}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -297,6 +326,11 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <p><b>Android (Chrome):</b> menú ⋮ → «Instalar aplicación» o «Añadir a pantalla de inicio».</p>
     <p class="muted">Abridla una vez en casa, con wifi, antes de viajar: así se guardan las fotos y todo funciona sin datos en Sri Lanka.</p>
   </details>
+  <a class="ckhome" id="ckHome" href="#checklist" hidden>
+    <div class="ring sm"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--paper2)" stroke-width="4"/><circle id="ckArcH" cx="18" cy="18" r="15.9" fill="none" stroke="var(--tea)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 100" transform="rotate(-90 18 18)"/></svg><b id="ckPctH">0%</b></div>
+    <div style="flex:1"><span class="eyebrow">Antes de salir</span><b id="ckCountH" style="display:block"></b><span class="small muted" id="ckNextH"></span></div>
+    <span class="chev">›</span>
+  </a>
 
   <h2 class="pad">La ruta</h2>
   <div class="strip" id="strip"></div>
@@ -417,6 +451,23 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
   </div>
 </section>
 
+
+<!-- CHECKLIST -->
+<section class="view" id="v-checklist">
+  <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
+    <a href="#inicio" class="back">‹ Inicio</a>
+    <span class="eyebrow" style="display:block;margin-top:10px">Preparación del viaje</span>
+    <h2 style="margin-top:4px">Checklist</h2>
+  </div>
+  <div class="ckhead">
+    <div class="ring" id="ckRing"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--paper2)" stroke-width="3.5"/><circle id="ckArc" cx="18" cy="18" r="15.9" fill="none" stroke="var(--tea)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="0 100" transform="rotate(-90 18 18)"/></svg><b id="ckPct">0%</b></div>
+    <div style="flex:1"><b id="ckCount"></b><span class="small muted" id="ckNext"></span></div>
+  </div>
+  <div class="ckfilter"><button class="on" data-f="all">Todo</button><button data-f="todo">Pendiente</button></div>
+  <div id="ckGroups"></div>
+  <p class="pad small muted" style="margin-top:14px">Cada uno marca lo suyo; se guarda solo en este móvil.</p>
+</section>
+
 <!-- INFO -->
 <section class="view" id="v-info">
   <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
@@ -500,12 +551,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <p class="small muted" style="margin:8px 0 0">El picante suele suavizarse para turistas. Si lo queréis de verdad, pedid «local spicy».</p>
   </div>
 
-  <div class="card">
-    <h3>Mi checklist</h3>
-    <p class="small muted" style="margin:0">Se guarda solo en este móvil.</p>
-    <div class="prog"><i id="progbar"></i></div>
-    <ul class="check" id="check"></ul>
-  </div>
+  <a class="card cklink" href="#checklist"><span>✅</span><span style="flex:1"><b>Checklist de preparación</b><span class="small muted" id="ckLinkTxt"></span></span><span class="chev">›</span></a>
 
   <div class="card">
     <h3>Documentación</h3>
@@ -794,7 +840,35 @@ const FLIGHTS = {
    warn:"Volvéis un día antes que el resto (13/12). El programa de ese día empieza en Ella, a unas 5 horas de Colombo: confirmad el traslado con Norakai."}
 };
 
-const CHECK = ["Pasaporte con validez de 6 meses o más","Visado ETA tramitado (eta.gov.lk)","Alergias e intolerancias comunicadas a la agencia","Adaptador de enchufe (tipos D/G)","Ropa que cubra hombros y rodillas para templos","Calcetines para andar descalzos en los templos","Capa de abrigo para Nuwara Eliya y Ella","Chubasquero ligero","Calzado cómodo para Sigiriya y Little Adam's Peak","Repelente de mosquitos y protector solar","Algo de efectivo para propinas y bebidas","Bañador para la piscina y la playa de Negombo"];
+const CHECK = [
+ {g:"Ya, cuanto antes", due:"2026-11-20", items:[
+  ["pas","Pasaporte válido al menos hasta el 14 de junio de 2027","Necesita 6 meses de validez desde la vuelta."],
+  ["eta","Visado ETA solicitado y aprobado","Gratuito en eta.gov.lk. Guardad la aprobación en el móvil.","https://eta.gov.lk/"],
+  ["vac","Consulta de vacunas del viajero","Pedid cita en un centro de vacunación internacional; conviene ir con 4–6 semanas de margen."],
+  ["reg","Apuntarse en el Registro de Viajeros","Así Exteriores os localiza si pasa algo.","https://registroviajeros.exteriores.gob.es/"],
+  ["ale","Alergias e intolerancias comunicadas a Norakai",""],
+  ["seg","Revisar qué cubre el seguro de viaje","Viene incluido; comprobad la cobertura médica y el teléfono de asistencia."]]},
+ {g:"La semana antes", due:"2026-12-03", items:[
+  ["app","Abrir esta app con wifi e instalarla en el móvil","Esperad a que en Inicio ponga «Lista para usar sin conexión»."],
+  ["sim","Datos en Sri Lanka: roaming, eSIM o SIM en el aeropuerto",""],
+  ["tar","Tarjeta para pagar y sacar dinero sin comisiones","Y avisad al banco del viaje si os lo piden."],
+  ["med","Medicación habitual y botiquín básico","Antidiarreico, paracetamol, tiritas, biodramina para las curvas."],
+  ["ada","Adaptador de enchufe (tipos D y G)",""],
+  ["rep","Repelente de mosquitos y protector solar",""]]},
+ {g:"En la maleta", due:"2026-12-04", items:[
+  ["tem","Ropa que cubra hombros y rodillas para los templos",""],
+  ["cal","Calcetines para andar descalzos en los templos",""],
+  ["abr","Una capa de abrigo para Nuwara Eliya y Ella","Por la noche puede bajar de 10 °C."],
+  ["llu","Chubasquero o paraguas plegable",""],
+  ["zap","Calzado cómodo con buena suela","Para Sigiriya y Little Adam's Peak."],
+  ["ban","Bañador",""],
+  ["sit","Hueco en la maleta para té y compras",""]]},
+ {g:"El día de salida (5 dic)", due:"2026-12-05", items:[
+  ["doc","Pasaporte y aprobación de la ETA a mano",""],
+  ["efe","Algo de efectivo para las primeras propinas",""],
+  ["fac","Al facturar: maleta directa hasta Colombo (CMB)","La conexión en Estambul es corta."]]}
+];
+const CK_ALL = CHECK.flatMap(g=>g.items.map(i=>i[0]));
 
 /* ---------- Render ---------- */
 const $ = s => document.querySelector(s);
@@ -902,12 +976,33 @@ function renderHotels(){
     ${h.tip?`<p class="htip">💡 ${h.tip}</p>`:''}
     <div class="lnks"><a class="mapbtn" href="${h.web}" target="_blank" rel="noopener">🌐 ${h.webLabel||'Web del hotel'}</a><a class="lk" href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ↗</a></div></div></article>`}).join('');
 }
+let ckFilter='all';
+function ckState(){ try{ return JSON.parse(localStorage.getItem('slk-check2')||'{}'); }catch(e){ return {}; } }
+function ckPaintSummary(){
+  const st=ckState(), done=CK_ALL.filter(k=>st[k]).length, tot=CK_ALL.length, pct=Math.round(100*done/tot);
+  let next=null; for(const g of CHECK){ for(const it of g.items){ if(!st[it[0]]){ next=it[1]; break; } } if(next) break; }
+  const today = colomboNow();
+  const late = CHECK.filter(g=>g.due<today).reduce((n,g)=>n+g.items.filter(i=>!st[i[0]]).length,0);
+  const txt = done===tot ? '¡Todo listo! Buen viaje.' : `Siguiente: ${next}` + (late?` · ${late} con fecha pasada`:'');
+  [['#ckArc','#ckPct','#ckCount','#ckNext'],['#ckArcH','#ckPctH','#ckCountH','#ckNextH']].forEach(([arc,p,c,n])=>{
+    const A=$(arc); if(!A) return; A.setAttribute('stroke-dasharray',`${pct} 100`); $(p).textContent=pct+'%';
+    $(c).textContent=`${done} de ${tot} hechos`; $(n).textContent=txt; });
+  const l=$('#ckLinkTxt'); if(l) l.textContent=` ${done} de ${tot} hechos`;
+  const home=$('#ckHome'); if(home) home.hidden = today >= '2026-12-06' && done===tot;
+}
 function renderCheck(){
-  let st = {}; try{ st = JSON.parse(localStorage.getItem('slk-check')||'{}'); }catch(e){}
-  $('#check').innerHTML = CHECK.map((c,i)=>`<li><input type="checkbox" id="c${i}" ${st[i]?'checked':''}><label for="c${i}">${c}</label></li>`).join('');
-  const upd = () => { const n = CHECK.filter((_,i)=>st[i]).length; $('#progbar').style.width = (100*n/CHECK.length)+'%'; };
-  $('#check').querySelectorAll('input').forEach((el,i)=>el.onchange=()=>{ st[i]=el.checked; try{localStorage.setItem('slk-check',JSON.stringify(st))}catch(e){} upd(); });
-  upd();
+  const st=ckState(), today=colomboNow();
+  $('#ckGroups').innerHTML = CHECK.map((g,gi)=>{
+    const items=g.items.filter(i=>ckFilter==='all'||!st[i[0]]);
+    const pend=g.items.filter(i=>!st[i[0]]).length;
+    if(!items.length) return '';
+    const d=new Date(g.due+'T12:00:00'); const dl=d.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+    const status = pend===0 ? '<span class="ckok">Hecho</span>' : (g.due<today ? `<span class="cklate">Fecha pasada · ${pend} pendiente${pend>1?'s':''}</span>` : `<span class="ckdue">Antes del ${dl}</span>`);
+    return `<div class="ckgroup"><div class="ckgh"><b>${g.g}</b>${status}</div><ul class="check">${items.map(i=>`<li><input type="checkbox" id="ck-${i[0]}" data-k="${i[0]}" ${st[i[0]]?'checked':''}><label for="ck-${i[0]}"><span>${i[1]}</span>${i[2]?`<small>${i[2]}</small>`:''}</label>${i[3]?`<a class="cka" href="${i[3]}" target="_blank" rel="noopener">Abrir ↗</a>`:''}</li>`).join('')}</ul></div>`;
+  }).join('') || '<p class="pad">No queda nada pendiente. 🎉</p>';
+  $('#ckGroups').querySelectorAll('input').forEach(el=>el.onchange=()=>{ const s=ckState(); s[el.dataset.k]=el.checked; try{localStorage.setItem('slk-check2',JSON.stringify(s))}catch(e){} ckPaintSummary(); if(ckFilter==='todo') setTimeout(renderCheck,350); });
+  document.querySelectorAll('.ckfilter button').forEach(b=>b.onclick=()=>{ ckFilter=b.dataset.f; document.querySelectorAll('.ckfilter button').forEach(x=>x.classList.toggle('on',x===b)); renderCheck(); });
+  ckPaintSummary();
 }
 
 
@@ -1112,13 +1207,13 @@ function route(){
   let view = h;
   if(h.startsWith('dia-')){ view='dias'; lastDay = +h.slice(4) || lastDay; }
   if(h==='dias') view='dias';
-  if(!TABS.some(t=>t[0]===view)) view='inicio';
+  if(!TABS.some(t=>t[0]===view) && view!=='checklist') view='inicio';
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+view));
   document.querySelectorAll('#tabs a').forEach(a=>{ a.classList.toggle('on', a.dataset.k===view); if(a.dataset.k==='dias') a.setAttribute('href','#dia-'+pad2(lastDay)); });
   if(view==='dias') renderDay(lastDay);
   window.scrollTo(0,0);
 }
-renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); initTools(); renderShopRoute(); initBuys(); initOffline();
+renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
