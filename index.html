@@ -287,6 +287,26 @@ h3{font-size:1.15rem}
 .back{font-weight:700;text-decoration:none;color:var(--jungle2);font-size:.9rem}
 
 .ckhead .ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--sans);font-size:.85rem}
+
+.newlist{display:flex;gap:6px;margin:12px 14px 0}
+.newlist input,.additem input{flex:1;min-width:0;font:600 .95rem var(--sans);padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.newlist button,.additem button{border:0;background:var(--jungle);color:#fff;font-weight:700;border-radius:12px;padding:0 16px;cursor:pointer}
+.ideas{display:flex;flex-wrap:wrap;gap:6px;margin:8px 14px 0}
+.ideas button{border:1px dashed var(--jungle2);background:none;color:var(--jungle2);border-radius:999px;padding:5px 11px;font-weight:700;font-size:.78rem;cursor:pointer}
+.mylist{margin:12px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:0 16px}
+.mylist summary{list-style:none;display:flex;align-items:center;gap:10px;padding:14px 0;cursor:pointer}
+.mylist summary::-webkit-details-marker{display:none}
+.mylist summary b{flex:1;font-family:var(--serif);font-size:1.08rem}
+.mylist .pl{color:var(--muted);font-size:1.2rem;transition:transform .2s}
+.mylist[open] .pl{transform:rotate(45deg)}
+.mylist .check{margin:0}
+.mylist .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:2px 4px}
+.additem{display:flex;gap:6px;margin:8px 0 6px}
+.additem input{font-size:.9rem;padding:8px 10px}
+.listfoot{text-align:right;padding:4px 0 12px}
+.dellist{border:0;background:none;color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer}
+.dellist.sure{color:var(--terra)}
+
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -465,7 +485,12 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
   </div>
   <div class="ckfilter"><button class="on" data-f="all">Todo</button><button data-f="todo">Pendiente</button></div>
   <div id="ckGroups"></div>
-  <p class="pad small muted" style="margin-top:14px">Cada uno marca lo suyo; se guarda solo en este móvil.</p>
+  <div class="pad" style="margin-top:22px"><span class="eyebrow">Tuyas</span><h2 style="margin:4px 0 4px">Mis listas</h2>
+  <p class="small muted" style="margin:0">Crea las listas que quieras: regalos, maleta, encargos, restaurantes… Se guardan solo en este móvil.</p></div>
+  <form class="newlist" id="newList"><input id="newListName" placeholder="Nombre de la lista (ej.: Regalos)" maxlength="40" required><button type="submit">Crear</button></form>
+  <div class="ideas" id="listIdeas"></div>
+  <div id="myLists"></div>
+  <p class="pad small muted" style="margin-top:14px">Todo lo que marques aquí se guarda solo en este móvil: no lo ve el resto del grupo.</p>
 </section>
 
 <!-- INFO -->
@@ -551,7 +576,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <p class="small muted" style="margin:8px 0 0">El picante suele suavizarse para turistas. Si lo queréis de verdad, pedid «local spicy».</p>
   </div>
 
-  <a class="card cklink" href="#checklist"><span>✅</span><span style="flex:1"><b>Checklist de preparación</b><span class="small muted" id="ckLinkTxt"></span></span><span class="chev">›</span></a>
+  <a class="card cklink" href="#checklist"><span>✅</span><span style="flex:1"><b>Checklist y mis listas</b><span class="small muted" id="ckLinkTxt"></span></span><span class="chev">›</span></a>
 
   <div class="card">
     <h3>Documentación</h3>
@@ -1140,6 +1165,44 @@ function initTools(){
 
 
 
+
+/* ---------- Mis listas ---------- */
+const LIST_IDEAS = ["Regalos","Maleta","Encargos","Restaurantes","Para comprar"];
+function listsGet(){ try{ return JSON.parse(localStorage.getItem('slk-lists')||'[]'); }catch(e){ return []; } }
+function listsSave(L){ try{ localStorage.setItem('slk-lists',JSON.stringify(L)); }catch(e){} }
+const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid = () => Math.random().toString(36).slice(2,9);
+let openList = null;
+function renderLists(){
+  const L = listsGet();
+  const used = new Set(L.map(l=>l.name.toLowerCase()));
+  $('#listIdeas').innerHTML = LIST_IDEAS.filter(n=>!used.has(n.toLowerCase())).map(n=>`<button type="button" data-n="${n}">+ ${n}</button>`).join('');
+  $('#listIdeas').querySelectorAll('button').forEach(b=>b.onclick=()=>{ const L=listsGet(); const id=uid(); L.push({id,name:b.dataset.n,items:[]}); listsSave(L); openList=id; renderLists(); });
+  $('#myLists').innerHTML = L.map(l=>{
+    const done=l.items.filter(i=>i.d).length;
+    return `<details class="mylist" data-id="${l.id}" ${openList===l.id?'open':''}>
+      <summary><b>${esc(l.name)}</b><span class="small muted">${l.items.length?`${done}/${l.items.length}`:'vacía'}</span><span class="pl">+</span></summary>
+      <ul class="check">${l.items.map(i=>`<li><input type="checkbox" id="li-${i.id}" data-i="${i.id}" ${i.d?'checked':''}><label for="li-${i.id}"><span>${esc(i.t)}</span></label><button type="button" class="del" data-del="${i.id}" aria-label="Borrar">✕</button></li>`).join('')}</ul>
+      <form class="additem"><input placeholder="Añadir elemento…" maxlength="80" required><button type="submit">Añadir</button></form>
+      <div class="listfoot"><button type="button" class="dellist">Borrar lista</button></div>
+    </details>`;
+  }).join('');
+  $('#myLists').querySelectorAll('.mylist').forEach(box=>{
+    const id=box.dataset.id;
+    const upd=fn=>{ const L=listsGet(); const l=L.find(x=>x.id===id); if(!l) return; fn(l,L); listsSave(L); openList=id; renderLists(); };
+    box.addEventListener('toggle',()=>{ if(box.open) openList=id; else if(openList===id) openList=null; });
+    box.querySelector('.additem').addEventListener('submit',e=>{ e.preventDefault(); const v=e.target.querySelector('input').value.trim(); if(v) upd(l=>l.items.push({id:uid(),t:v,d:false})); setTimeout(()=>{ const i=document.querySelector(`.mylist[data-id="${id}"] .additem input`); i&&i.focus(); },0); });
+    box.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.onchange=()=>upd(l=>{ const it=l.items.find(x=>x.id===cb.dataset.i); if(it) it.d=cb.checked; }));
+    box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>upd(l=>{ l.items=l.items.filter(x=>x.id!==b.dataset.del); }));
+    const dl=box.querySelector('.dellist');
+    dl.onclick=()=>{ if(dl.dataset.sure){ const L=listsGet().filter(x=>x.id!==id); listsSave(L); openList=null; renderLists(); } else { dl.dataset.sure='1'; dl.textContent='¿Seguro? Toca otra vez para borrar'; dl.classList.add('sure'); setTimeout(()=>{ if(dl.isConnected){ delete dl.dataset.sure; dl.textContent='Borrar lista'; dl.classList.remove('sure'); } },4000); } };
+  });
+}
+function initLists(){
+  $('#newList').addEventListener('submit',e=>{ e.preventDefault(); const n=$('#newListName').value.trim(); if(!n) return; const L=listsGet(); const id=uid(); L.push({id,name:n,items:[]}); listsSave(L); $('#newListName').value=''; openList=id; renderLists(); });
+  renderLists();
+}
+
 /* ---------- Compras ---------- */
 function renderShopRoute(){
   $('#shopRoute').innerHTML = Object.keys(SHOP).map(Number).map(d=>{const x=DAYS.find(y=>y.d===d);
@@ -1213,7 +1276,7 @@ function route(){
   if(view==='dias') renderDay(lastDay);
   window.scrollTo(0,0);
 }
-renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initOffline();
+renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
