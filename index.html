@@ -233,6 +233,12 @@ h3{font-size:1.15rem}
 .install summary{cursor:pointer;font-weight:700;color:var(--jungle)}
 .install p{margin:8px 0 0}
 
+
+.shopbox{margin:14px 14px 0;background:#fdf3e4;border-radius:16px;padding:12px 16px;border-top:4px solid var(--saffron)}
+.shopbox .mk{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a0661a}
+.shopbox p{margin:6px 0;font-size:.92rem}
+.shopbox a{font-weight:700;font-size:.84rem;color:var(--jungle2)}
+
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -322,7 +328,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 
 
   <nav class="jump" aria-label="Secciones">
-    <a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
+    <a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a><a href="#" data-j="t-shop">Compras</a>
   </nav>
 
   <div class="card" id="t-conv">
@@ -395,6 +401,52 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div id="food"></div>
     <p class="small muted" style="margin:8px 0 0">El picante suele suavizarse para turistas. Si lo queréis de verdad, pedid «local spicy».</p>
   </div>
+
+  <div class="card" id="t-shop">
+    <h3>Compras</h3>
+    <p class="small" style="margin:4px 0 10px">Lo más importante: en los circuitos organizados son habituales las paradas en tiendas que pagan comisión al guía (jardines de especias, "museos" de gemas, talleres de batik o de tallas). No es una estafa en sí, pero los precios están inflados. Se puede entrar, mirar y salir sin comprar: decid un «no, thank you» amable y firme.</p>
+
+    <h4>Qué merece la pena</h4>
+    <ul class="small">
+      <li><b>Té en hoja suelta:</b> mejor en la fábrica de té del día 10 o en tiendas de marca (Dilmah, Mlesna) que en el aeropuerto. Sri Lanka permite sacar hasta 10 kg de té sin pagar impuestos.</li>
+      <li><b>Canela de Ceilán y especias:</b> envasadas al vacío. En el jardín de especias son caras; en un supermercado (Keells, Cargills, Arpico) cuestan una fracción.</li>
+      <li><b>Artesanía:</b> máscaras de madera, lacados, batik y tejidos de telar. Como referencia orientativa: batik de 10 a 100 US$, máscaras de 15 a 150 US$ y tejidos de telar de 20 a 150 US$, según tamaño y trabajo.</li>
+      <li><b>Laksala</b> es la cadena estatal de artesanía, <b>con precio fijo</b>: sin regateo y sin riesgo de falsificación. Tiene tienda en el Jardín Botánico de Peradeniya y en Kandy, junto al Templo del Diente (los dos, día 9), y en el aeropuerto.</li>
+    </ul>
+
+    <h4>Ropa de marca y excedentes de exportación</h4>
+    <p class="small" style="margin:4px 0">Sí, existe. La confección es la primera industria exportadora del país: alrededor del 40% de las exportaciones. Allí se fabrica para Calvin Klein, H&M, Gap, Victoria's Secret o Nike, sobre todo lencería, ropa deportiva y punto.</p>
+    <ul class="small">
+      <li><b>Qué esperar:</b> excedentes de producción, a menudo con la etiqueta cortada, tallas y colores sueltos y alguna tara. Precios bajos, pero no esperéis la colección de temporada ni probadores de lujo. Revisad costuras y tallas antes de pagar.</li>
+      <li><b>Dónde, en vuestra ruta:</b> en Negombo, el día 13 por la tarde, el gran almacén <b>Odel</b> (Colombo Road) y las tiendas de Main Street. En Kandy, el centro comercial <b>Kandy City Centre</b>, junto al templo, si sobra tiempo el día 9.</li>
+      <li><b>Lo mejor está en Colombo:</b> en Bambalapitiya (Galle Road) se concentran tiendas de excedentes y cadenas locales como House of Fashions, NOLIMIT o Cotton Collection. Está a una hora de Negombo, pero el día 13 ya hay 5 h de coche desde Ella: no es realista sin cambiar el programa.</li>
+    </ul>
+
+    <h4>Lo que no hay que comprar</h4>
+    <ul class="small">
+      <li><b>Gemas fuera de una tienda con licencia.</b> Las piedras falsas o pintadas vendidas a turistas son un problema conocido. Desconfiad de quien os lleve a un «museo de gemas» o a una «venta del gobierno». Si alguien compra una gema, que pida certificado de la NGJA (National Gem and Jewellery Authority) y pague con tarjeta.</li>
+      <li><b>Antigüedades:</b> no se pueden sacar del país sin permiso del Departamento de Arqueología. Esto incluye estatuas antiguas de Buda. Las réplicas nuevas de artesanía sí se pueden llevar; pedid factura.</li>
+      <li><b>Coral, conchas y productos de tortuga o marfil:</b> exportación prohibida.</li>
+      <li><b>Muebles de madera:</b> necesitan permiso del Departamento Forestal.</li>
+      <li><b>Ropa o tatuajes con la imagen de Buda:</b> en Sri Lanka se consideran una falta de respeto y ha habido problemas con turistas. Evitad llevar ropa con estampados de Buda.</li>
+    </ul>
+
+    <h4>Pagar y regatear</h4>
+    <ul class="small">
+      <li>En mercados y puestos se regatea; en tiendas, centros comerciales y Laksala el precio es fijo.</li>
+      <li>Las tiendas grandes aceptan tarjeta, a veces con un recargo del 3%. Para puestos y mercados, efectivo en rupias.</li>
+      <li><b>Devolución de impuestos:</b> en tiendas con el cartel «Tax Free for Tourists» se puede recuperar el IVA a partir de 5.000 Rs por ticket. Se tramita en el mostrador de aduanas del aeropuerto antes de facturar, con el ticket original, el producto y el pasaporte.</li>
+    </ul>
+
+    <h4>Al volver a España</h4>
+    <ul class="small">
+      <li><b>Franquicia de aduanas:</b> hasta <b>430 € por persona</b> en compras, viajando en avión desde fuera de la UE. No se pueden sumar los importes de varias personas para un objeto que valga más.</li>
+      <li>El té y las especias secas envasadas, para uso propio, no dan problemas. La fruta fresca, las plantas y los productos de carne o lácteos no se pueden traer.</li>
+      <li>Si os pasáis de los 430 €, hay que declararlo en el canal rojo y pagar IVA y aranceles por la diferencia.</li>
+    </ul>
+    <p class="small muted" style="margin:8px 0 0">Fuentes: <a href="https://www3.agenciatributaria.gob.es/static_files/Sede/Tema/Viajeros_Desplazados/Viajeros/Viajeros_paises_noUE.pdf" target="_blank" rel="noopener">Agencia Tributaria</a> · <a href="https://www.customs.gov.lk/about-us/directorates-and-divisions/passenger-services-directorate/" target="_blank" rel="noopener">Aduanas de Sri Lanka</a> · <a href="https://www.kandycity.org/kandy-shopping/" target="_blank" rel="noopener">Kandy City</a> · <a href="https://www.ft.lk/columns/Challenges-faced-by-Sri-Lanka-s-apparel-and-textile-industry-in-US-market/4-781436" target="_blank" rel="noopener">Daily FT</a>. Precios orientativos; las tiendas concretas, comprobadlas antes porque pueden haber cerrado o cambiado.</p>
+  </div>
+
 
   <div class="card">
     <h3>Mi checklist</h3>
@@ -541,6 +593,7 @@ const HOTELS = {
     facts:["En primera línea de la playa de Negombo, a unos 25 minutos del aeropuerto.","Abrió en noviembre de 2022 y pertenece al mismo grupo que el Earl's Regency de Kandy.","La piscina da directamente a la playa y tiene bar en la azotea."],
     tip:"No hemos encontrado web oficial; el enlace lleva a una reseña de prensa local."}
 };
+const SHOP = {"8": "Cerca de Sigiriya hay grandes tiendas de tallas y artesanía a las que suelen parar los circuitos. Los precios son altos; en Laksala (día 9) encontraréis lo mismo más barato y a precio fijo.", "9": "Es el día con más tiendas: el jardín de especias, y quizá un taller de batik o un «museo» de gemas en Kandy. Mejor opción: Laksala, a precio fijo, en el Jardín Botánico de Peradeniya y junto al Templo del Diente. Si queda tiempo, el centro comercial Kandy City Centre.", "10": "La tienda de la fábrica de té es buen sitio para comprar té en hoja suelta, envasado allí mismo.", "13": "Tarde libre en Negombo: el gran almacén Odel (Colombo Road) y las tiendas de Main Street para ropa y excedentes de exportación. Para especias baratas, cualquier supermercado (Keells, Cargills).", "14": "En el aeropuerto hay tienda Laksala y duty free para lo último. Si habéis comprado en tiendas «Tax Free for Tourists», pasad por el mostrador de devolución del IVA antes de facturar."};
 const DAYS = [
  {d:5,wd:"Sáb",title:"Rumbo a Sri Lanka",route:"Ciudad de origen → Estambul → Colombo",ph:"airport1",
   lead:"Salida desde Bilbao, Barcelona, Madrid o Múnich con conexión en Estambul. Noche a bordo.",
@@ -759,6 +812,7 @@ function renderDay(dn){
    <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}</div>
    <p class="lead">${x.lead}</p>
    ${x.note?`<div class="note">${x.note}</div>`:''}
+   ${SHOP[x.d]?`<div class="shopbox"><span class="mk">🛍 Compras hoy</span><p>${SHOP[x.d]}</p><a href="#" onclick="go('info');setTimeout(()=>document.getElementById('t-shop').scrollIntoView({block:'start'}),50);return false;">Ver la guía de compras ›</a></div>`:''}
    ${x.tips?`<div class="tipsbox"><span class="mk">Lo que conviene saber hoy</span><ul>${x.tips.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
    ${x.visits.length?`<div class="visits">${x.visits.map((v,k)=>`
      <details class="visit" ${k===0?'open':''}><summary><div class="th ph" data-n="">${photo(v.ph,v.n,false)}</div><div class="vt"><b>${v.n}</b><span>${v.t}</span></div><span class="pl">+</span></summary>
