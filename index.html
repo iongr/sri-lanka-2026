@@ -239,6 +239,25 @@ h3{font-size:1.15rem}
 .shopbox p{margin:6px 0;font-size:.92rem}
 .shopbox a{font-weight:700;font-size:.84rem;color:var(--jungle2)}
 
+
+.sr{display:flex;gap:12px;text-decoration:none;color:inherit;padding:10px 0;border-bottom:1px dashed var(--line)}
+.sr:last-child{border:0}
+.sr .sd{flex:0 0 48px;text-align:center;background:#fdf3e4;border-radius:12px;padding:6px 0;font-size:.7rem;text-transform:uppercase;color:#a0661a;font-weight:700}
+.sr .sd b{display:block;font-family:var(--serif);font-size:1.3rem;color:var(--ink);text-transform:none}
+.sr .st b{display:block;font-size:.84rem}
+.sr .st span{font-size:.86rem;color:var(--muted)}
+.buyform{display:grid;grid-template-columns:1fr 92px 64px;gap:6px}
+.buyform input,.buyform select{font:600 .95rem var(--sans);padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);min-width:0}
+.buyform button{grid-column:1/-1;border:0;background:var(--jungle);color:#fff;font-weight:700;border-radius:10px;padding:10px;cursor:pointer}
+.buylist{list-style:none;padding:0;margin:10px 0 0}
+.buylist li{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.9rem}
+.buylist li span:first-child{flex:1}
+.buylist .ba{font-weight:700;font-size:.84rem}
+.buylist button{border:0;background:var(--paper2);border-radius:8px;width:28px;height:28px;cursor:pointer;color:var(--muted)}
+.franq{margin-top:10px}
+.tabbar a{font-size:.64rem}
+
+.card.warn{border-left:4px solid var(--terra)}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -319,6 +338,85 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
   <div id="hotels"></div>
 </section>
 
+
+<!-- COMPRAS -->
+<section class="view" id="v-compras">
+  <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
+    <span class="eyebrow">Shopping</span>
+    <h2 style="margin-top:4px">Compras</h2>
+  </div>
+  <nav class="jump" aria-label="Secciones de compras">
+    <a href="#" data-j="c-ruta">En la ruta</a><a href="#" data-j="c-mias">Mis compras</a><a href="#" data-j="c-que">Qué comprar</a><a href="#" data-j="c-ropa">Ropa</a><a href="#" data-j="c-no">Qué evitar</a><a href="#" data-j="c-pagar">Pagar</a><a href="#" data-j="c-vuelta">Aduana</a>
+  </nav>
+  <div class="card warn">
+    <h3>Antes de nada</h3>
+    <p class="small" style="margin:4px 0 10px">Lo más importante: en los circuitos organizados son habituales las paradas en tiendas que pagan comisión al guía (jardines de especias, "museos" de gemas, talleres de batik o de tallas). No es una estafa en sí, pero los precios están inflados. Se puede entrar, mirar y salir sin comprar: decid un «no, thank you» amable y firme.</p>
+  </div>
+  <div class="card" id="c-ruta">
+    <h3>Dónde se compra en la ruta</h3>
+    <div id="shopRoute"></div>
+  </div>
+  <div class="card" id="c-mias">
+    <h3>Mis compras</h3>
+    <p class="small muted" style="margin:0 0 8px">Apunta lo que compras para controlar el gasto y la franquicia de aduanas (430 € por persona). Se guarda solo en este móvil.</p>
+    <form id="buyForm" class="buyform">
+      <input id="buyName" placeholder="Qué (ej.: té, máscara…)" maxlength="40" required>
+      <input id="buyAmt" type="number" inputmode="decimal" min="0" step="any" placeholder="Precio" required>
+      <select id="buyCur"><option value="LKR">Rs</option><option value="EUR">€</option></select>
+      <button type="submit">Añadir</button>
+    </form>
+    <ul class="buylist" id="buyList"></ul>
+    <div class="franq"><div class="prog"><i id="buyBar"></i></div><p class="small" id="buyTotal" style="margin:6px 0 0"></p></div>
+  </div>
+  
+  <div class="card" id="c-que">
+    <h3>Qué merece la pena</h3>
+    <ul class="small">
+      <li><b>Té en hoja suelta:</b> mejor en la fábrica de té del día 10 o en tiendas de marca (Dilmah, Mlesna) que en el aeropuerto. Sri Lanka permite sacar hasta 10 kg de té sin pagar impuestos.</li>
+      <li><b>Canela de Ceilán y especias:</b> envasadas al vacío. En el jardín de especias son caras; en un supermercado (Keells, Cargills, Arpico) cuestan una fracción.</li>
+      <li><b>Artesanía:</b> máscaras de madera, lacados, batik y tejidos de telar. Como referencia orientativa: batik de 10 a 100 US$, máscaras de 15 a 150 US$ y tejidos de telar de 20 a 150 US$, según tamaño y trabajo.</li>
+      <li><b>Laksala</b> es la cadena estatal de artesanía, <b>con precio fijo</b>: sin regateo y sin riesgo de falsificación. Tiene tienda en el Jardín Botánico de Peradeniya y en Kandy, junto al Templo del Diente (los dos, día 9), y en el aeropuerto.</li>
+    </ul>
+  </div>
+  <div class="card" id="c-ropa">
+    <h3>Ropa de marca y excedentes de exportación</h3>
+    <p class="small" style="margin:4px 0">Sí, existe. La confección es la primera industria exportadora del país: alrededor del 40% de las exportaciones. Allí se fabrica para Calvin Klein, H&M, Gap, Victoria's Secret o Nike, sobre todo lencería, ropa deportiva y punto.</p>
+    <ul class="small">
+      <li><b>Qué esperar:</b> excedentes de producción, a menudo con la etiqueta cortada, tallas y colores sueltos y alguna tara. Precios bajos, pero no esperéis la colección de temporada ni probadores de lujo. Revisad costuras y tallas antes de pagar.</li>
+      <li><b>Dónde, en vuestra ruta:</b> en Negombo, el día 13 por la tarde, el gran almacén <b>Odel</b> (Colombo Road) y las tiendas de Main Street. En Kandy, el centro comercial <b>Kandy City Centre</b>, junto al templo, si sobra tiempo el día 9.</li>
+      <li><b>Lo mejor está en Colombo:</b> en Bambalapitiya (Galle Road) se concentran tiendas de excedentes y cadenas locales como House of Fashions, NOLIMIT o Cotton Collection. Está a una hora de Negombo, pero el día 13 ya hay 5 h de coche desde Ella: no es realista sin cambiar el programa.</li>
+    </ul>
+  </div>
+  <div class="card" id="c-no">
+    <h3>Lo que no hay que comprar</h3>
+    <ul class="small">
+      <li><b>Gemas fuera de una tienda con licencia.</b> Las piedras falsas o pintadas vendidas a turistas son un problema conocido. Desconfiad de quien os lleve a un «museo de gemas» o a una «venta del gobierno». Si alguien compra una gema, que pida certificado de la NGJA (National Gem and Jewellery Authority) y pague con tarjeta.</li>
+      <li><b>Antigüedades:</b> no se pueden sacar del país sin permiso del Departamento de Arqueología. Esto incluye estatuas antiguas de Buda. Las réplicas nuevas de artesanía sí se pueden llevar; pedid factura.</li>
+      <li><b>Coral, conchas y productos de tortuga o marfil:</b> exportación prohibida.</li>
+      <li><b>Muebles de madera:</b> necesitan permiso del Departamento Forestal.</li>
+      <li><b>Ropa o tatuajes con la imagen de Buda:</b> en Sri Lanka se consideran una falta de respeto y ha habido problemas con turistas. Evitad llevar ropa con estampados de Buda.</li>
+    </ul>
+  </div>
+  <div class="card" id="c-pagar">
+    <h3>Pagar y regatear</h3>
+    <ul class="small">
+      <li>En mercados y puestos se regatea; en tiendas, centros comerciales y Laksala el precio es fijo.</li>
+      <li>Las tiendas grandes aceptan tarjeta, a veces con un recargo del 3%. Para puestos y mercados, efectivo en rupias.</li>
+      <li><b>Devolución de impuestos:</b> en tiendas con el cartel «Tax Free for Tourists» se puede recuperar el IVA a partir de 5.000 Rs por ticket. Se tramita en el mostrador de aduanas del aeropuerto antes de facturar, con el ticket original, el producto y el pasaporte.</li>
+    </ul>
+  </div>
+  <div class="card" id="c-vuelta">
+    <h3>Al volver a España</h3>
+    <ul class="small">
+      <li><b>Franquicia de aduanas:</b> hasta <b>430 € por persona</b> en compras, viajando en avión desde fuera de la UE. No se pueden sumar los importes de varias personas para un objeto que valga más.</li>
+      <li>El té y las especias secas envasadas, para uso propio, no dan problemas. La fruta fresca, las plantas y los productos de carne o lácteos no se pueden traer.</li>
+      <li>Si os pasáis de los 430 €, hay que declararlo en el canal rojo y pagar IVA y aranceles por la diferencia.</li>
+    </ul>
+    <p class="small muted" style="margin:8px 0 0">Fuentes: <a href="https://www3.agenciatributaria.gob.es/static_files/Sede/Tema/Viajeros_Desplazados/Viajeros/Viajeros_paises_noUE.pdf" target="_blank" rel="noopener">Agencia Tributaria</a> · <a href="https://www.customs.gov.lk/about-us/directorates-and-divisions/passenger-services-directorate/" target="_blank" rel="noopener">Aduanas de Sri Lanka</a> · <a href="https://www.kandycity.org/kandy-shopping/" target="_blank" rel="noopener">Kandy City</a> · <a href="https://www.ft.lk/columns/Challenges-faced-by-Sri-Lanka-s-apparel-and-textile-industry-in-US-market/4-781436" target="_blank" rel="noopener">Daily FT</a>. Precios orientativos; las tiendas concretas, comprobadlas antes porque pueden haber cerrado o cambiado.</p>
+  
+  </div>
+</section>
+
 <!-- INFO -->
 <section class="view" id="v-info">
   <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
@@ -328,7 +426,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 
 
   <nav class="jump" aria-label="Secciones">
-    <a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a><a href="#" data-j="t-shop">Compras</a>
+    <a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
   </nav>
 
   <div class="card" id="t-conv">
@@ -401,52 +499,6 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div id="food"></div>
     <p class="small muted" style="margin:8px 0 0">El picante suele suavizarse para turistas. Si lo queréis de verdad, pedid «local spicy».</p>
   </div>
-
-  <div class="card" id="t-shop">
-    <h3>Compras</h3>
-    <p class="small" style="margin:4px 0 10px">Lo más importante: en los circuitos organizados son habituales las paradas en tiendas que pagan comisión al guía (jardines de especias, "museos" de gemas, talleres de batik o de tallas). No es una estafa en sí, pero los precios están inflados. Se puede entrar, mirar y salir sin comprar: decid un «no, thank you» amable y firme.</p>
-
-    <h4>Qué merece la pena</h4>
-    <ul class="small">
-      <li><b>Té en hoja suelta:</b> mejor en la fábrica de té del día 10 o en tiendas de marca (Dilmah, Mlesna) que en el aeropuerto. Sri Lanka permite sacar hasta 10 kg de té sin pagar impuestos.</li>
-      <li><b>Canela de Ceilán y especias:</b> envasadas al vacío. En el jardín de especias son caras; en un supermercado (Keells, Cargills, Arpico) cuestan una fracción.</li>
-      <li><b>Artesanía:</b> máscaras de madera, lacados, batik y tejidos de telar. Como referencia orientativa: batik de 10 a 100 US$, máscaras de 15 a 150 US$ y tejidos de telar de 20 a 150 US$, según tamaño y trabajo.</li>
-      <li><b>Laksala</b> es la cadena estatal de artesanía, <b>con precio fijo</b>: sin regateo y sin riesgo de falsificación. Tiene tienda en el Jardín Botánico de Peradeniya y en Kandy, junto al Templo del Diente (los dos, día 9), y en el aeropuerto.</li>
-    </ul>
-
-    <h4>Ropa de marca y excedentes de exportación</h4>
-    <p class="small" style="margin:4px 0">Sí, existe. La confección es la primera industria exportadora del país: alrededor del 40% de las exportaciones. Allí se fabrica para Calvin Klein, H&M, Gap, Victoria's Secret o Nike, sobre todo lencería, ropa deportiva y punto.</p>
-    <ul class="small">
-      <li><b>Qué esperar:</b> excedentes de producción, a menudo con la etiqueta cortada, tallas y colores sueltos y alguna tara. Precios bajos, pero no esperéis la colección de temporada ni probadores de lujo. Revisad costuras y tallas antes de pagar.</li>
-      <li><b>Dónde, en vuestra ruta:</b> en Negombo, el día 13 por la tarde, el gran almacén <b>Odel</b> (Colombo Road) y las tiendas de Main Street. En Kandy, el centro comercial <b>Kandy City Centre</b>, junto al templo, si sobra tiempo el día 9.</li>
-      <li><b>Lo mejor está en Colombo:</b> en Bambalapitiya (Galle Road) se concentran tiendas de excedentes y cadenas locales como House of Fashions, NOLIMIT o Cotton Collection. Está a una hora de Negombo, pero el día 13 ya hay 5 h de coche desde Ella: no es realista sin cambiar el programa.</li>
-    </ul>
-
-    <h4>Lo que no hay que comprar</h4>
-    <ul class="small">
-      <li><b>Gemas fuera de una tienda con licencia.</b> Las piedras falsas o pintadas vendidas a turistas son un problema conocido. Desconfiad de quien os lleve a un «museo de gemas» o a una «venta del gobierno». Si alguien compra una gema, que pida certificado de la NGJA (National Gem and Jewellery Authority) y pague con tarjeta.</li>
-      <li><b>Antigüedades:</b> no se pueden sacar del país sin permiso del Departamento de Arqueología. Esto incluye estatuas antiguas de Buda. Las réplicas nuevas de artesanía sí se pueden llevar; pedid factura.</li>
-      <li><b>Coral, conchas y productos de tortuga o marfil:</b> exportación prohibida.</li>
-      <li><b>Muebles de madera:</b> necesitan permiso del Departamento Forestal.</li>
-      <li><b>Ropa o tatuajes con la imagen de Buda:</b> en Sri Lanka se consideran una falta de respeto y ha habido problemas con turistas. Evitad llevar ropa con estampados de Buda.</li>
-    </ul>
-
-    <h4>Pagar y regatear</h4>
-    <ul class="small">
-      <li>En mercados y puestos se regatea; en tiendas, centros comerciales y Laksala el precio es fijo.</li>
-      <li>Las tiendas grandes aceptan tarjeta, a veces con un recargo del 3%. Para puestos y mercados, efectivo en rupias.</li>
-      <li><b>Devolución de impuestos:</b> en tiendas con el cartel «Tax Free for Tourists» se puede recuperar el IVA a partir de 5.000 Rs por ticket. Se tramita en el mostrador de aduanas del aeropuerto antes de facturar, con el ticket original, el producto y el pasaporte.</li>
-    </ul>
-
-    <h4>Al volver a España</h4>
-    <ul class="small">
-      <li><b>Franquicia de aduanas:</b> hasta <b>430 € por persona</b> en compras, viajando en avión desde fuera de la UE. No se pueden sumar los importes de varias personas para un objeto que valga más.</li>
-      <li>El té y las especias secas envasadas, para uso propio, no dan problemas. La fruta fresca, las plantas y los productos de carne o lácteos no se pueden traer.</li>
-      <li>Si os pasáis de los 430 €, hay que declararlo en el canal rojo y pagar IVA y aranceles por la diferencia.</li>
-    </ul>
-    <p class="small muted" style="margin:8px 0 0">Fuentes: <a href="https://www3.agenciatributaria.gob.es/static_files/Sede/Tema/Viajeros_Desplazados/Viajeros/Viajeros_paises_noUE.pdf" target="_blank" rel="noopener">Agencia Tributaria</a> · <a href="https://www.customs.gov.lk/about-us/directorates-and-divisions/passenger-services-directorate/" target="_blank" rel="noopener">Aduanas de Sri Lanka</a> · <a href="https://www.kandycity.org/kandy-shopping/" target="_blank" rel="noopener">Kandy City</a> · <a href="https://www.ft.lk/columns/Challenges-faced-by-Sri-Lanka-s-apparel-and-textile-industry-in-US-market/4-781436" target="_blank" rel="noopener">Daily FT</a>. Precios orientativos; las tiendas concretas, comprobadlas antes porque pueden haber cerrado o cambiado.</p>
-  </div>
-
 
   <div class="card">
     <h3>Mi checklist</h3>
@@ -812,7 +864,7 @@ function renderDay(dn){
    <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}</div>
    <p class="lead">${x.lead}</p>
    ${x.note?`<div class="note">${x.note}</div>`:''}
-   ${SHOP[x.d]?`<div class="shopbox"><span class="mk">🛍 Compras hoy</span><p>${SHOP[x.d]}</p><a href="#" onclick="go('info');setTimeout(()=>document.getElementById('t-shop').scrollIntoView({block:'start'}),50);return false;">Ver la guía de compras ›</a></div>`:''}
+   ${SHOP[x.d]?`<div class="shopbox"><span class="mk">🛍 Compras hoy</span><p>${SHOP[x.d]}</p><a href="#compras">Ver la guía de compras ›</a></div>`:''}
    ${x.tips?`<div class="tipsbox"><span class="mk">Lo que conviene saber hoy</span><ul>${x.tips.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
    ${x.visits.length?`<div class="visits">${x.visits.map((v,k)=>`
      <details class="visit" ${k===0?'open':''}><summary><div class="th ph" data-n="">${photo(v.ph,v.n,false)}</div><div class="vt"><b>${v.n}</b><span>${v.t}</span></div><span class="pl">+</span></summary>
@@ -992,6 +1044,29 @@ function initTools(){
 }
 
 
+
+/* ---------- Compras ---------- */
+function renderShopRoute(){
+  $('#shopRoute').innerHTML = Object.keys(SHOP).map(Number).map(d=>{const x=DAYS.find(y=>y.d===d);
+    return `<a class="sr" href="#dia-${pad2(d)}"><span class="sd"><b>${d}</b>${x.wd}</span><span class="st"><b>${x.route}</b><span>${SHOP[d]}</span></span></a>`}).join('');
+}
+function initBuys(){
+  let items=[]; try{ items=JSON.parse(localStorage.getItem('slk-buys')||'[]'); }catch(e){}
+  const save=()=>{ try{ localStorage.setItem('slk-buys',JSON.stringify(items)); }catch(e){} };
+  const eur=it=> it.cur==='EUR' ? it.amt : it.amt/fx.rate;
+  const paint=()=>{
+    $('#buyList').innerHTML = items.length ? items.map((it,i)=>`<li><span>${it.name.replace(/[<>&]/g,'')}</span><span class="ba">${it.cur==='EUR'?fmt(it.amt,2)+' €':fmt(it.amt)+' Rs · '+fmt(eur(it),2)+' €'}</span><button type="button" data-i="${i}" aria-label="Borrar">✕</button></li>`).join('') : '<li class="muted small">Aún no has apuntado nada.</li>';
+    $('#buyList').querySelectorAll('button').forEach(b=>b.onclick=()=>{ items.splice(+b.dataset.i,1); save(); paint(); });
+    const tot=items.reduce((s,it)=>s+eur(it),0), pct=Math.min(100,100*tot/430);
+    $('#buyBar').style.width=pct+'%'; $('#buyBar').style.background = tot>430?'var(--terra)':tot>350?'var(--saffron)':'var(--tea)';
+    $('#buyTotal').innerHTML = `Total: <b>${fmt(tot,2)} €</b> de 430 € de franquicia` + (tot>430?` · <b style="color:var(--terra)">Te pasas ${fmt(tot-430,2)} €: hay que declararlo.</b>`:` · te quedan ${fmt(430-tot,2)} €`);
+  };
+  $('#buyForm').addEventListener('submit',e=>{ e.preventDefault();
+    const name=$('#buyName').value.trim(), amt=parseFloat($('#buyAmt').value), cur=$('#buyCur').value;
+    if(!name||!(amt>0)) return; items.push({name,amt,cur}); save(); $('#buyName').value=''; $('#buyAmt').value=''; paint(); });
+  paint();
+}
+
 /* ---------- Sin conexión ---------- */
 function initOffline(){
   const standalone = window.matchMedia && matchMedia('(display-mode: standalone)').matches || navigator.standalone;
@@ -1025,6 +1100,7 @@ const TABS = [
  ["dias","Día a día",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
  ["vuelos","Vuelos",'<path d="M2 16l20-6-3-2-7 2-5-5-2 1 3 5-4 1-2-2-1 1z"/>'],
  ["hoteles","Hoteles",'<path d="M3 20V8l9-4 9 4v12M3 20h18M8 20v-6h8v6"/>'],
+ ["compras","Compras",'<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'],
  ["info","Práctico",'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>']
 ];
 $('#tabs').innerHTML = TABS.map(([k,l,ic])=>`<a href="#${k}" data-k="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg>${l}</a>`).join('');
@@ -1042,7 +1118,7 @@ function route(){
   if(view==='dias') renderDay(lastDay);
   window.scrollTo(0,0);
 }
-renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); initTools(); initOffline();
+renderHome(); document.getElementById('credits').innerHTML = Object.values(PH).map(p=>`<li><a href="${cp(p[0])}" target="_blank" rel="noopener">${p[0]}</a> · ${p[1]}</li>`).join(''); renderFlights(); renderHotels(); renderCheck(); initTools(); renderShopRoute(); initBuys(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
