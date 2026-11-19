@@ -542,6 +542,8 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div class="rwxs" id="ropaWx"></div>
     <div id="ropaBody"></div>
   </div>
+  <div class="pad" style="margin-top:22px" id="botiquin"><span class="eyebrow">Para la maleta</span><h2 style="margin:4px 0 4px">Botiquín</h2></div>
+  <div class="ckgroup ropa"><div id="medBody"></div></div>
   <div class="pad" style="margin-top:22px"><span class="eyebrow">Tuyas</span><h2 style="margin:4px 0 4px">Mis listas</h2>
   <p class="small muted" style="margin:0">Crea las listas que quieras: regalos, maleta, encargos, restaurantes… Se guardan solo en este móvil.</p></div>
   <form class="newlist" id="newList"><input id="newListName" placeholder="Nombre de la lista (ej.: Regalos)" maxlength="40" required><button type="submit">Crear</button></form>
@@ -942,7 +944,7 @@ const CHECK = [
   ["app","Abrir esta app con wifi e instalarla en el móvil","Esperad a que en Inicio ponga «Lista para usar sin conexión»."],
   ["sim","Datos en Sri Lanka: roaming, eSIM o SIM en el aeropuerto",""],
   ["tar","Tarjeta para pagar y sacar dinero sin comisiones","Y avisad al banco del viaje si os lo piden."],
-  ["med","Medicación habitual y botiquín básico","Antidiarreico, paracetamol, tiritas, biodramina para las curvas."],
+  ["med","Medicación habitual y botiquín básico","Lista detallada en «Botiquín», más abajo en esta pantalla."],
   ["ada","Adaptador de enchufe (tipos D y G)",""],
   ["rep","Repelente de mosquitos y protector solar",""]]},
  {g:"En la maleta", due:"2026-12-04", items:[
@@ -1281,51 +1283,92 @@ function ropaRules(wx){
   return R;
 }
 
-/* ---------- Ropa: estado ----------
-   slk-ropa = {items:[{id,cat,t,q,why,src:'auto'|'me',d}], hidden:[ids auto quitados], at:'fecha', fc:bool} */
-function ropaGet(){ try{ return JSON.parse(localStorage.getItem('slk-ropa')||'null'); }catch(e){ return null; } }
-function ropaSave(s){ try{ localStorage.setItem('slk-ropa',JSON.stringify(s)); }catch(e){} }
-function ropaWx(){
-  const days = Object.keys(CLIMA).map(Number);
-  return Promise.all(days.map(d=>wxFor(d).then(w=>[d,w]))).then(arr=>{
-    const o={}; arr.forEach(([d,w])=>{ if(w && !w.err && !w.pending) o[d]={min:w.min,max:w.max,rain:w.rain}; }); return o; });
-}
-function ropaCalc(){
-  return ropaWx().then(wx=>{
-    const old = ropaGet() || {items:[],hidden:[]};
-    const fresh = ropaRules(wx);
-    const keep = old.items.filter(i=>i.src==='me' || i.d);           // lo mío y lo marcado no se toca
-    const keepIds = new Set(keep.map(i=>i.id));
-    const hidden = new Set(old.hidden||[]);
-    const auto = fresh.filter(r=>!keepIds.has(r.id) && !hidden.has(r.id)).map(r=>({...r,src:'auto',d:false}));
-    // los marcados que siguen en las reglas actualizan cantidad y motivo, pero siguen marcados
-    keep.forEach(i=>{ if(i.src==='auto'){ const r=fresh.find(x=>x.id===i.id); if(r){ i.q=r.q; i.why=r.why; i.t=r.t; } } });
-    const st = {items:[...keep,...auto], hidden:[...hidden], at:new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short'}), fc:Object.keys(wx).length>0, nfc:Object.keys(wx).length};
-    ropaSave(st); return st;
+/* ---------- Listas calculadas (ropa, botiquín) ----------
+   estado = {items:[{id,cat,t,q,why,src:'auto'|'me',d}], hidden:[ids auto quitados], at, info} */
+function smartList(c){
+  const get=()=>{ try{ return JSON.parse(localStorage.getItem(c.key)||'null'); }catch(e){ return null; } };
+  const save=s=>{ try{ localStorage.setItem(c.key,JSON.stringify(s)); }catch(e){} };
+  const calc=()=>Promise.resolve(c.rules()).then(({items:fresh,info})=>{
+    const old=get()||{items:[],hidden:[]};
+    const keep=old.items.filter(i=>i.src==='me'||i.d);            // lo mío y lo marcado no se toca
+    const keepIds=new Set(keep.map(i=>i.id)), hidden=new Set(old.hidden||[]);
+    keep.forEach(i=>{ if(i.src==='auto'){ const r=fresh.find(x=>x.id===i.id); if(r){ i.q=r.q; i.why=r.why; i.t=r.t; i.cat=r.cat; } } });
+    const auto=fresh.filter(r=>!keepIds.has(r.id)&&!hidden.has(r.id)).map(r=>({...r,src:'auto',d:false}));
+    const st={items:[...keep,...auto],hidden:[...hidden],at:new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short'}),info:info||''};
+    save(st); return st;
   });
+  const box=()=>$('#'+c.el);
+  const count=s=>`${s.items.filter(i=>i.d).length} de ${s.items.length} ${c.unit}`;
+  function render(){
+    const s=get(), B=box(); if(!B) return;
+    if(!s){ B.innerHTML=`<p class="small muted" style="margin:6px 0 10px">${c.intro}</p><button class="rbtn" type="button" data-go>${c.btn}</button>`;
+      B.querySelector('[data-go]').onclick=e=>{ e.target.textContent='Calculando…'; calc().then(render); }; return; }
+    const groups=c.cats.map(([k,n])=>[n,s.items.filter(i=>(i.src==='me'?'mio':i.cat)===k)]).filter(g=>g[1].length);
+    B.innerHTML=`
+      <div class="rhead"><b>${count(s)}</b><span class="small muted">Calculada el ${s.at}${s.info?' · '+s.info:''}</span></div>
+      ${groups.map(([n,its])=>`<div class="rcat"><span class="mk">${n}</span><ul class="check">${its.map(i=>`<li><input type="checkbox" id="${c.pre}-${i.id}" data-i="${i.id}" ${i.d?'checked':''}><label for="${c.pre}-${i.id}"><span>${i.q>1?`<b class="rq">${i.q}×</b> `:''}${esc(i.t)}</span>${i.why?`<small>${i.why}</small>`:''}</label><button type="button" class="del" data-del="${i.id}" aria-label="Quitar">✕</button></li>`).join('')}</ul></div>`).join('')}
+      <form class="additem"><input placeholder="${c.addPh}" maxlength="80" required><button type="submit">Añadir</button></form>
+      <div class="rfoot"><button type="button" class="rbtn2" data-re>↻ Recalcular</button>${(s.hidden||[]).length?`<button type="button" class="rlink" data-unhide>Volver a mostrar ${s.hidden.length} quitado${s.hidden.length>1?'s':''}</button>`:''}</div>
+      <p class="small muted" style="margin:6px 0 2px">${c.foot}</p>`;
+    const upd=fn=>{ const s=get(); fn(s); save(s); render(); };
+    B.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.onchange=()=>{ const s=get(); const it=s.items.find(x=>x.id===cb.dataset.i); if(it) it.d=cb.checked; save(s); B.querySelector('.rhead b').textContent=count(s); });
+    B.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>upd(s=>{ const it=s.items.find(x=>x.id===b.dataset.del); s.items=s.items.filter(x=>x.id!==b.dataset.del); if(it&&it.src==='auto') s.hidden=[...new Set([...(s.hidden||[]),it.id])]; }));
+    B.querySelector('.additem').onsubmit=e=>{ e.preventDefault(); const v=e.target.querySelector('input').value.trim(); if(!v) return;
+      const m=v.match(/^(\d+)\s*(?:x|×)?\s+(.+)$/i); upd(s=>s.items.push({id:'me-'+uid(),cat:'mio',t:m?m[2]:v,q:m?+m[1]:1,why:'',src:'me',d:false})); };
+    B.querySelector('[data-re]').onclick=e=>{ e.target.textContent='Recalculando…'; calc().then(render); };
+    const un=B.querySelector('[data-unhide]'); if(un) un.onclick=()=>{ const s=get(); s.hidden=[]; save(s); calc().then(render); };
+  }
+  return {render,calc,get};
 }
+
+/* Ropa */
+function ropaWx(){
+  const days=Object.keys(CLIMA).map(Number);
+  return Promise.all(days.map(d=>wxFor(d).then(w=>[d,w]))).then(arr=>{ const o={}; arr.forEach(([d,w])=>{ if(w&&!w.err&&!w.pending) o[d]={min:w.min,max:w.max,rain:w.rain}; }); return o; });
+}
+const ROPA = smartList({key:'slk-ropa',el:'ropaBody',pre:'ro',cats:ROPA_CATS,unit:'en la maleta',
+  btn:'Calcular mi lista de ropa', addPh:'Añadir prenda (ej.: 2 camisetas de deporte)',
+  intro:'Calcula la lista a partir del tiempo de cada día y de lo que se visita: templos, Sigiriya, tierras altas, piscinas y los vuelos.',
+  foot:'Recalcular usa la previsión real cuando falten menos de 16 días. No toca lo que hayas añadido ni lo que ya tengas marcado, y no vuelve a poner lo que hayas quitado.',
+  rules:()=>ropaWx().then(wx=>{ const n=Object.keys(wx).length; return {items:ropaRules(wx),info:n?`con previsión real de ${n} de 8 días`:'con medias de diciembre'}; })});
 function renderRopa(){
-  const s = ropaGet();
-  $('#ropaWx').innerHTML = Object.keys(CLIMA).map(Number).map(d=>`<div class="rwx"><b>${d}</b><span>${WX_LOC[d][0]}</span><span id="rw-${d}">${CLIMA[d][0]}–${CLIMA[d][1]} °C</span></div>`).join('');
-  Object.keys(CLIMA).map(Number).forEach(d=>wxFor(d).then(w=>{ const el=$('#rw-'+d); if(el && w && !w.err && !w.pending){ el.innerHTML=`<b class="fc">${Math.round(w.min)}–${Math.round(w.max)} °C${w.rain!=null?` · ☔${w.rain}%`:''}</b>`; } }));
-  if(!s){ $('#ropaBody').innerHTML = `<p class="small muted" style="margin:6px 0 10px">Calcula la lista a partir del tiempo de cada día y de lo que se visita: templos, Sigiriya, tierras altas, piscinas y los vuelos.</p><button class="rbtn" id="ropaGo" type="button">Calcular mi lista de ropa</button>`;
-    $('#ropaGo').onclick=()=>{ $('#ropaGo').textContent='Calculando…'; ropaCalc().then(renderRopa); }; return; }
-  const done = s.items.filter(i=>i.d).length;
-  const byCat = ROPA_CATS.map(([k,n])=>[n, s.items.filter(i=>(i.src==='me'?'mio':i.cat)===k)]).filter(c=>c[1].length);
-  $('#ropaBody').innerHTML = `
-    <div class="rhead"><b>${done} de ${s.items.length} en la maleta</b><span class="small muted">Calculada el ${s.at} · ${s.fc?`con previsión real de ${s.nfc} de 8 días`:'con medias de diciembre'}</span></div>
-    ${byCat.map(([n,its])=>`<div class="rcat"><span class="mk">${n}</span><ul class="check">${its.map(i=>`<li><input type="checkbox" id="ro-${i.id}" data-i="${i.id}" ${i.d?'checked':''}><label for="ro-${i.id}"><span>${i.q>1?`<b class="rq">${i.q}×</b> `:''}${esc(i.t)}</span>${i.why?`<small>${i.why}</small>`:''}</label><button type="button" class="del" data-del="${i.id}" aria-label="Quitar">✕</button></li>`).join('')}</ul></div>`).join('')}
-    <form class="additem" id="ropaAdd"><input placeholder="Añadir prenda (ej.: 2 camisetas de deporte)" maxlength="80" required><button type="submit">Añadir</button></form>
-    <div class="rfoot"><button type="button" class="rbtn2" id="ropaRe">↻ Recalcular</button>${(s.hidden||[]).length?`<button type="button" class="rlink" id="ropaUnhide">Volver a mostrar ${s.hidden.length} quitada${s.hidden.length>1?'s':''}</button>`:''}</div>
-    <p class="small muted" style="margin:6px 0 2px">Recalcular usa la previsión real cuando falten menos de 16 días. No toca lo que hayas añadido ni lo que ya tengas marcado, y no vuelve a poner lo que hayas quitado.</p>`;
-  const upd = fn => { const s=ropaGet(); fn(s); ropaSave(s); renderRopa(); };
-  $('#ropaBody').querySelectorAll('input[type=checkbox]').forEach(cb=>cb.onchange=()=>{ const s=ropaGet(); const it=s.items.find(x=>x.id===cb.dataset.i); if(it) it.d=cb.checked; ropaSave(s); $('#ropaBody .rhead b').textContent=`${s.items.filter(i=>i.d).length} de ${s.items.length} en la maleta`; });
-  $('#ropaBody').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>upd(s=>{ const it=s.items.find(x=>x.id===b.dataset.del); s.items=s.items.filter(x=>x.id!==b.dataset.del); if(it && it.src==='auto') s.hidden=[...new Set([...(s.hidden||[]),it.id])]; }));
-  $('#ropaAdd').onsubmit=e=>{ e.preventDefault(); const v=e.target.querySelector('input').value.trim(); if(!v) return;
-    const m=v.match(/^(\d+)\s*(?:x|×)?\s+(.+)$/i); upd(s=>s.items.push({id:'me-'+uid(),cat:'mio',t:m?m[2]:v,q:m?+m[1]:1,why:'',src:'me',d:false})); };
-  $('#ropaRe').onclick=()=>{ $('#ropaRe').textContent='Recalculando…'; ropaCalc().then(renderRopa); };
-  const un=$('#ropaUnhide'); if(un) un.onclick=()=>{ upd(s=>{ s.hidden=[]; }); $('#ropaRe').click(); };
+  $('#ropaWx').innerHTML=Object.keys(CLIMA).map(Number).map(d=>`<div class="rwx"><b>${d}</b><span>${WX_LOC[d][0]}</span><span id="rw-${d}">${CLIMA[d][0]}–${CLIMA[d][1]} °C</span></div>`).join('');
+  Object.keys(CLIMA).map(Number).forEach(d=>wxFor(d).then(w=>{ const el=$('#rw-'+d); if(el&&w&&!w.err&&!w.pending) el.innerHTML=`<b class="fc">${Math.round(w.min)}–${Math.round(w.max)} °C${w.rain!=null?` · ☔${w.rain}%`:''}</b>`; }));
+  ROPA.render(); MEDS.render();
 }
+
+/* Botiquín */
+const MED_CATS=[["tuyo","Lo tuyo"],["dolor","Dolor y fiebre"],["estomago","Estómago"],["mareo","Mareo"],["piel","Mosquitos, sol y picaduras"],["curas","Curas y pies"],["varios","Otros"],["mio","Añadido por mí"]];
+function medRules(){
+  const R=[], add=(id,cat,t,q,why)=>R.push({id,cat,t,q,why});
+  add('m_hab','tuyo','Tu medicación habitual, para todo el viaje y unos días más',1,'En el equipaje de mano y en su caja original, por si la maleta se retrasa en Estambul.');
+  add('m_rec','tuyo','Receta o informe médico, a ser posible en inglés',1,'Por si os preguntan en la aduana o hay que comprar algo allí.');
+  add('m_gaf','tuyo','Gafas o lentillas de repuesto',1,'');
+  add('m_par','dolor','Paracetamol',1,'Si hay fiebre, solo paracetamol: en Sri Lanka hay dengue y con ibuprofeno o aspirina el riesgo de sangrado es mayor.');
+  add('m_ibu','dolor','Ibuprofeno',1,'Para dolores sin fiebre: pies, espalda después de los trayectos.');
+  add('m_ter','dolor','Termómetro',1,'Una fiebre los días siguientes a una picadura es motivo para ir al médico.');
+  add('m_sro','estomago','Sales de rehidratación oral',4,'Lo más importante si hay diarrea, sobre todo con calor.');
+  add('m_lop','estomago','Antidiarreico (loperamida)',1,'Para un apuro, como un trayecto largo. No si hay fiebre o sangre.');
+  add('m_ome','estomago','Antiácido o protector de estómago',1,'La comida pica: rice & curry, kottu, sambol.');
+  add('m_mar','mareo','Pastillas para el mareo',1,'Curvas de Kandy a Nuwara Eliya (10 dic), de Nuwara Eliya a Ella (11 dic) y bajada a Negombo, 5 h (13 dic).');
+  add('m_rep','piel','Repelente con DEET al 20–30 % o icaridina',1,'El mosquito del dengue pica de día. También se compra allí.');
+  add('m_pic','piel','Crema para picaduras',1,'');
+  add('m_ant','piel','Antihistamínico',1,'Para picaduras que se inflaman o alergias.');
+  add('m_sol','piel','Protector solar de factor 50',1,'Índice UV 10–11, también con nubes.');
+  add('m_aft','piel','Aftersun o gel de aloe',1,'');
+  add('m_tir','curas','Tiritas',1,'');
+  add('m_amp','curas','Apósitos para ampollas',1,'Escaleras de Sigiriya (8 dic) y Little Adam\'s Peak (12 dic).');
+  add('m_ase','curas','Antiséptico (clorhexidina) y gasas',1,'Con el calor y la humedad, las heridas pequeñas se infectan antes.');
+  add('m_gel','varios','Gel hidroalcohólico',1,'Se come mucho con la mano y no siempre hay jabón.');
+  add('m_gar','varios','Pastillas para la garganta',1,'Aire acondicionado fuerte en hoteles y furgoneta.');
+  add('m_lag','varios','Lágrimas artificiales',1,'Para el avión y el polvo de la carretera.');
+  return {items:R};
+}
+const MEDS = smartList({key:'slk-med',el:'medBody',pre:'md',cats:MED_CATS,unit:'en el botiquín',
+  btn:'Preparar mi botiquín', addPh:'Añadir (ej.: Inhalador, 2 cajas de…)',
+  intro:'Botiquín para la ruta: dengue, calor, comida picante, curvas en la montaña y escaleras. Quita lo que no necesites y añade lo tuyo.',
+  foot:'Sin dosis a propósito: seguid el prospecto o lo que os diga el médico. Revisadlo en la consulta de vacunación internacional. Recalcular no toca lo que hayas añadido o marcado.',
+  rules:medRules});
 
 /* ---------- Qué ponerse cada día ---------- */
 function wearHint(d){
