@@ -331,6 +331,26 @@ h3{font-size:1.15rem}
 .mycf input{flex:1;min-width:0;font:600 .9rem var(--sans);padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
 .mycf button{border:0;background:var(--jungle);color:#fff;font-weight:700;border-radius:10px;padding:0 12px;cursor:pointer}
 
+
+.wear{margin:12px 14px 0;background:#eef4ea;border-radius:14px;padding:12px 14px}
+.wear p{margin:4px 0 6px;font-size:.92rem}
+.wear a{font-weight:700;font-size:.84rem;text-decoration:none;color:var(--jungle2)}
+.rwxs{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:4px 0 10px;font-size:.8rem}
+.rwx{display:flex;gap:6px;align-items:baseline;border-bottom:1px dashed var(--line);padding:4px 0}
+.rwx>b{flex:0 0 18px;color:var(--muted)}
+.rwx>span:nth-child(2){flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rwx>span:last-child{white-space:nowrap;font-weight:700}
+.rwx .fc{color:var(--jungle)}
+.rhead{display:flex;flex-direction:column;margin:2px 0 4px}
+.rhead b{font-family:var(--serif);font-size:1.05rem}
+.rcat{margin-top:8px}
+.rcat .check{margin:2px 0 0}
+.rq{color:var(--jungle);font-weight:800}
+.ropa .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:2px 4px}
+.rbtn{display:block;width:100%;border:0;background:var(--jungle);color:#fff;font-weight:700;border-radius:12px;padding:12px;cursor:pointer;font-size:.95rem;margin-bottom:10px}
+.rfoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.rbtn2{border:0;background:var(--paper2);color:var(--jungle);font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer}
+.rlink{border:0;background:none;color:var(--jungle2);font-weight:700;font-size:.82rem;cursor:pointer;text-decoration:underline}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -517,6 +537,11 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
   </div>
   <div class="ckfilter"><button class="on" data-f="all">Todo</button><button data-f="todo">Pendiente</button></div>
   <div id="ckGroups"></div>
+  <div class="pad" style="margin-top:22px" id="ropa"><span class="eyebrow">Para la maleta</span><h2 style="margin:4px 0 4px">Ropa para el viaje</h2></div>
+  <div class="ckgroup ropa">
+    <div class="rwxs" id="ropaWx"></div>
+    <div id="ropaBody"></div>
+  </div>
   <div class="pad" style="margin-top:22px"><span class="eyebrow">Tuyas</span><h2 style="margin:4px 0 4px">Mis listas</h2>
   <p class="small muted" style="margin:0">Crea las listas que quieras: regalos, maleta, encargos, restaurantes… Se guardan solo en este móvil.</p></div>
   <form class="newlist" id="newList"><input id="newListName" placeholder="Nombre de la lista (ej.: Regalos)" maxlength="40" required><button type="submit">Crear</button></form>
@@ -586,7 +611,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 
   <div class="card" id="t-wx">
     <h3>El tiempo en la ruta</h3>
-    <p class="small muted" style="margin:0 0 8px" id="wxNote">Previsión de Open-Meteo para cada día del viaje en su destino. Solo hay previsión para los próximos 16 días: hasta unos días antes de salir no aparecerá.</p>
+    <p class="small muted" style="margin:0 0 8px" id="wxNote">📊 = lo normal en diciembre (medias históricas). Cuando falten menos de 16 días se cambia sola por la previsión de Open-Meteo para ese día y ese sitio.</p>
     <div id="wxList"></div>
   </div>
 
@@ -1002,6 +1027,7 @@ function renderDay(dn){
    <div class="daytitle"><span class="eyebrow">${x.route}</span><h2>${x.title}</h2></div>
    <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}${WX_LOC[x.d]?(s=>`<span class="fact">🌅 ${s.rise} · 🌇 ${s.set}</span>`)(sunFor(x.d)):''}</div>
    <p class="lead">${x.lead}</p>
+   <div class="wear"><span class="mk">👕 Qué ponerse</span><p>${wearHint(x.d)}</p><a href="#checklist" data-ropa>Lista de ropa ›</a></div>
    ${x.note?`<div class="note">${x.note}</div>`:''}
    ${SHOP[x.d]?`<div class="shopbox"><span class="mk">🛍 Compras hoy</span><p>${SHOP[x.d]}</p><a href="#compras">Ver la guía de compras ›</a></div>`:''}
    ${x.tips?`<div class="tipsbox"><span class="mk">Lo que conviene saber hoy</span><ul>${x.tips.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
@@ -1011,6 +1037,7 @@ function renderDay(dn){
    ${h?`<div class="hotelbox"><div style="flex:1"><span class="k">${x.hotel==='earls'?'Para refrescarse':'Dormimos en'}</span><b>${h.n}</b><span class="small">${'★'.repeat(h.st)} · ${h.room}</span></div><div style="display:flex;flex-direction:column;gap:6px;text-align:right"><a href="tel:${h.tel.replace(/[^+\d]/g,'')}">Llamar ›</a><a href="${h.web}" target="_blank" rel="noopener">${h.webLabel?'Reseña':'Web'} ›</a><a href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ›</a></div></div>`:''}
    <div class="daynav"><button ${i===0?'disabled':''} data-go="${i>0?DAYS[i-1].d:''}">‹ ${i>0?DAYS[i-1].wd+' '+DAYS[i-1].d:''}</button><button ${i===DAYS.length-1?'disabled':''} data-go="${i<DAYS.length-1?DAYS[i+1].d:''}">${i<DAYS.length-1?DAYS[i+1].wd+' '+DAYS[i+1].d:''} ›</button></div>`;
   if(WX_LOC[dn]) wxFor(dn).then(w=>{ const el=$('#dwx'); if(el && lastDay===dn) el.textContent = wxText(w).replace(/^([^ ]+) [^:]+: /,'$1 '); });
+  const rl=$('#day [data-ropa]'); if(rl) rl.onclick=e=>{ e.preventDefault(); go('checklist'); setTimeout(()=>{ const r=$('#ropa'); r&&r.scrollIntoView({behavior:'smooth'}); },350); };
   $('#day').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ if(b.dataset.go) go('dia-'+pad2(+b.dataset.go)); });
 }
 
@@ -1179,16 +1206,15 @@ function wxFor(day){
     wxCache[key] = fetch(u).then(r=>r.json()).catch(()=>null);
   }
   return wxCache[key].then(j=>{
-    if(!j || !j.daily) return {err:true, place:L[0]};
+    if(!j || !j.daily) return {err:true, place:L[0], day};
     const i = j.daily.time.indexOf(date);
-    if(i<0) return {pending:true, place:L[0]};
+    if(i<0) return {pending:true, place:L[0], day};
     return {place:L[0], code:j.daily.weather_code[i], max:j.daily.temperature_2m_max[i], min:j.daily.temperature_2m_min[i], rain:j.daily.precipitation_probability_max[i]};
   });
 }
 function wxText(w){
   if(!w) return '';
-  if(w.err) return `${w.place}: sin conexión`;
-  if(w.pending) return `${w.place}: previsión aún no disponible`;
+  if(w.err||w.pending) return `📊 ${w.place}: lo normal en diciembre, ${climaText(w.day)}${w.err?' (sin conexión)':''}`;
   const [ic,tx]=WMO(w.code);
   return `${ic} ${w.place}: ${Math.round(w.min)}–${Math.round(w.max)} °C · ${tx}${w.rain!=null?` · lluvia ${w.rain}%`:''}`;
 }
@@ -1205,6 +1231,117 @@ function initTools(){
 
 
 
+
+/* ---------- Clima normal de diciembre (medias históricas) ---------- */
+// [mín, máx, días con lluvia en diciembre]
+const CLIMA = {6:[22,29,13],7:[21,28,15],8:[21,28,15],9:[19,27,12],10:[11,20,15],11:[17,25,13],12:[17,25,13],13:[23,30,10]};
+const climaText = d => { const c=CLIMA[d]; return c?`${c[0]}–${c[1]} °C · lluvia ${c[2]} de 31 días`:''; };
+
+/* ---------- Ropa: reglas ---------- */
+const ROPA_CATS = [["calor","Para el calor"],["templos","Templos"],["fresco","Fresco y abrigo"],["lluvia","Lluvia y sol"],["calzado","Calzado"],["agua","Piscina y playa"],["viaje","Vuelos y España"],["mio","Añadido por mí"]];
+const TEMPLE_DAYS = [6,7,8,9];      // Anuradhapura, Dambulla, Polonnaruwa, Kandy
+function ropaRules(wx){
+  // wx: {dia:{min,max,rain}} con la previsión si existe; si no, medias
+  const days = Object.keys(CLIMA).map(Number);
+  const v = d => wx[d] || {min:CLIMA[d][0], max:CLIMA[d][1], rain:null};
+  const hot = days.filter(d=>v(d).max>=26), mild = days.filter(d=>v(d).max<26);
+  const coldMin = Math.min(...days.map(d=>v(d).min));
+  const coldDay = days.find(d=>v(d).min===coldMin);
+  const place = d => WX_LOC[d][0];
+  const fc = Object.keys(wx).length>0;
+  const wetDays = fc ? days.filter(d=>wx[d] && wx[d].rain>=60) : [];
+  const tops = Math.max(4, Math.ceil(days.length*0.75));
+  const R = [];
+  const add = (id,cat,t,q,why) => R.push({id,cat,t,q,why});
+  add('tee','calor','Camisetas o blusas transpirables',tops,`${hot.length} días con máximas de ${Math.min(...hot.map(d=>v(d).max))}–${Math.max(...hot.map(d=>v(d).max))} °C y mucha humedad. Contando con lavar una vez.`);
+  add('short','calor','Pantalón corto o falda corta',2,'Para Negombo y las tardes en el hotel. No sirven para los templos.');
+  add('under','calor','Mudas de ropa interior',8,'8 días en Sri Lanka. Con lavandería del hotel bastan 6.');
+  add('sleep','calor','Pijama ligero',1,'');
+  add('long','templos','Pantalón largo ligero o falda por debajo de la rodilla',3,`Templos los días ${TEMPLE_DAYS.join(', ')} de diciembre: hay que cubrir rodillas.`);
+  add('shirt','templos','Camisa o camiseta de manga corta que cubra los hombros',2,'Sin tirantes en los templos. La de manga larga sirve también para el sol y los mosquitos.');
+  add('scarf','templos','Pañuelo o fular grande',1,'Para taparse los hombros al entrar sin cambiarse de ropa.');
+  add('tsocks','templos','Calcetines viejos para los templos',2,'Se entra descalzo y la piedra quema a mediodía.');
+  add('fleece','fresco','Forro polar o jersey',1,`${place(coldDay)} (${coldDay} dic) baja a ${Math.round(coldMin)} °C por la noche. También para el tren y el aire acondicionado.`);
+  add('ls','fresco','Camiseta de manga larga',1,`Para la noche en ${place(coldDay)} y Ella (${Math.round(v(11).min)} °C).`);
+  add('pants','fresco','Pantalón largo de abrigo (vaquero o similar)',1,'Para las tierras altas, días 10 a 12.');
+  if(coldMin<10) add('cold','fresco','Gorro o braga de cuello',1,`La previsión da ${Math.round(coldMin)} °C en ${place(coldDay)}.`);
+  add('rainc','lluvia','Chubasquero ligero o cortavientos impermeable',1,'En diciembre llueve 10–15 días al mes en toda la ruta, normalmente en chaparrones.');
+  add('umb','lluvia','Paraguas plegable',1,'Sirve también para el sol.');
+  add('hat','lluvia','Gorra o sombrero',1,'Índice UV 10–11 en diciembre.');
+  add('sung','lluvia','Gafas de sol',1,'');
+  add('dry','lluvia','Bolsa estanca o funda impermeable para el móvil',1,'');
+  add('walk','calzado','Zapatillas de caminar con buena suela',1,'Escaleras de Sigiriya (8 dic) y Little Adam\'s Peak (12 dic).');
+  add('sand','calzado','Sandalias fáciles de quitar',1,'Para los templos: os descalzaréis muchas veces al día.');
+  add('flip','calzado','Chanclas',1,'Ducha y piscina.');
+  if(wetDays.length>=3) add('shoes2','calzado','Segundo calzado que seque rápido',1,`La previsión da lluvia probable ${wetDays.length} días (${wetDays.join(', ')} dic).`);
+  add('swim','agua','Bañador',2,'Piscina en casi todos los hoteles y uso de día en Negombo (13 dic). Con dos siempre hay uno seco.');
+  add('coat','viaje','Abrigo para la salida y la vuelta',1,'Diciembre en España: el 5 y el 14 os toca frío en el aeropuerto.');
+  add('hand','viaje','Muda completa en el equipaje de mano',1,'Por si la maleta se retrasa en la escala de Estambul.');
+  add('plane','viaje','Sudadera cómoda para el avión',1,'');
+  return R;
+}
+
+/* ---------- Ropa: estado ----------
+   slk-ropa = {items:[{id,cat,t,q,why,src:'auto'|'me',d}], hidden:[ids auto quitados], at:'fecha', fc:bool} */
+function ropaGet(){ try{ return JSON.parse(localStorage.getItem('slk-ropa')||'null'); }catch(e){ return null; } }
+function ropaSave(s){ try{ localStorage.setItem('slk-ropa',JSON.stringify(s)); }catch(e){} }
+function ropaWx(){
+  const days = Object.keys(CLIMA).map(Number);
+  return Promise.all(days.map(d=>wxFor(d).then(w=>[d,w]))).then(arr=>{
+    const o={}; arr.forEach(([d,w])=>{ if(w && !w.err && !w.pending) o[d]={min:w.min,max:w.max,rain:w.rain}; }); return o; });
+}
+function ropaCalc(){
+  return ropaWx().then(wx=>{
+    const old = ropaGet() || {items:[],hidden:[]};
+    const fresh = ropaRules(wx);
+    const keep = old.items.filter(i=>i.src==='me' || i.d);           // lo mío y lo marcado no se toca
+    const keepIds = new Set(keep.map(i=>i.id));
+    const hidden = new Set(old.hidden||[]);
+    const auto = fresh.filter(r=>!keepIds.has(r.id) && !hidden.has(r.id)).map(r=>({...r,src:'auto',d:false}));
+    // los marcados que siguen en las reglas actualizan cantidad y motivo, pero siguen marcados
+    keep.forEach(i=>{ if(i.src==='auto'){ const r=fresh.find(x=>x.id===i.id); if(r){ i.q=r.q; i.why=r.why; i.t=r.t; } } });
+    const st = {items:[...keep,...auto], hidden:[...hidden], at:new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short'}), fc:Object.keys(wx).length>0, nfc:Object.keys(wx).length};
+    ropaSave(st); return st;
+  });
+}
+function renderRopa(){
+  const s = ropaGet();
+  $('#ropaWx').innerHTML = Object.keys(CLIMA).map(Number).map(d=>`<div class="rwx"><b>${d}</b><span>${WX_LOC[d][0]}</span><span id="rw-${d}">${CLIMA[d][0]}–${CLIMA[d][1]} °C</span></div>`).join('');
+  Object.keys(CLIMA).map(Number).forEach(d=>wxFor(d).then(w=>{ const el=$('#rw-'+d); if(el && w && !w.err && !w.pending){ el.innerHTML=`<b class="fc">${Math.round(w.min)}–${Math.round(w.max)} °C${w.rain!=null?` · ☔${w.rain}%`:''}</b>`; } }));
+  if(!s){ $('#ropaBody').innerHTML = `<p class="small muted" style="margin:6px 0 10px">Calcula la lista a partir del tiempo de cada día y de lo que se visita: templos, Sigiriya, tierras altas, piscinas y los vuelos.</p><button class="rbtn" id="ropaGo" type="button">Calcular mi lista de ropa</button>`;
+    $('#ropaGo').onclick=()=>{ $('#ropaGo').textContent='Calculando…'; ropaCalc().then(renderRopa); }; return; }
+  const done = s.items.filter(i=>i.d).length;
+  const byCat = ROPA_CATS.map(([k,n])=>[n, s.items.filter(i=>(i.src==='me'?'mio':i.cat)===k)]).filter(c=>c[1].length);
+  $('#ropaBody').innerHTML = `
+    <div class="rhead"><b>${done} de ${s.items.length} en la maleta</b><span class="small muted">Calculada el ${s.at} · ${s.fc?`con previsión real de ${s.nfc} de 8 días`:'con medias de diciembre'}</span></div>
+    ${byCat.map(([n,its])=>`<div class="rcat"><span class="mk">${n}</span><ul class="check">${its.map(i=>`<li><input type="checkbox" id="ro-${i.id}" data-i="${i.id}" ${i.d?'checked':''}><label for="ro-${i.id}"><span>${i.q>1?`<b class="rq">${i.q}×</b> `:''}${esc(i.t)}</span>${i.why?`<small>${i.why}</small>`:''}</label><button type="button" class="del" data-del="${i.id}" aria-label="Quitar">✕</button></li>`).join('')}</ul></div>`).join('')}
+    <form class="additem" id="ropaAdd"><input placeholder="Añadir prenda (ej.: 2 camisetas de deporte)" maxlength="80" required><button type="submit">Añadir</button></form>
+    <div class="rfoot"><button type="button" class="rbtn2" id="ropaRe">↻ Recalcular</button>${(s.hidden||[]).length?`<button type="button" class="rlink" id="ropaUnhide">Volver a mostrar ${s.hidden.length} quitada${s.hidden.length>1?'s':''}</button>`:''}</div>
+    <p class="small muted" style="margin:6px 0 2px">Recalcular usa la previsión real cuando falten menos de 16 días. No toca lo que hayas añadido ni lo que ya tengas marcado, y no vuelve a poner lo que hayas quitado.</p>`;
+  const upd = fn => { const s=ropaGet(); fn(s); ropaSave(s); renderRopa(); };
+  $('#ropaBody').querySelectorAll('input[type=checkbox]').forEach(cb=>cb.onchange=()=>{ const s=ropaGet(); const it=s.items.find(x=>x.id===cb.dataset.i); if(it) it.d=cb.checked; ropaSave(s); $('#ropaBody .rhead b').textContent=`${s.items.filter(i=>i.d).length} de ${s.items.length} en la maleta`; });
+  $('#ropaBody').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>upd(s=>{ const it=s.items.find(x=>x.id===b.dataset.del); s.items=s.items.filter(x=>x.id!==b.dataset.del); if(it && it.src==='auto') s.hidden=[...new Set([...(s.hidden||[]),it.id])]; }));
+  $('#ropaAdd').onsubmit=e=>{ e.preventDefault(); const v=e.target.querySelector('input').value.trim(); if(!v) return;
+    const m=v.match(/^(\d+)\s*(?:x|×)?\s+(.+)$/i); upd(s=>s.items.push({id:'me-'+uid(),cat:'mio',t:m?m[2]:v,q:m?+m[1]:1,why:'',src:'me',d:false})); };
+  $('#ropaRe').onclick=()=>{ $('#ropaRe').textContent='Recalculando…'; ropaCalc().then(renderRopa); };
+  const un=$('#ropaUnhide'); if(un) un.onclick=()=>{ upd(s=>{ s.hidden=[]; }); $('#ropaRe').click(); };
+}
+
+/* ---------- Qué ponerse cada día ---------- */
+function wearHint(d){
+  if(d===5||d===14) return 'Ropa cómoda en capas para el avión y abrigo para España.';
+  const c=CLIMA[d]; if(!c) return '';
+  const p=[];
+  if(c[1]>=26) p.push('ropa ligera y transpirable');
+  if(TEMPLE_DAYS.includes(d)) p.push('hombros y rodillas cubiertos para los templos, sandalias y calcetines');
+  if(d===8) p.push('zapatillas para las escaleras de Sigiriya');
+  if(d===10) p.push('forro polar y pantalón largo: por la noche ronda los 11 °C');
+  if(d===11) p.push('una capa para el tren, que en la montaña refresca');
+  if(d===12) p.push('zapatillas para Little Adam\'s Peak y una capa para la noche');
+  if(d===13) p.push('bañador para la piscina o la playa del hotel');
+  p.push('chubasquero o paraguas en la mochila');
+  const s=p.join('; '); return s.charAt(0).toUpperCase()+s.slice(1)+'.';
+}
 
 /* ---------- Mis listas ---------- */
 const LIST_IDEAS = ["Regalos","Maleta","Encargos","Restaurantes","Para comprar"];
@@ -1401,7 +1538,7 @@ function route(){
   window.scrollTo(0,0);
   if(jumpTo) setTimeout(()=>{ const el=document.getElementById(jumpTo); el && el.scrollIntoView({block:'start'}); },30);
 }
-renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); initExtra(); initOffline();
+renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); initExtra(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
