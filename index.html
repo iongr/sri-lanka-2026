@@ -371,6 +371,7 @@ h3{font-size:1.15rem}
 .dvbar{display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 14px 12px;color:#fff}
 .dvbar button{border:0;background:#fff;color:var(--ink);font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer}
 .docview img{flex:1;min-height:0;object-fit:contain;width:100%;touch-action:pinch-zoom}
+.inc{margin:10px 14px 0;font-size:.88rem;background:var(--card);border-radius:12px;padding:9px 12px;box-shadow:var(--shadow)}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -613,7 +614,13 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <h3>Contactos del viaje</h3>
     <h4>Agencia</h4>
     <ul class="ctl"><li><span><b>Norakai Travel</b><small>Donostia · info@norakai.com</small></span><a class="tel" href="tel:+34628263259">+34 628 263 259</a></li></ul>
-    <h4>Guía, conductor y enlaces del grupo</h4>
+    <h4>En Sri Lanka</h4>
+    <ul class="ctl">
+      <li><span><b>Sohan, guía de habla hispana</b><small>Os acompaña todo el circuito</small></span><a class="tel" href="tel:+94715567211">+94 71 556 7211</a></li>
+      <li><span><b>NKAR Travels · emergencias</b><small>Agencia local que organiza el circuito</small></span><a class="tel" href="tel:+94770113773">+94 77 011 3773</a></li>
+      <li><span><b>NKAR Travels · oficina</b><small>Colombo · tours@nkartravelhouse.com</small></span><a class="tel" href="tel:+94112564584">+94 11 256 4584</a></li>
+    </ul>
+    <h4>Conductor y enlaces del grupo</h4>
     <p class="small muted" style="margin:2px 0 4px">Rellénalo cuando os los den. Se guarda solo en este móvil.</p>
     <ul class="ctl" id="ctMine"></ul>
     <h4>Hoteles</h4>
@@ -658,7 +665,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 
   <div class="card" id="t-wx">
     <h3>El tiempo en la ruta</h3>
-    <p class="small muted" style="margin:0 0 8px" id="wxNote">📊 = lo normal en diciembre (medias históricas). Cuando falten menos de 16 días se cambia sola por la previsión de Open-Meteo para ese día y ese sitio.</p>
+    <p class="small muted" style="margin:0 0 8px" id="wxNote">📊 = lo normal en diciembre (temperaturas de la mini guía de Norakai). Cuando falten menos de 16 días se cambia sola por la previsión de Open-Meteo para ese día y ese sitio.</p>
     <div id="wxList"></div>
   </div>
 
@@ -666,14 +673,16 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <h3>Propinas</h3>
     <p class="small" style="margin:4px 0 8px">Las propinas no están incluidas en el viaje. En Sri Lanka no son obligatorias, pero son habituales y para guías y conductores son una parte importante del sueldo.</p>
     <ul class="small">
-      <li><b>Guía y conductor:</b> una referencia habitual es 3.500–4.500 Rs al día por grupo para un conductor-guía. Con guía y conductor por separado y 10 personas, lo práctico es hacer un <b>bote común</b>.</li>
-      <li><b>Hoteles:</b> unos 0,50 US$ por maleta al maletero y hasta 1 US$ al día para limpieza.</li>
-      <li><b>Restaurantes:</b> muchas cuentas ya incluyen un 10% de servicio. Miradlo antes de dejar nada.</li>
+      <li><b>Guía:</b> 3–5 US$ por persona y día, según la mini guía de Norakai.</li>
+      <li><b>Conductor:</b> 2–3 US$ por persona y día.</li>
+      <li><b>Maleteros:</b> 1 US$ por maleta.</li>
+      <li><b>Restaurantes:</b> 5–10 % si el servicio no viene incluido; muchas cuentas ya llevan un 10 %. Miradlo antes de dejar nada.</li>
+      <li>Con 10 personas, lo práctico es hacer un <b>bote común</b> y darlo el último día.</li>
       <li><b>Templos y aparcamientos:</b> a la salida de los templos suele haber quien guarda el calzado. Se le deja una moneda o un billete pequeño (20–100 Rs).</li>
     </ul>
     <div class="tipcalc">
       <b>Calculadora del bote</b>
-      <div class="tcrow"><label>Rs por día para el guía <input id="tcG" type="number" inputmode="numeric" value="4000"></label><label>Rs por día para el conductor <input id="tcD" type="number" inputmode="numeric" value="3000"></label></div>
+      <div class="tcrow"><label>US$ por persona y día, guía <input id="tcG" type="number" inputmode="decimal" step="0.5" value="4"></label><label>US$ por persona y día, conductor <input id="tcD" type="number" inputmode="decimal" step="0.5" value="2.5"></label></div>
       <div class="tcrow"><label>Días de servicio <input id="tcN" type="number" inputmode="numeric" value="8"></label><label>Personas <input id="tcP" type="number" inputmode="numeric" value="10"></label></div>
       <p id="tcOut" style="margin:8px 0 0"></p>
     </div>
@@ -710,7 +719,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
       <li>Hoteles del programa</li>
       <li>Vehículo con aire acondicionado y guía nacional de habla hispana</li>
       <li>Desayuno y cena durante todo el tour</li>
-      <li>Habitaciones de cortesía para refrescarse el día de llegada y el de salida</li>
+      <li>Noche del 5 en Negombo para entrar al hotel nada más llegar el 6, y última noche del 13 con cena</li>
       <li>Asistencia en el aeropuerto a la llegada y a la salida</li>
       <li>Entradas y actividades del programa y tasas gubernamentales locales</li>
     </ul>
@@ -722,7 +731,6 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
       <li>Propinas, lavandería, llamadas y gastos personales</li>
       <li>Gastos por causas ajenas a la organización (cancelaciones, retrasos, cambios de horario…)</li>
     </ul>
-    <span class="pend">Seguro de anulación: el documento lo cita como incluido y como no incluido. Confirmar con Norakai.</span>
   </div>
 
   <div class="card">
@@ -730,8 +738,8 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <ul>
       <li><b>Moneda:</b> rupia de Sri Lanka (LKR).</li>
       <li><b>Hora:</b> UTC+5:30, cuatro horas y media más que en España en diciembre.</li>
-      <li><b>Enchufes:</b> 230 V; tipos D y G (conviene un adaptador universal).</li>
-      <li><b>Templos:</b> hombros y rodillas cubiertos, descalzos al entrar. Útil llevar calcetines para el suelo caliente.</li>
+      <li><b>Enchufes:</b> 230 V; tipos D, G y M (conviene un adaptador universal).</li>
+      <li><b>Templos:</b> hombros y rodillas cubiertos, hombres y mujeres. Se entra descalzo y sin sombrero; útil llevar calcetines para el suelo caliente. No os hagáis fotos de espaldas a una estatua de Buda, tapad los tatuajes religiosos y pedid permiso antes de fotografiar a monjes.</li>
       <li><b>Clima:</b> calor húmedo en el Triángulo Cultural y la costa; en Nuwara Eliya y Ella hace fresco por la noche. Llevad una capa de abrigo y chubasquero.</li>
     </ul>
   </div>
@@ -823,12 +831,13 @@ const HOTELS = {
     web:"https://www.resort98acres.com/",
     facts:["Chalés sobre una plantación de té de 98 acres, de ahí el nombre. Construido en gran parte con materiales reciclados y madera local.","Vistas a Little Adam's Peak, que queda justo enfrente, y a Ella Rock.","Piscina, spa y bar con vistas. El Puente de los Nueve Arcos está a unos 10–15 minutos a pie."],
     tip:"Las dos excursiones del día 12 se pueden hacer andando desde el hotel."},
-  earls:{tel:"+94 31 203 0700",addr:"05 Carron Place, Negombo",n:"Earl's Regent",st:4,city:"Negombo",room:"Deluxe",q:"Earl's Regent Negombo",nights:"6 y 13 dic · uso de día para refrescarse",ph:"negbeach2",
+  earls:{tel:"+94 31 203 0700",addr:"05 Carron Place, Negombo",n:"Earl's Regent",st:4,city:"Negombo",room:"Deluxe",q:"Earl's Regent Negombo",nights:"Noche del 5 (para entrar nada más llegar el 6) y noche del 13 con cena",ph:"negbeach2",
     web:"https://themorning.lk/articles/HU65HmeOy0Ud8XguSDO9", webLabel:"Reseña (The Morning)",
     facts:["En primera línea de la playa de Negombo, a unos 25 minutos del aeropuerto.","Abrió en noviembre de 2022 y pertenece al mismo grupo que el Earl's Regency de Kandy.","La piscina da directamente a la playa y tiene bar en la azotea."],
     tip:"No hemos encontrado web oficial; el enlace lleva a una reseña de prensa local."}
 };
 const SHOP = {"8": "Cerca de Sigiriya hay grandes tiendas de tallas y artesanía a las que suelen parar los circuitos. Los precios son altos; en Laksala (día 9) encontraréis lo mismo más barato y a precio fijo.", "9": "Es el día con más tiendas: el jardín de especias, y quizá un taller de batik o un «museo» de gemas en Kandy. Mejor opción: Laksala, a precio fijo, en el Jardín Botánico de Peradeniya y junto al Templo del Diente. Si queda tiempo, el centro comercial Kandy City Centre.", "10": "La tienda de la fábrica de té es buen sitio para comprar té en hoja suelta, envasado allí mismo.", "13": "Tarde libre en Negombo: el gran almacén Odel (Colombo Road) y las tiendas de Main Street para ropa y excedentes de exportación. Para especias baratas, cualquier supermercado (Keells, Cargills).", "14": "En el aeropuerto hay tienda Laksala y duty free para lo último. Si habéis comprado en tiendas «Tax Free for Tourists», pasad por el mostrador de devolución del IVA antes de facturar."};
+const INC = {"6": "Peajes de autopista", "7": "Entradas de Anuradhapura y del Templo de las Cuevas de Dambulla", "8": "Entradas de Sigiriya y Polonnaruwa", "9": "Templo del Diente, Jardín Botánico de Peradeniya y espectáculo de danzas", "10": "Visita a la fábrica de té y lago Gregory", "11": "Billete de tren Nanu Oya – Ella", "12": "Sin entradas: Little Adam's Peak y el Puente de los Nueve Arcos son de acceso libre"};
 const DAYS = [
  {d:5,wd:"Sáb",title:"Rumbo a Sri Lanka",route:"Ciudad de origen → Estambul → Colombo",ph:"airport1",
   lead:"Salida desde Bilbao, Barcelona, Madrid o Múnich con conexión en Estambul. Noche a bordo.",
@@ -836,10 +845,10 @@ const DAYS = [
   tips:["Las conexiones en Estambul son justas: desde Bilbao y Madrid hay alrededor de 1 h entre la llegada y la salida a Colombo. Si el vuelo de ida sale con retraso, avisad a la tripulación.","Comprobad en el mostrador que la maleta va facturada directa hasta Colombo (CMB).","El vuelo Estambul–Colombo es nocturno. Al aterrizar, en Sri Lanka son 4 h 30 min más que en España: intentad dormir a bordo.","Llevad a mano la aprobación de la ETA (impresa o en el móvil) y el pasaporte."],
   visits:[]},
  {d:6,wd:"Dom",title:"Llegada y primera noche entre arrozales",route:"Aeropuerto → Negombo → Anuradhapura",ph:"lagoon",drive:"3 h 45 min",
-  lead:"Llegada a Colombo a las 05:50, recepción en el aeropuerto y traslado a Negombo. Desayuno y ducha en el Earl's Regent antes de seguir hacia Anuradhapura.",
+  lead:"Llegada a Colombo hacia las 05:50–06:00, recepción en el aeropuerto y traslado a Negombo. La habitación del Earl's Regent está reservada desde la noche del 5, así que se puede entrar nada más llegar: ducha, desayuno y descanso antes de seguir hacia Anuradhapura.",
   meals:"Desayuno y cena",hotel:"ulagalla",
   tips:["En la sala de llegadas hay cajeros y casas de cambio, y puestos de las operadoras móviles para comprar una SIM o eSIM de datos para el viaje.","La rupia (LKR) no se cambia fácilmente fuera del país: sacad poco y en varias veces.","El trayecto a Anuradhapura cruza la llanura seca del norte. Es buen momento para dormir en el coche.","Uga Ulagalla está entre arrozales y embalses; a última hora de la tarde salen pájaros y, con suerte, algún elefante en la zona."],
-  visits:[{n:"Desayuno en Earl's Regent (Negombo)",ph:"negbeach",q:"Earl's Regent Negombo",t:"Parada para refrescarse",p:"Habitaciones de cortesía para descansar un rato después del vuelo nocturno.",
+  visits:[{n:"Desayuno en Earl's Regent (Negombo)",ph:"negbeach",q:"Earl's Regent Negombo",t:"Parada para descansar",p:"Habitación reservada desde la noche anterior (con desayuno) para entrar a la llegada del vuelo nocturno.",
     more:["Negombo es una ciudad pesquera y muy católica por la herencia portuguesa y holandesa. Hay un mercado de pescado y un canal holandés."],
     links:[["Negombo en Wikipedia",wk("Negombo")]]}]},
  {d:7,wd:"Lun",title:"La primera capital y el Templo de Oro",route:"Anuradhapura → Dambulla",ph:"ruwan1",drive:"1 h 30 min",
@@ -914,7 +923,7 @@ const DAYS = [
     more:["Nuwara Eliya se conoce como la «pequeña Inglaterra» por sus edificios coloniales, su hipódromo y su clima fresco.","Ojo: el hotel está en Kandapola, a unos 14 km del lago. Preguntad al guía cómo volver si os quedáis por la ciudad."],
     links:[["Nuwara Eliya en Wikipedia",wk("Nuwara Eliya")]]}
   ]},
- {d:11,wd:"Vie",title:"El tren más bonito del mundo",route:"Nuwara Eliya → Nanu Oya → Ella",ph:"train1",drive:"2 h 30 min",
+ {d:11,wd:"Vie",title:"El tren más bonito del mundo",route:"Nuwara Eliya → Nanu Oya → Ella",ph:"train1",drive:"Tren 2 h 30 min – 3 h",
   lead:"Trayecto en tren de Nanu Oya a Ella entre plantaciones, montañas con niebla, cascadas y viaductos.",
   meals:"Desayuno y cena",hotel:"acres",
   tips:["Confirmad con el guía el tipo de billete (1ª o 2ª clase reservada) y el vagón. El equipaje suele ir por carretera con el vehículo.","Las puertas van abiertas y es tentador asomarse para la foto. Agarraos bien y cuidado con los túneles y la vegetación junto a la vía.","Llevad algo de abrigo para la primera parte: el tren pasa de 1.600 m a casi 1.900 m antes de bajar hacia Ella.","Por las ventanillas pasan vendedores de samosas y cacahuetes en cucurucho: forma parte de la experiencia."],
@@ -927,6 +936,7 @@ const DAYS = [
  {d:12,wd:"Sáb",title:"Ella a pie",route:"Ella",ph:"@arches",
   lead:"Día sin traslados. Caminatas cortas con vistas sobre las colinas de té.",
   meals:"Desayuno y cena",hotel:"acres",
+  note:"Quien vuela a Múnich el 13 probablemente sale hoy de Ella hacia Colombo: confirmadlo con Norakai.",
   tips:["Es el único día completo sin coche: buen momento para un masaje ayurvédico en el spa del hotel.","Opcionales cerca: las cascadas de Ravana, a unos 6 km, y la tirolina Flying Ravana, junto al hotel.","El pueblo de Ella tiene muchos cafés y restaurantes para comer: la comida del mediodía no está incluida.","Calzado con buena suela: los senderos entre el té resbalan si ha llovido."],
   visits:[
    {n:"Little Adam's Peak",ph:"ella1",q:"Little Adam's Peak Ella",t:"Caminata de 30–45 min",
@@ -939,13 +949,13 @@ const DAYS = [
     links:[["Nueve Arcos en Wikipedia",wk("Nine Arch Bridge Demodara")]]}
   ]},
  {d:13,wd:"Dom",title:"De vuelta a la costa",route:"Ella → Negombo",ph:"negbeach",drive:"5 h",
-  lead:"Traslado largo a Negombo. Habitaciones en el Earl's Regent para refrescarse y tiempo libre junto a la playa.",
-  meals:"Desayuno",hotel:"earls",
-  note:"El grupo de Múnich vuela este día a las 09:25 desde Colombo. Confirmad con la agencia cómo y cuándo se hace su traslado desde Ella.",
-  tips:["La cena de hoy no está incluida: buen momento para una última cena de pescado o curry de cangrejo en Negombo.","Desde la playa de Negombo se ve la puesta de sol sobre el océano Índico.","Gastad o cambiad las rupias que os sobren: fuera de Sri Lanka es difícil cambiarlas.","Mañana el vuelo sale a las 07:25: preparad hoy la maleta y confirmad la hora de recogida, probablemente de madrugada."],
+  lead:"Traslado largo a Negombo. Última noche en el Earl's Regent, frente a la playa, con la cena incluida.",
+  meals:"Desayuno y cena",hotel:"earls",
+  note:"El grupo de Múnich vuela hoy a las 09:25 desde Colombo. En el voucher de la agencia local, las noches del 12 y del 13 tienen 4 habitaciones en vez de 5: parece que salen de Ella el 12. Confirmad con Norakai su traslado y dónde duermen esa noche.",
+  tips:["La cena está incluida en el hotel. Si preferís cenar fuera, avisad en recepción.","Desde la playa de Negombo se ve la puesta de sol sobre el océano Índico.","Gastad o cambiad las rupias que os sobren: fuera de Sri Lanka es difícil cambiarlas.","Mañana el vuelo sale a las 07:25 y hay que estar en el aeropuerto a las 04:25: preparad hoy la maleta y confirmad la hora de recogida, sobre las 03:45."],
   visits:[]},
  {d:14,wd:"Lun",title:"Regreso a casa",route:"Colombo → Estambul → ciudad de origen",ph:"airport2",
-  lead:"Traslado al aeropuerto para el vuelo de regreso de las 07:25. Fin de los servicios.",
+  lead:"Traslado de madrugada al aeropuerto: hay que estar a las 04:25, tres horas antes del vuelo TK 731 de las 07:25. Fin de los servicios.",
   meals:"—",
   tips:["El aeropuerto está a unos 25–30 minutos de Negombo. Para un vuelo internacional conviene estar unas 3 h antes, así que la salida del hotel será muy temprano.","El té y las especias se pueden llevar en la maleta facturada.","Revisad en la pestaña Vuelos la conexión en Estambul según vuestra ciudad. La de Bilbao está pendiente de confirmar con Norakai."],
   visits:[]}
@@ -974,7 +984,7 @@ const FLIGHTS = {
    back:[["14/12","CMB","Colombo","IST","Estambul","07:25","13:50",""],["14/12","IST","Estambul","MAD","Madrid","20:55","23:35",""]]},
  munich:{label:"Múnich",out:[["05/12","MUC","Múnich","IST","Estambul","11:00","15:45",""],["05/12","IST","Estambul","CMB","Colombo","19:15","05:50","+1"]],
    back:[["13/12","CMB","Colombo","IST","Estambul","09:25","15:55",""],["13/12","IST","Estambul","MUC","Múnich","17:00","17:45",""]],
-   warn:"Volvéis un día antes que el resto (13/12). El programa de ese día empieza en Ella, a unas 5 horas de Colombo: confirmad el traslado con Norakai."}
+   warn:"Volvéis un día antes que el resto (13/12, 09:25). El voucher de la agencia local ya no os cuenta en Ella la noche del 12 (4 habitaciones en vez de 5), pero no dice dónde dormís ni cuándo es el traslado: confirmadlo con Norakai."}
 };
 
 const CHECK = [
@@ -984,14 +994,14 @@ const CHECK = [
   ["vac","Consulta de vacunas del viajero","Pedid cita en un centro de vacunación internacional; conviene ir con 4–6 semanas de margen."],
   ["reg","Apuntarse en el Registro de Viajeros","Así Exteriores os localiza si pasa algo.","https://registroviajeros.exteriores.gob.es/"],
   ["ale","Alergias e intolerancias comunicadas a Norakai",""],
-  ["seg","Revisar qué cubre el seguro de viaje","Viene incluido; comprobad la cobertura médica y el teléfono de asistencia."]]},
+  ["seg","Revisar qué cubre el seguro de viaje","Incluido, con asistencia y anulación según la mini guía de Norakai. Guardad la póliza en Docs y apuntad el teléfono de asistencia."]]},
  {g:"La semana antes", due:"2026-12-03", items:[
   ["app","Abrir esta app con wifi e instalarla en el móvil","Esperad a que en Inicio ponga «Lista para usar sin conexión»."],
   ["mdoc","Guardar billetes, ETA y seguro en «Mis documentos»","Pestaña Docs. Se guardan solo en tu móvil y se abren sin conexión."],
   ["sim","Datos en Sri Lanka: roaming, eSIM o SIM en el aeropuerto",""],
   ["tar","Tarjeta para pagar y sacar dinero sin comisiones","Y avisad al banco del viaje si os lo piden."],
   ["med","Medicación habitual y botiquín básico","Lista detallada en «Botiquín», más abajo en esta pantalla."],
-  ["ada","Adaptador de enchufe (tipos D y G)",""],
+  ["ada","Adaptador universal de enchufe (tipos D, G y M)",""],
   ["rep","Repelente de mosquitos y protector solar",""]]},
  {g:"En la maleta", due:"2026-12-04", items:[
   ["tem","Ropa que cubra hombros y rodillas para los templos",""],
@@ -1076,6 +1086,7 @@ function renderDay(dn){
    <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}${WX_LOC[x.d]?(s=>`<span class="fact">🌅 ${s.rise} · 🌇 ${s.set}</span>`)(sunFor(x.d)):''}</div>
    <p class="lead">${x.lead}</p>
    <div class="wear"><span class="mk">👕 Qué ponerse</span><p>${wearHint(x.d)}</p><a href="#checklist" data-ropa>Lista de ropa ›</a></div>
+   ${INC[x.d]?`<p class="inc">🎟 <b>Incluido:</b> ${INC[x.d]}</p>`:''}
    ${x.note?`<div class="note">${x.note}</div>`:''}
    ${SHOP[x.d]?`<div class="shopbox"><span class="mk">🛍 Compras hoy</span><p>${SHOP[x.d]}</p><a href="#compras">Ver la guía de compras ›</a></div>`:''}
    ${x.tips?`<div class="tipsbox"><span class="mk">Lo que conviene saber hoy</span><ul>${x.tips.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
@@ -1192,8 +1203,8 @@ function initTipCalc(){
   const ids=['tcG','tcD','tcN','tcP'];
   const run=()=>{
     const [g,d,n,p]=ids.map(i=>+$('#'+i).value||0);
-    const tot=(g+d)*n, pp=p?tot/p:0;
-    $('#tcOut').innerHTML = `Total del bote: <b>${fmt(tot)} Rs</b> (≈ ${fmt(tot/fx.rate)} €) · Por persona: <b>${fmt(pp)} Rs</b> (≈ ${fmt(pp/fx.rate,1)} €)`;
+    const pp=(g+d)*n, tot=pp*p;
+    $('#tcOut').innerHTML = `Por persona: <b>${fmt(pp)} US$</b> · Bote total: <b>${fmt(tot)} US$</b> (guía ${fmt(g*n*p)} · conductor ${fmt(d*n*p)})`;
   };
   ids.forEach(i=>$('#'+i).addEventListener('input',run)); run();
 }
@@ -1201,6 +1212,7 @@ function initTipCalc(){
 /* Frases */
 const PHRASES = [
  ["Hola / bienvenido","Ayubowan","a-yu-bo-uan","Se dice con las palmas juntas; vale para saludar y despedirse."],
+ ["Sin picante, por favor","Not spicy / mild, please","not spái-si / maild","En inglés. En los restaurantes turísticos lo entienden siempre."],
  ["Gracias","Istuti","is-tu-ti","«Bohoma istuti» = muchas gracias."],
  ["Sí / No","Ow / Nehe","ou / ne-je",""],
  ["No, gracias (no lo quiero)","Epa, istuti","e-pa is-tu-ti","Útil con vendedores insistentes."],
@@ -1282,11 +1294,11 @@ function initTools(){
 
 /* ---------- Clima normal de diciembre (medias históricas) ---------- */
 // [mín, máx, días con lluvia en diciembre]
-const CLIMA = {6:[22,29,13],7:[21,28,15],8:[21,28,15],9:[19,27,12],10:[11,20,15],11:[17,25,13],12:[17,25,13],13:[23,30,10]};
+const CLIMA = {6:[23,30,13],7:[23,30,15],8:[23,30,15],9:[18,27,12],10:[9,20,15],11:[16,26,13],12:[16,26,13],13:[24,31,10]}; // temperaturas: mini guía de Norakai; días de lluvia: medias históricas
 const climaText = d => { const c=CLIMA[d]; return c?`${c[0]}–${c[1]} °C · lluvia ${c[2]} de 31 días`:''; };
 
 /* ---------- Ropa: reglas ---------- */
-const ROPA_CATS = [["calor","Para el calor"],["templos","Templos"],["fresco","Fresco y abrigo"],["lluvia","Lluvia y sol"],["calzado","Calzado"],["agua","Piscina y playa"],["viaje","Vuelos y España"],["mio","Añadido por mí"]];
+const ROPA_CATS = [["calor","Para el calor"],["templos","Templos"],["fresco","Fresco y abrigo"],["lluvia","Lluvia y sol"],["calzado","Calzado"],["agua","Piscina y playa"],["viaje","Vuelos y España"],["util","Otros útiles"],["mio","Añadido por mí"]];
 const TEMPLE_DAYS = [6,7,8,9];      // Anuradhapura, Dambulla, Polonnaruwa, Kandy
 function ropaRules(wx){
   // wx: {dia:{min,max,rain}} con la previsión si existe; si no, medias
@@ -1312,7 +1324,7 @@ function ropaRules(wx){
   add('fleece','fresco','Forro polar o jersey',1,`${place(coldDay)} (${coldDay} dic) baja a ${Math.round(coldMin)} °C por la noche. También para el tren y el aire acondicionado.`);
   add('ls','fresco','Camiseta de manga larga',1,`Para la noche en ${place(coldDay)} y Ella (${Math.round(v(11).min)} °C).`);
   add('pants','fresco','Pantalón largo de abrigo (vaquero o similar)',1,'Para las tierras altas, días 10 a 12.');
-  if(coldMin<10) add('cold','fresco','Gorro o braga de cuello',1,`La previsión da ${Math.round(coldMin)} °C en ${place(coldDay)}.`);
+  if(coldMin<10) add('cold','fresco','Gorro o braga de cuello',1,`${fc?'La previsión da':'Por la noche puede bajar a'} ${Math.round(coldMin)} °C en ${place(coldDay)}.`);
   add('rainc','lluvia','Chubasquero ligero o cortavientos impermeable',1,'En diciembre llueve 10–15 días al mes en toda la ruta, normalmente en chaparrones.');
   add('umb','lluvia','Paraguas plegable',1,'Sirve también para el sol.');
   add('hat','lluvia','Gorra o sombrero',1,'Índice UV 10–11 en diciembre.');
@@ -1326,6 +1338,10 @@ function ropaRules(wx){
   add('coat','viaje','Abrigo para la salida y la vuelta',1,'Diciembre en España: el 5 y el 14 os toca frío en el aeropuerto.');
   add('hand','viaje','Muda completa en el equipaje de mano',1,'Por si la maleta se retrasa en la escala de Estambul.');
   add('plane','viaje','Sudadera cómoda para el avión',1,'');
+  add('mochi','util','Mochila pequeña para las excursiones',1,'Agua, chubasquero, calcetines y protector solar durante las visitas.');
+  add('adapt','util','Adaptador universal (enchufes D, G y M)',1,'');
+  add('bat','util','Batería externa',1,'Muchas fotos y mapas, y pocas ocasiones de cargar durante el día.');
+  add('prism','util','Prismáticos',1,'Los recomienda la agencia para ver aves y fauna por el camino.');
   return R;
 }
 
@@ -1396,15 +1412,19 @@ function medRules(){
   add('m_sro','estomago','Sales de rehidratación oral',4,'Lo más importante si hay diarrea, sobre todo con calor.');
   add('m_lop','estomago','Antidiarreico (loperamida)',1,'Para un apuro, como un trayecto largo. No si hay fiebre o sangre.');
   add('m_ome','estomago','Antiácido o protector de estómago',1,'La comida pica: rice & curry, kottu, sambol.');
+  add('m_abx','estomago','Antibiótico, solo si te lo receta el médico',1,'La agencia lo incluye para cuando no se pueda ir al médico y haya fiebre alta. Pregúntalo en la consulta de vacunación.');
   add('m_mar','mareo','Pastillas para el mareo',1,'Curvas de Kandy a Nuwara Eliya (10 dic), de Nuwara Eliya a Ella (11 dic) y bajada a Negombo, 5 h (13 dic).');
-  add('m_rep','piel','Repelente con DEET al 20–30 % o icaridina',1,'El mosquito del dengue pica de día. También se compra allí.');
+  add('m_rep','piel','Repelente con DEET (30–50 %), icaridina o IR3535',1,'El mosquito del dengue pica de día, sobre todo al amanecer y al atardecer. También se compra allí.');
   add('m_pic','piel','Crema para picaduras',1,'');
   add('m_ant','piel','Antihistamínico',1,'Para picaduras que se inflaman o alergias.');
+  add('m_cort','piel','Crema con corticoide suave',1,'Para reacciones de piel leves. La incluye la lista de la agencia.');
   add('m_sol','piel','Protector solar de factor 50',1,'Índice UV 10–11, también con nubes.');
   add('m_aft','piel','Aftersun o gel de aloe',1,'');
   add('m_tir','curas','Tiritas',1,'');
   add('m_amp','curas','Apósitos para ampollas',1,'Escaleras de Sigiriya (8 dic) y Little Adam\'s Peak (12 dic).');
-  add('m_ase','curas','Antiséptico (clorhexidina) y gasas',1,'Con el calor y la humedad, las heridas pequeñas se infectan antes.');
+  add('m_ase','curas','Antiséptico (clorhexidina), gasas, vendas y esparadrapo',1,'Con el calor y la humedad, las heridas pequeñas se infectan antes.');
+  add('m_sue','curas','Suero fisiológico en monodosis',1,'Para limpiar heridas y ojos.');
+  add('m_tij','curas','Tijeras pequeñas',1,'En la maleta facturada, no en la de mano.');
   add('m_gel','varios','Gel hidroalcohólico',1,'Se come mucho con la mano y no siempre hay jabón.');
   add('m_gar','varios','Pastillas para la garganta',1,'Aire acondicionado fuerte en hoteles y furgoneta.');
   add('m_lag','varios','Lágrimas artificiales',1,'Para el avión y el polvo de la carretera.');
@@ -1424,7 +1444,7 @@ function wearHint(d){
   if(c[1]>=26) p.push('ropa ligera y transpirable');
   if(TEMPLE_DAYS.includes(d)) p.push('hombros y rodillas cubiertos para los templos, sandalias y calcetines');
   if(d===8) p.push('zapatillas para las escaleras de Sigiriya');
-  if(d===10) p.push('forro polar y pantalón largo: por la noche ronda los 11 °C');
+  if(d===10) p.push(`forro polar y pantalón largo: por la noche puede bajar a ${CLIMA[10][0]} °C`);
   if(d===11) p.push('una capa para el tren, que en la montaña refresca');
   if(d===12) p.push('zapatillas para Little Adam\'s Peak y una capa para la noche');
   if(d===13) p.push('bañador para la piscina o la playa del hotel');
@@ -1597,7 +1617,7 @@ function initShare(){
 }
 
 /* ---------- Contactos ---------- */
-const MYC_SLOTS = [["guia","Guía","tel"],["cond","Conductor","tel"],["wa","Grupo de WhatsApp","url"],["album","Álbum de fotos compartido","url"]];
+const MYC_SLOTS = [["cond","Conductor","tel"],["wa","Grupo de WhatsApp","url"],["album","Álbum de fotos compartido","url"]];
 function mycGet(){ try{ return JSON.parse(localStorage.getItem('slk-myc')||'{}'); }catch(e){ return {}; } }
 function renderContacts(){
   const telLink = t => `<a class="tel" href="tel:${t.replace(/[^+\d]/g,'')}">${t}</a>`;
