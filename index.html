@@ -375,7 +375,10 @@ h3{font-size:1.15rem}
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
 .tabbar a{flex:1;text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.7rem;font-weight:700;border-radius:12px}
-.tabbar a svg{width:24px;height:24px}
+.tabbar a svg{width:22px;height:22px}
+.tolink{margin:14px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:12px 16px}
+.tolink small{display:block;font-size:.8rem}
+.tolink>span:last-child{margin-left:auto;color:var(--muted);font-size:1.2rem}
 .tabbar a.on{color:var(--jungle)}
 .tabbar a.on svg{stroke:var(--jungle)}
 footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:center}
@@ -451,15 +454,28 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <span class="eyebrow">Vuelos y hoteles</span>
     <h2 style="margin-top:4px">Reservas</h2>
   </div>
-  <nav class="jump" aria-label="Secciones de reservas" style="margin-bottom:6px"><a href="#" data-j="r-docs">📄 Mis documentos</a><a href="#" data-j="r-vuelos">✈ Vuelos</a><a href="#" data-j="r-hoteles">🛏 Hoteles</a></nav>
+  <nav class="jump" aria-label="Secciones de reservas" style="margin-bottom:6px"><a href="#" data-j="r-vuelos">✈ Vuelos</a><a href="#" data-j="r-hoteles">🛏 Hoteles</a></nav>
   <div class="pad" id="r-vuelos" style="scroll-margin-top:12px">
     <h3 style="font-size:1.3rem;margin:10px 0 2px">Vuelos <span class="small muted" style="font-family:var(--sans);font-weight:600">· Turkish vía Estambul</span></h3>
     <p class="muted small" style="margin:-4px 0 14px">Elige tu ciudad de salida. Horas locales de cada aeropuerto.</p>
   </div>
   <div class="seg" id="seg"></div>
   <div id="legs"></div>
-  <div class="pad" id="r-docs" style="scroll-margin-top:12px"><h3 style="font-size:1.3rem;margin:26px 0 2px">Mis documentos <span class="small muted" style="font-family:var(--sans);font-weight:600" id="docCount"></span></h3>
-    <p class="muted small" style="margin:-2px 0 10px">🔒 Se guardan solo en este móvil: no se suben a ningún sitio y nadie más del grupo los ve. Se abren sin conexión.</p></div>
+  <a class="cklink tolink" href="#docs"><span>📄</span><span><b>Billetes, ETA, seguro…</b><small class="muted">Guárdalos en la pestaña Docs para tenerlos sin conexión</small></span><span>›</span></a>
+  <div class="pad" id="r-hoteles" style="scroll-margin-top:12px"><h3 style="font-size:1.3rem;margin:26px 0 2px">Hoteles <span class="small muted" style="font-family:var(--sans);font-weight:600">· confirmados</span></h3></div>
+  <div id="hotels"></div>
+</section>
+
+
+
+
+<!-- DOCS -->
+<section class="view" id="v-docs">
+  <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top))">
+    <span class="eyebrow">Solo en este móvil</span>
+    <h2 style="margin-top:4px">Mis documentos <span class="small muted" style="font-family:var(--sans);font-weight:600;font-size:.9rem" id="docCount"></span></h2>
+    <p class="small muted" style="margin:0 0 6px">Billetes y tarjetas de embarque, aprobación de la ETA, seguro, pasaporte, reservas de excursiones: lo que quieras tener a mano sin conexión.</p>
+    <p class="muted small" style="margin:0 0 12px">🔒 Se guardan solo en este móvil: no se suben a ningún sitio y nadie más del grupo los ve. Se abren sin conexión.</p></div>
   <div class="card docs">
     <ul class="doclist" id="docList"></ul>
     <form id="docForm" class="docf">
@@ -472,12 +488,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <p class="small muted" style="margin:8px 0 0">Guarda también el original en el correo o en Drive: si cambias de móvil o borras los datos del navegador, se pierden. En iPhone, úsala desde la app instalada en la pantalla de inicio.</p>
   </div>
   <div class="docview" id="docView" hidden><div class="dvbar"><b id="docViewT"></b><button type="button" id="docViewX">Cerrar ✕</button></div><img id="docViewImg" alt=""></div>
-  <div class="pad" id="r-hoteles" style="scroll-margin-top:12px"><h3 style="font-size:1.3rem;margin:26px 0 2px">Hoteles <span class="small muted" style="font-family:var(--sans);font-weight:600">· confirmados</span></h3></div>
-  <div id="hotels"></div>
 </section>
-
-
-
 
 <!-- COMPRAS -->
 <section class="view" id="v-compras">
@@ -976,7 +987,7 @@ const CHECK = [
   ["seg","Revisar qué cubre el seguro de viaje","Viene incluido; comprobad la cobertura médica y el teléfono de asistencia."]]},
  {g:"La semana antes", due:"2026-12-03", items:[
   ["app","Abrir esta app con wifi e instalarla en el móvil","Esperad a que en Inicio ponga «Lista para usar sin conexión»."],
-  ["mdoc","Guardar billetes, ETA y seguro en «Mis documentos»","Reservas → Mis documentos. Se guardan solo en tu móvil y se abren sin conexión."],
+  ["mdoc","Guardar billetes, ETA y seguro en «Mis documentos»","Pestaña Docs. Se guardan solo en tu móvil y se abren sin conexión."],
   ["sim","Datos en Sri Lanka: roaming, eSIM o SIM en el aeropuerto",""],
   ["tar","Tarjeta para pagar y sacar dinero sin comisiones","Y avisad al banco del viaje si os lo piden."],
   ["med","Medicación habitual y botiquín básico","Lista detallada en «Botiquín», más abajo en esta pantalla."],
@@ -1640,8 +1651,9 @@ function initOffline(){
 /* ---------- Navegación ---------- */
 const TABS = [
  ["inicio","Inicio",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
- ["dias","Día a día",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
+ ["dias","Días",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
  ["vuelos","Reservas",'<path d="M2 16l20-6-3-2-7 2-5-5-2 1 3 5-4 1-2-2-1 1z"/>'],
+ ["docs","Docs",'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'],
  ["compras","Compras",'<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'],
  ["checklist","Listas",'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>'],
  ["info","Práctico",'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>']
