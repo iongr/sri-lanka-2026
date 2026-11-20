@@ -351,6 +351,26 @@ h3{font-size:1.15rem}
 .rfoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
 .rbtn2{border:0;background:var(--paper2);color:var(--jungle);font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer}
 .rlink{border:0;background:none;color:var(--jungle2);font-weight:700;font-size:.82rem;cursor:pointer;text-decoration:underline}
+
+.docs{margin:0 14px}
+.doclist{list-style:none;padding:0;margin:0}
+.doc{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.dico{font-size:1.4rem}
+.dtx{flex:1;min-width:120px;display:flex;flex-direction:column}
+.dtx b{font-size:.95rem}
+.dtx small{color:var(--muted);font-size:.76rem;word-break:break-all}
+.dbt{display:flex;gap:6px}
+.dbt a,.dbt button{border:0;background:var(--paper2);color:var(--jungle);font-weight:700;font-size:.8rem;border-radius:999px;padding:7px 11px;cursor:pointer;text-decoration:none;font-family:var(--sans)}
+.dbt .ddel{background:none;color:var(--muted)}
+.dbt .ddel.sure{background:#fbe3db;color:#8a2f1c}
+.docf{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.docf select,.docf input{font:600 .92rem var(--sans);padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.docf input[type=file]{padding:8px}
+.docf button{border:0;background:var(--jungle);color:#fff;font-weight:700;border-radius:12px;padding:12px;cursor:pointer;font-size:.95rem}
+.docview{position:fixed;inset:0;z-index:100;background:rgba(15,25,20,.94);display:flex;flex-direction:column}
+.dvbar{display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 14px 12px;color:#fff}
+.dvbar button{border:0;background:#fff;color:var(--ink);font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer}
+.docview img{flex:1;min-height:0;object-fit:contain;width:100%;touch-action:pinch-zoom}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -431,13 +451,27 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <span class="eyebrow">Vuelos y hoteles</span>
     <h2 style="margin-top:4px">Reservas</h2>
   </div>
-  <nav class="jump" aria-label="Secciones de reservas" style="margin-bottom:6px"><a href="#" data-j="r-vuelos">✈ Vuelos</a><a href="#" data-j="r-hoteles">🛏 Hoteles</a></nav>
+  <nav class="jump" aria-label="Secciones de reservas" style="margin-bottom:6px"><a href="#" data-j="r-docs">📄 Mis documentos</a><a href="#" data-j="r-vuelos">✈ Vuelos</a><a href="#" data-j="r-hoteles">🛏 Hoteles</a></nav>
   <div class="pad" id="r-vuelos" style="scroll-margin-top:12px">
     <h3 style="font-size:1.3rem;margin:10px 0 2px">Vuelos <span class="small muted" style="font-family:var(--sans);font-weight:600">· Turkish vía Estambul</span></h3>
     <p class="muted small" style="margin:-4px 0 14px">Elige tu ciudad de salida. Horas locales de cada aeropuerto.</p>
   </div>
   <div class="seg" id="seg"></div>
   <div id="legs"></div>
+  <div class="pad" id="r-docs" style="scroll-margin-top:12px"><h3 style="font-size:1.3rem;margin:26px 0 2px">Mis documentos <span class="small muted" style="font-family:var(--sans);font-weight:600" id="docCount"></span></h3>
+    <p class="muted small" style="margin:-2px 0 10px">🔒 Se guardan solo en este móvil: no se suben a ningún sitio y nadie más del grupo los ve. Se abren sin conexión.</p></div>
+  <div class="card docs">
+    <ul class="doclist" id="docList"></ul>
+    <form id="docForm" class="docf">
+      <select id="docLabel" aria-label="Tipo de documento"></select>
+      <input id="docTitle" placeholder="Nombre (ej.: Reserva del tren)" maxlength="40" hidden>
+      <input id="docFile" type="file" accept="application/pdf,image/*" aria-label="Archivo">
+      <button type="submit">Guardar en este móvil</button>
+      <p class="small" id="docMsg" style="margin:0;font-weight:700;color:var(--jungle)"></p>
+    </form>
+    <p class="small muted" style="margin:8px 0 0">Guarda también el original en el correo o en Drive: si cambias de móvil o borras los datos del navegador, se pierden. En iPhone, úsala desde la app instalada en la pantalla de inicio.</p>
+  </div>
+  <div class="docview" id="docView" hidden><div class="dvbar"><b id="docViewT"></b><button type="button" id="docViewX">Cerrar ✕</button></div><img id="docViewImg" alt=""></div>
   <div class="pad" id="r-hoteles" style="scroll-margin-top:12px"><h3 style="font-size:1.3rem;margin:26px 0 2px">Hoteles <span class="small muted" style="font-family:var(--sans);font-weight:600">· confirmados</span></h3></div>
   <div id="hotels"></div>
 </section>
@@ -942,6 +976,7 @@ const CHECK = [
   ["seg","Revisar qué cubre el seguro de viaje","Viene incluido; comprobad la cobertura médica y el teléfono de asistencia."]]},
  {g:"La semana antes", due:"2026-12-03", items:[
   ["app","Abrir esta app con wifi e instalarla en el móvil","Esperad a que en Inicio ponga «Lista para usar sin conexión»."],
+  ["mdoc","Guardar billetes, ETA y seguro en «Mis documentos»","Reservas → Mis documentos. Se guardan solo en tu móvil y se abren sin conexión."],
   ["sim","Datos en Sri Lanka: roaming, eSIM o SIM en el aeropuerto",""],
   ["tar","Tarjeta para pagar y sacar dinero sin comisiones","Y avisad al banco del viaje si os lo piden."],
   ["med","Medicación habitual y botiquín básico","Lista detallada en «Botiquín», más abajo en esta pantalla."],
@@ -1386,6 +1421,53 @@ function wearHint(d){
   const s=p.join('; '); return s.charAt(0).toUpperCase()+s.slice(1)+'.';
 }
 
+/* ---------- Mis documentos (solo en este móvil, IndexedDB) ---------- */
+const DOC_LABELS=["Vuelo de ida","Vuelo de vuelta","Tarjeta de embarque","ETA (visado)","Seguro de viaje","Pasaporte","Otro"];
+const DOC_MAX=15*1024*1024;
+function docDB(){ return new Promise((ok,ko)=>{ if(!('indexedDB' in window)) return ko(new Error('sin IndexedDB'));
+  const r=indexedDB.open('slk-docs',1); r.onupgradeneeded=()=>r.result.createObjectStore('docs',{keyPath:'id'}); r.onsuccess=()=>ok(r.result); r.onerror=()=>ko(r.error); }); }
+function docTx(mode,fn){ return docDB().then(db=>new Promise((ok,ko)=>{ const tx=db.transaction('docs',mode); const st=tx.objectStore('docs'); const res=fn(st); tx.oncomplete=()=>ok(res&&res.result!==undefined?res.result:res); tx.onerror=()=>ko(tx.error); tx.onabort=()=>ko(tx.error); })); }
+const docAll=()=>docTx('readonly',st=>st.getAll());
+const docPut=d=>docTx('readwrite',st=>st.put(d));
+const docDel=id=>docTx('readwrite',st=>st.delete(id));
+const kb=n=>n>1048576?(n/1048576).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(n/1024))+' KB';
+let docURLs=[];
+function renderDocs(){
+  const L=$('#docList'); if(!L) return;
+  docAll().then(list=>{
+    docURLs.forEach(u=>URL.revokeObjectURL(u)); docURLs=[];
+    list.sort((a,b)=>DOC_LABELS.indexOf(a.label)-DOC_LABELS.indexOf(b.label)||a.added-b.added);
+    $('#docCount').textContent=list.length?`${list.length} guardado${list.length>1?'s':''}`:'';
+    if(!list.length){ L.innerHTML='<p class="small muted" style="margin:4px 0 8px">Aún no hay nada. Sube los billetes, la aprobación de la ETA y el seguro para tenerlos sin conexión.</p>'; return; }
+    L.innerHTML=list.map(d=>{ const u=URL.createObjectURL(d.blob); docURLs.push(u); const img=d.type.startsWith('image/');
+      return `<li class="doc"><span class="dico">${img?'🖼':'📄'}</span><span class="dtx"><b>${esc(d.title||d.label)}</b><small>${esc(d.name)} · ${kb(d.size)}</small></span>
+        <span class="dbt">${img?`<button type="button" data-view="${d.id}">Ver</button>`:`<a href="${u}" target="_blank" rel="noopener">Abrir</a>`}
+        <button type="button" data-share="${d.id}">Compartir</button><button type="button" class="ddel" data-rm="${d.id}" aria-label="Borrar">✕</button></span></li>`; }).join('');
+    const byId=id=>list.find(x=>x.id===id);
+    L.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{ const d=byId(b.dataset.view); $('#docViewImg').src=URL.createObjectURL(d.blob); $('#docViewT').textContent=d.title||d.label; $('#docView').hidden=false; });
+    L.querySelectorAll('[data-share]').forEach(b=>{ const d=byId(b.dataset.share); const f=new File([d.blob],d.name,{type:d.type});
+      if(!(navigator.canShare&&navigator.canShare({files:[f]}))){ b.remove(); return; }
+      b.onclick=()=>navigator.share({files:[f],title:d.title||d.label}).catch(()=>{}); });
+    L.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ if(b.dataset.sure){ docDel(b.dataset.rm).then(renderDocs); } else { b.dataset.sure=1; b.textContent='¿Borrar?'; b.classList.add('sure'); setTimeout(()=>{ if(b.isConnected){ delete b.dataset.sure; b.textContent='✕'; b.classList.remove('sure'); } },3000); } });
+  }).catch(()=>{ L.innerHTML='<p class="small muted">Este navegador no permite guardar documentos. Prueba con Chrome o Safari, sin modo incógnito.</p>'; $('#docForm').hidden=true; });
+}
+function initDocs(){
+  const F=$('#docForm'); if(!F) return;
+  $('#docLabel').innerHTML=DOC_LABELS.map(l=>`<option>${l}</option>`).join('');
+  $('#docLabel').onchange=()=>{ $('#docTitle').hidden=$('#docLabel').value!=='Otro'; };
+  F.onsubmit=e=>{ e.preventDefault(); const f=$('#docFile').files[0], msg=$('#docMsg'); msg.textContent='';
+    if(!f){ msg.textContent='Elige un archivo.'; return; }
+    if(f.size>DOC_MAX){ msg.textContent=`Ocupa ${kb(f.size)}; el máximo es 15 MB.`; return; }
+    if(!/^(application\/pdf|image\/)/.test(f.type)){ msg.textContent='Solo PDF o fotos.'; return; }
+    const label=$('#docLabel').value, title=label==='Otro'?$('#docTitle').value.trim():'';
+    docPut({id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),label,title,name:f.name,type:f.type,size:f.size,added:Date.now(),blob:f})
+      .then(()=>{ F.reset(); $('#docTitle').hidden=true; msg.textContent='Guardado en este móvil ✓'; renderDocs();
+        if(navigator.storage&&navigator.storage.persist) navigator.storage.persist().catch(()=>{}); })
+      .catch(()=>{ msg.textContent='No se ha podido guardar. ¿Queda espacio en el móvil?'; }); };
+  $('#docViewX').onclick=()=>{ $('#docView').hidden=true; URL.revokeObjectURL($('#docViewImg').src); $('#docViewImg').removeAttribute('src'); };
+  renderDocs();
+}
+
 /* ---------- Mis listas ---------- */
 const LIST_IDEAS = ["Regalos","Maleta","Encargos","Restaurantes","Para comprar"];
 function listsGet(){ try{ return JSON.parse(localStorage.getItem('slk-lists')||'[]'); }catch(e){ return []; } }
@@ -1581,7 +1663,7 @@ function route(){
   window.scrollTo(0,0);
   if(jumpTo) setTimeout(()=>{ const el=document.getElementById(jumpTo); el && el.scrollIntoView({block:'start'}); },30);
 }
-renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); initExtra(); initOffline();
+renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); initDocs(); initExtra(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
