@@ -372,6 +372,32 @@ h3{font-size:1.15rem}
 .dvbar button{border:0;background:#fff;color:var(--ink);font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer}
 .docview img{flex:1;min-height:0;object-fit:contain;width:100%;touch-action:pinch-zoom}
 .inc{margin:10px 14px 0;font-size:.88rem;background:var(--card);border-radius:12px;padding:9px 12px;box-shadow:var(--shadow)}
+
+.tday{margin:14px 14px 0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px}
+.tnums{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 12px}
+.tnums div{background:var(--paper2);border-radius:10px;padding:7px 6px;text-align:center}
+.tnums b{display:block;font-size:.86rem;line-height:1.2}
+.tnums span{display:block;font-size:.66rem;color:var(--muted);line-height:1.2;margin-top:2px}
+.tbar{position:relative;height:22px;border-radius:6px;background:#f3efe6;overflow:hidden}
+.tbar i{position:absolute;top:3px;bottom:3px;border-radius:3px}
+.tbar i.hb,.tsegs i.hb{background:repeating-linear-gradient(45deg,#1f4d3f33 0 4px,#1f4d3f14 4px 8px)}
+.tbar b.nt{position:absolute;top:0;bottom:0;background:#1f2b2633}
+.tscale{position:relative;height:14px;font-size:.64rem;color:var(--muted);margin:2px 0 8px}
+.tscale span{position:absolute;transform:translateX(-50%)}
+.tsum td small{display:block;color:var(--muted);font-size:.68rem;font-weight:600}
+.tsegs{list-style:none;padding:0;margin:0;font-size:.84rem}
+.tsegs li{display:flex;align-items:center;gap:8px;padding:3px 0}
+.tsegs time{flex:0 0 74px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.78rem}
+.tsegs i{flex:0 0 10px;height:10px;border-radius:3px}
+.tedit{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:10px}
+.tedit label{font-size:.74rem;font-weight:700;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.tedit input{font:600 .9rem var(--sans);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.tedit button{border:0;background:var(--paper2);color:var(--jungle);font-weight:700;border-radius:999px;padding:8px 12px;cursor:pointer;font-size:.8rem}
+.tsumbox{margin:10px 14px 0;background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:10px 14px}
+.tsumbox summary{font-weight:700;cursor:pointer;font-size:.92rem}
+table.tsum{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:8px}
+.tsum th{text-align:left;color:var(--muted);font-weight:700;font-size:.7rem;padding:4px 3px;border-bottom:1px solid var(--line)}
+.tsum td{padding:6px 3px;border-bottom:1px dashed var(--line);cursor:pointer;white-space:nowrap}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -446,6 +472,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 <!-- DÍAS -->
 <section class="view" id="v-dias">
   <div class="chips" id="chips"></div>
+  <details class="tsumbox"><summary>⏱ Tiempo de cada día: resumen</summary><div id="tsumBody"></div></details>
   <div id="day"></div>
 </section>
 
@@ -1085,6 +1112,7 @@ function renderDay(dn){
    <div class="daytitle"><span class="eyebrow">${x.route}</span><h2>${x.title}</h2></div>
    <div class="facts">${x.drive?`<span class="fact">🚐 ${x.drive}</span>`:''}<span class="fact">🍽 ${x.meals}</span>${h?`<span class="fact">🛏 ${h.city}</span>`:''}${WX_LOC[x.d]?`<span class="fact" id="dwx">🌡 Tiempo…</span>`:''}${WX_LOC[x.d]?(s=>`<span class="fact">🌅 ${s.rise} · 🌇 ${s.set}</span>`)(sunFor(x.d)):''}</div>
    <p class="lead">${x.lead}</p>
+   ${tCard(x.d)}
    <div class="wear"><span class="mk">👕 Qué ponerse</span><p>${wearHint(x.d)}</p><a href="#checklist" data-ropa>Lista de ropa ›</a></div>
    ${INC[x.d]?`<p class="inc">🎟 <b>Incluido:</b> ${INC[x.d]}</p>`:''}
    ${x.note?`<div class="note">${x.note}</div>`:''}
@@ -1096,6 +1124,7 @@ function renderDay(dn){
    ${h?`<div class="hotelbox"><div style="flex:1"><span class="k">${x.hotel==='earls'?'Para refrescarse':'Dormimos en'}</span><b>${h.n}</b><span class="small">${'★'.repeat(h.st)} · ${h.room}</span></div><div style="display:flex;flex-direction:column;gap:6px;text-align:right"><a href="tel:${h.tel.replace(/[^+\d]/g,'')}">Llamar ›</a><a href="${h.web}" target="_blank" rel="noopener">${h.webLabel?'Reseña':'Web'} ›</a><a href="${gm(h.q)}" target="_blank" rel="noopener">Mapa ›</a></div></div>`:''}
    <div class="daynav"><button ${i===0?'disabled':''} data-go="${i>0?DAYS[i-1].d:''}">‹ ${i>0?DAYS[i-1].wd+' '+DAYS[i-1].d:''}</button><button ${i===DAYS.length-1?'disabled':''} data-go="${i<DAYS.length-1?DAYS[i+1].d:''}">${i<DAYS.length-1?DAYS[i+1].wd+' '+DAYS[i+1].d:''} ›</button></div>`;
   if(WX_LOC[dn]) wxFor(dn).then(w=>{ const el=$('#dwx'); if(el && lastDay===dn) el.textContent = wxText(w).replace(/^([^ ]+) [^:]+: /,'$1 '); });
+  tBind(dn);
   const rl=$('#day [data-ropa]'); if(rl) rl.onclick=e=>{ e.preventDefault(); go('checklist'); setTimeout(()=>{ const r=$('#ropa'); r&&r.scrollIntoView({behavior:'smooth'}); },350); };
   $('#day').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ if(b.dataset.go) go('dia-'+pad2(+b.dataset.go)); });
 }
@@ -1499,6 +1528,76 @@ function initDocs(){
   renderDocs();
 }
 
+/* ---------- Tiempo efectivo de cada día (estimación) ----------
+   k: car = carretera/traslado · vis = visita · tren · com = comida · des = descanso · lib = tiempo libre
+   m: [mín, máx] en minutos. El último tramo termina en el hotel de esa noche. */
+const TPLAN = {
+ 6:{start:"05:50",startLbl:"Aterrizaje",seg:[["des","Inmigración, maletas y recogida",60,90],["car","Traslado a Negombo",30,40],["des","Descanso y desayuno en el Earl's Regent",180,240],["car","Carretera a Anuradhapura",225,270]]},
+ 7:{start:"08:00",seg:[["vis","Ciudad sagrada de Anuradhapura",180,240],["com","Comida",45,60],["car","Carretera a Dambulla",90,110],["vis","Templo de las Cuevas (con la subida)",90,120],["car","Al hotel",10,20]]},
+ 8:{start:"08:00",seg:[["car","A Sigiriya",30,40],["vis","Roca de Sigiriya",150,180],["com","Comida",45,60],["car","Carretera a Polonnaruwa",90,100],["vis","Polonnaruwa",120,150],["car","Vuelta a Dambulla",75,90]]},
+ 9:{start:"08:00",seg:[["car","Carretera a Matale",75,90],["vis","Jardín de especias",45,60],["car","Carretera a Kandy",65,90],["vis","Jardín Botánico de Peradeniya",90,120],["com","Comida",45,60],["vis","Danzas kandyanas",60,60,"17:00"],["vis","Templo del Diente (ceremonia de las 18:30)",60,75],["car","Al hotel",10,20]],note:"Las danzas suelen ser a las 17:00 y el Templo del Diente se visita al anochecer, con la ceremonia de las 18:30. Si el guía lo organiza así, el hueco antes de las danzas se puede pasar en el hotel."},
+ 10:{start:"08:30",seg:[["car","Carretera a Ramboda",110,130],["vis","Cascadas y templo de Hanuman",45,60],["com","Comida",45,60],["car","Carretera a Nuwara Eliya",60,75],["vis","Fábrica de té",60,60],["lib","Lago Gregory",60,90],["car","Al hotel (Kandapola)",30,40]]},
+ 11:{start:"08:30",seg:[["car","A la estación de Nanu Oya",40,50],["des","Espera en la estación",30,60],["tren","Tren a Ella",150,180],["car","De la estación al hotel",10,20]],note:"La hora del tren no la sabemos: ajusta la salida cuando os la diga el guía."},
+ 12:{start:"08:00",seg:[["vis","Little Adam's Peak, ida y vuelta",120,150],["vis","Puente de los Nueve Arcos",120,150],["com","Comida en Ella",60,90]],note:"Día libre: el plan es orientativo."},
+ 13:{start:"08:00",seg:[["car","Carretera a Negombo",300,330],["com","Parada para comer",45,60]],note:"Quien vuela a Múnich no hace este día con el grupo."}
+};
+const TK = {car:["Carretera","#c9a46a"],tren:["Tren","#7a9bb5"],vis:["Visitas","#2f6b55"],lib:["Tiempo libre","#7fae8f"],com:["Comida","#e3c98f"],des:["Esperas y descanso","#cfc6b4"]};
+const hm2m = s => { const [h,m]=s.split(':').map(Number); return h*60+m; };
+const m2hm = m => `${pad2(Math.floor(m/60)%24)}:${pad2(Math.round(m%60))}`;
+const hrs0 = m => (Math.round(m/30)/2).toString().replace('.',',');
+const hrs = m => hrs0(m)+' h';
+const hrr = (a,b) => hrs0(a)===hrs0(b)?hrs(a):`${hrs0(a)}–${hrs0(b)} h`;
+const r5 = m => Math.round(m/5)*5;
+function tGet(){ try{ return JSON.parse(localStorage.getItem('slk-times')||'{}'); }catch(e){ return {}; } }
+function tSet(o){ try{ localStorage.setItem('slk-times',JSON.stringify(o)); }catch(e){} }
+function tCalc(d){
+  const P=TPLAN[d]; if(!P) return null;
+  const st=tGet(), start=hm2m(st['s'+d]||P.start), bed=hm2m(st.bed||"23:00");
+  let lo=start, hi=start, md=start; const sum={}, rows=[];
+  const put=(k,n,a,b)=>{ rows.push({k,n,lo,hi,md,dur:(a+b)/2}); lo+=a; hi+=b; md+=(a+b)/2; sum[k]=sum[k]||[0,0]; sum[k][0]+=a; sum[k][1]+=b; };
+  P.seg.forEach(([k,n,a,b,fix])=>{
+    if(fix){ const f=hm2m(fix); if(lo<f){ const g=[f-lo, Math.max(0,f-hi), f-md]; rows.push({k:'lib',n:'Tiempo libre (o descanso en el hotel)',lo,hi,md,dur:g[2]}); sum.lib=sum.lib||[0,0]; sum.lib[0]+=g[1]; sum.lib[1]+=g[0]; lo=f; hi=Math.max(hi,f); md=Math.max(md,f); } }
+    put(k,n,a,b); });
+  const z=k=>sum[k]||[0,0];
+  const zona=['vis','lib','tren','com'].reduce((s,k)=>[s[0]+z(k)[0],s[1]+z(k)[1]],[0,0]);
+  return {P,start,bed,arr:[lo,hi],md,rows,car:z('car'),zona,hotel:[Math.max(0,bed-hi),Math.max(0,bed-lo)]};
+}
+const rng = (a,b,f) => f(a)===f(b)?f(a):`${f(a)}–${f(b)}`;
+function tCard(d){
+  const c=tCalc(d); if(!c) return '';
+  const T0=5*60, T1=23*60, W=T1-T0, pct=m=>(Math.max(0,Math.min(W,m-T0))/W*100).toFixed(2)+'%';
+  const bars=c.rows.map(r=>`<i style="left:${pct(r.md)};width:${(r.dur/W*100).toFixed(2)}%;background:${TK[r.k][1]}"></i>`).join('');
+  const hotelB=`<i class="hb" style="left:${pct(c.md)};right:${(100-(c.bed-T0)/W*100).toFixed(2)}%"></i>`;
+  const sun=sunFor(d), sr=sun?hm2m(sun.rise):null, ss=sun?hm2m(sun.set):null;
+  const night=sun?`<b class="nt" style="left:0;width:${pct(sr)}"></b><b class="nt" style="left:${pct(ss)};right:0"></b>`:'';
+  const scale=[6,9,12,15,18,21].map(h=>`<span style="left:${pct(h*60)}">${pad2(h)}</span>`).join('');
+  const st=tGet();
+  return `<div class="tday" id="tday">
+    <span class="mk">⏱ Tu día, más o menos</span>
+    <div class="tnums"><div><b>${rng(c.arr[0],c.arr[1],m2hm)}</b><span>llegada al hotel</span></div><div><b>${hrr(c.zona[0],c.zona[1])}</b><span>en la zona</span></div><div><b>${hrr(c.car[0],c.car[1])}</b><span>carretera</span></div><div><b>${hrr(c.hotel[0],c.hotel[1])}</b><span>en el hotel despierto</span></div></div>
+    <div class="tbar">${night}${bars}${hotelB}</div>
+    <div class="tscale">${scale}</div>
+    <ul class="tsegs">${c.rows.map(r=>`<li><time>≈ ${m2hm(r5(r.md))}</time><i style="background:${TK[r.k][1]}"></i>${r.n}</li>`).join('')}<li><time>${rng(c.arr[0],c.arr[1],m2hm)}</time><i class="hb"></i>Hotel: tiempo libre, cena (19:30) y a dormir</li></ul>
+    <p class="small muted" style="margin:6px 0 0">La zona sombreada de la barra es de noche. Las horas con ≈ son el punto medio de la estimación.</p>
+    ${c.P.note?`<p class="small muted" style="margin:4px 0 0">${c.P.note}</p>`:''}
+    <div class="tedit"><label>${c.P.startLbl||'Salida del hotel'} <input type="time" id="tStart" value="${st['s'+d]||c.P.start}"></label><label>A dormir <input type="time" id="tBed" value="${st.bed||'23:00'}"></label>${st['s'+d]||st.bed?`<button type="button" id="tReset">Volver a lo previsto</button>`:''}</div>
+    <p class="small muted" style="margin:6px 0 0">Estimación con los tiempos de carretera de la agencia y duraciones habituales de cada visita. Las horas reales las marca el guía: cambia la hora de salida y se recalcula todo.</p>
+  </div>`;
+}
+function tBind(d){
+  const s=$('#tStart'); if(!s) return;
+  const redo=()=>{ const el=$('#tday'); el.outerHTML=tCard(d); tBind(d); renderTSum(); };
+  s.onchange=()=>{ const o=tGet(); o['s'+d]=s.value; tSet(o); redo(); };
+  $('#tBed').onchange=()=>{ const o=tGet(); o.bed=$('#tBed').value; tSet(o); redo(); };
+  const r=$('#tReset'); if(r) r.onclick=()=>{ const o=tGet(); delete o['s'+d]; delete o.bed; tSet(o); redo(); };
+}
+function renderTSum(){
+  const el=$('#tsumBody'); if(!el) return;
+  el.innerHTML=`<table class="tsum"><tr><th>Día</th><th>Llegada</th><th>Zona</th><th>Coche</th><th>Hotel*</th></tr>${Object.keys(TPLAN).map(Number).map(d=>{ const c=tCalc(d);
+    return `<tr data-d="${d}"><td><b>${d}</b><small>${WX_LOC[d][0]}</small></td><td>${rng(c.arr[0],c.arr[1],m2hm)}</td><td>${hrr(c.zona[0],c.zona[1])}</td><td>${hrr(c.car[0],c.car[1])}</td><td><b>${hrr(c.hotel[0],c.hotel[1])}</b></td></tr>`; }).join('')}</table>
+    <p class="small muted" style="margin:6px 0 0">* Horas despierto en el hotel, cena incluida. Toca un día para verlo.</p>`;
+  el.querySelectorAll('tr[data-d]').forEach(tr=>tr.onclick=()=>go('dia-'+pad2(+tr.dataset.d)));
+}
 /* ---------- Mis listas ---------- */
 const LIST_IDEAS = ["Regalos","Maleta","Encargos","Restaurantes","Para comprar"];
 function listsGet(){ try{ return JSON.parse(localStorage.getItem('slk-lists')||'[]'); }catch(e){ return []; } }
@@ -1695,7 +1794,7 @@ function route(){
   window.scrollTo(0,0);
   if(jumpTo) setTimeout(()=>{ const el=document.getElementById(jumpTo); el && el.scrollIntoView({block:'start'}); },30);
 }
-renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); initDocs(); initExtra(); initOffline();
+renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); renderTSum(); initDocs(); initExtra(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
