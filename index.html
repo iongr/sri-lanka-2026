@@ -398,6 +398,15 @@ h3{font-size:1.15rem}
 table.tsum{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:8px}
 .tsum th{text-align:left;color:var(--muted);font-weight:700;font-size:.7rem;padding:4px 3px;border-bottom:1px solid var(--line)}
 .tsum td{padding:6px 3px;border-bottom:1px dashed var(--line);cursor:pointer;white-space:nowrap}
+
+.pend-card{margin:12px 14px 0;background:#fff4e0;border:1px solid #f0d9a8;border-radius:14px;padding:10px 14px}
+.pend-card summary{display:flex;gap:8px;align-items:center;cursor:pointer;font-size:.92rem}
+.pdot{background:#c98a1b;color:#fff;border-radius:999px;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800}
+.pendl{margin:10px 0 10px;padding-left:20px}
+.pendl li{margin:0 0 8px}
+.pendl a{text-decoration:none;color:inherit;display:block}
+.pendl b{display:block;font-size:.88rem}
+.pendl span{display:block;font-size:.8rem;color:var(--muted)}
 /* tabbar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
 .tabbar nav{max-width:760px;margin:0 auto;display:flex}
@@ -431,6 +440,7 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
     <div style="flex:1"><span class="eyebrow">Antes de salir</span><b id="ckCountH" style="display:block"></b><span class="small muted" id="ckNextH"></span></div>
     <span class="chev">›</span>
   </a>
+  <div class="pend-card" id="pendCard"></div>
   <div class="clocks" id="clocks"></div>
   <button class="sharebtn" id="shareBtn" type="button">📤 Compartir la app con el grupo</button>
   <div class="sharebox" id="shareBox" hidden>
@@ -634,20 +644,26 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
 
 
   <nav class="jump" aria-label="Secciones">
-    <a href="#" data-j="t-ct">Contactos</a><a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
+    <a href="#" data-j="t-ct">Contactos</a><a href="#" data-j="t-conv">Rupias</a><a href="#" data-j="t-sos">Emergencias</a><a href="#" data-j="t-seg">Seguro</a><a href="#" data-j="t-wx">Tiempo</a><a href="#" data-j="t-tip">Propinas</a><a href="#" data-j="t-fr">Frases</a><a href="#" data-j="t-food">Comida</a>
   </nav>
 
   <div class="card" id="t-ct">
     <h3>Contactos del viaje</h3>
     <h4>Agencia</h4>
     <ul class="ctl"><li><span><b>Norakai Travel</b><small>Donostia · info@norakai.com</small></span><a class="tel" href="tel:+34628263259">+34 628 263 259</a></li></ul>
+    <h4>Seguro de viaje (ARAG · 24 h)</h4>
+    <ul class="ctl">
+      <li><span><b>Asistencia desde el extranjero</b><small>Antes de ir a un hospital, si se puede</small></span><a class="tel" href="tel:+34910001949">+34 91 000 19 49</a></li>
+      <li><span><b>Asistencia por WhatsApp</b><small>Útil con wifi del hotel</small></span><a class="tel" href="https://wa.me/34666142601" target="_blank" rel="noopener">+34 666 14 26 01</a></li>
+    </ul>
+    <p class="small muted" style="margin:4px 0 0">Os pedirán nombre, número de póliza, dónde estáis y qué pasa. El número de póliza está en el certificado: guardadlo en Docs y apuntadlo abajo. <a href="#" data-j="t-seg">Qué cubre ›</a></p>
     <h4>En Sri Lanka</h4>
     <ul class="ctl">
       <li><span><b>Sohan, guía de habla hispana</b><small>Os acompaña todo el circuito</small></span><a class="tel" href="tel:+94715567211">+94 71 556 7211</a></li>
       <li><span><b>NKAR Travels · emergencias</b><small>Agencia local que organiza el circuito</small></span><a class="tel" href="tel:+94770113773">+94 77 011 3773</a></li>
       <li><span><b>NKAR Travels · oficina</b><small>Colombo · tours@nkartravelhouse.com</small></span><a class="tel" href="tel:+94112564584">+94 11 256 4584</a></li>
     </ul>
-    <h4>Conductor y enlaces del grupo</h4>
+    <h4>Póliza, conductor y enlaces del grupo</h4>
     <p class="small muted" style="margin:2px 0 4px">Rellénalo cuando os los den. Se guarda solo en este móvil.</p>
     <ul class="ctl" id="ctMine"></ul>
     <h4>Hoteles</h4>
@@ -668,6 +684,33 @@ footer{padding:26px 18px 10px;font-size:.76rem;color:var(--muted);text-align:cen
       <div style="display:flex;gap:8px;align-items:center;margin-top:8px">1 € = <input id="cvRate" type="number" inputmode="decimal" step="any" style="width:110px"> Rs <button class="lk" id="cvReset" type="button" style="border:0;cursor:pointer">Usar el automático</button></div>
       <p class="muted" style="margin:6px 0 0">Útil para poner el cambio real que os den en la casa de cambio o el cajero.</p>
     </details>
+  </div>
+
+  <div class="card" id="t-seg">
+    <h3>Seguro de viaje: qué cubre</h3>
+    <p class="small" style="margin:4px 0 8px">«TOP con anulación» de ARAG, contratado por Norakai. Lo más útil para este viaje:</p>
+    <ul class="small">
+      <li><b>Médicos en el extranjero:</b> hasta 2.000.000 €. Dentista, 200 €.</li>
+      <li><b>Enfermedad previa o crónica:</b> solo urgencias vitales, hasta 50.000 €.</li>
+      <li><b>Repatriación y traslado sanitario:</b> sin límite.</li>
+      <li><b>Maleta perdida o dañada:</b> hasta 3.000 €. Si tarda en llegar, 200 € para comprar lo básico.</li>
+      <li><b>Retraso del vuelo:</b> 100 € cada 6 h, hasta 1.000 €. <b>Conexión perdida</b> (por ejemplo, en Estambul): hasta 700 €.</li>
+      <li><b>Pasaporte perdido o robado:</b> 250 €.</li>
+      <li><b>Interrupción del viaje:</b> hasta 3.000 €.</li>
+    </ul>
+    <h4>Lo que no cubre</h4>
+    <ul class="small">
+      <li>Lesiones haciendo <b>senderismo o trekking</b>: la póliza lo excluye de forma expresa. Pendiente de confirmar si Little Adam's Peak o Ella Rock cuentan como tal.</li>
+      <li>Problemas causados por el alcohol.</li>
+      <li>Gastos médicos de menos de 9 €.</li>
+    </ul>
+    <h4>Cómo actuar</h4>
+    <ul class="small">
+      <li>Llamad primero a la central (+34 91 000 19 49) si se puede: os dicen a qué centro ir y suelen pagar directamente.</li>
+      <li>Si pagáis vosotros, guardad informes y facturas. Los reembolsos se piden a <a href="mailto:siniestros.i4t@arag.es">siniestros.i4t@arag.es</a>.</li>
+      <li>Retrasos y maletas: pedid a la aerolínea el justificante (o el parte de equipaje, PIR) antes de salir del aeropuerto.</li>
+    </ul>
+    <p class="small muted" style="margin:6px 0 0">Resumen del certificado. Lo que vale es la póliza: guardad el PDF en Docs.</p>
   </div>
 
   <div class="card" id="t-sos">
@@ -1598,6 +1641,25 @@ function renderTSum(){
     <p class="small muted" style="margin:6px 0 0">* Horas despierto en el hotel, cena incluida. Toca un día para verlo.</p>`;
   el.querySelectorAll('tr[data-d]').forEach(tr=>tr.onclick=()=>go('dia-'+pad2(+tr.dataset.d)));
 }
+/* ---------- Pendiente de confirmar con Norakai ---------- */
+const PEND = [
+ ["Vuelta Estambul–Bilbao","El documento da dos opciones: 14/12 a las 08:40 (sale antes de llegar de Colombo) o 15/12 a las 08:30. ¿Cuál es la buena? Si es el 15, ¿dónde se duerme en Estambul?","vuelos"],
+ ["Traslado del grupo de Múnich","Su vuelo sale el 13/12 a las 09:25 desde Colombo. Según el voucher no duermen en Ella la noche del 12: ¿cuándo salen de Ella y dónde duermen?","dia-12"],
+ ["Seguro: 8 asegurados","El certificado de ARAG cubre a 8 personas y el grupo es de 10. ¿Tienen seguro los otros dos?","info"],
+ ["Seguro y senderismo","La póliza excluye lesiones por senderismo o trekking. ¿Cuenta Little Adam's Peak, que está en el programa?","info"],
+ ["Hora del tren Nanu Oya–Ella","Para el día 11. Tipo de billete (clase reservada) y hora de salida.","dia-11"],
+ ["Horarios de salida cada día","Sobre todo el 8 (Sigiriya) y el 9 (Kandy: danzas y Templo del Diente por la tarde).","dia-09"],
+ ["Recogida el 14/12","Hay que estar en el aeropuerto a las 04:25. ¿A qué hora recogen en el hotel? Estimado: 03:45.","dia-14"]
+];
+function renderPend(){
+  const el=$('#pendCard'); if(!el) return;
+  el.innerHTML=`<details><summary><span class="pdot">${PEND.length}</span><b>Pendiente de confirmar con Norakai</b></summary>
+    <ol class="pendl">${PEND.map(([t,d,g])=>`<li><a href="#${g}"><b>${t}</b><span>${d}</span></a></li>`).join('')}</ol>
+    <button type="button" class="rbtn2" id="pendCopy">📋 Copiar las preguntas para enviarlas</button> <span class="small muted" id="pendMsg"></span></details>`;
+  $('#pendCopy').onclick=()=>{ const txt='Hola, unas dudas del viaje a Sri Lanka (5–14 dic):\n\n'+PEND.map(([t,d],i)=>`${i+1}. ${t}: ${d}`).join('\n')+'\n\nGracias.';
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>{ $('#pendMsg').textContent='Copiado ✓'; }).catch(()=>{ $('#pendMsg').textContent='No se ha podido copiar'; }); };
+}
+
 /* ---------- Mis listas ---------- */
 const LIST_IDEAS = ["Regalos","Maleta","Encargos","Restaurantes","Para comprar"];
 function listsGet(){ try{ return JSON.parse(localStorage.getItem('slk-lists')||'[]'); }catch(e){ return []; } }
@@ -1716,7 +1778,7 @@ function initShare(){
 }
 
 /* ---------- Contactos ---------- */
-const MYC_SLOTS = [["cond","Conductor","tel"],["wa","Grupo de WhatsApp","url"],["album","Álbum de fotos compartido","url"]];
+const MYC_SLOTS = [["poliza","Nº de póliza del seguro","text"],["cond","Conductor","tel"],["wa","Grupo de WhatsApp","url"],["album","Álbum de fotos compartido","url"]];
 function mycGet(){ try{ return JSON.parse(localStorage.getItem('slk-myc')||'{}'); }catch(e){ return {}; } }
 function renderContacts(){
   const telLink = t => `<a class="tel" href="tel:${t.replace(/[^+\d]/g,'')}">${t}</a>`;
@@ -1725,9 +1787,9 @@ function renderContacts(){
   const c=mycGet();
   $('#ctMine').innerHTML = MYC_SLOTS.map(([k,label,type])=>{
     const v=c[k]||'';
-    const shown = v ? (type==='tel' ? telLink(v) : `<a class="tel" href="${esc(v)}" target="_blank" rel="noopener">Abrir ↗</a>`) : '';
+    const shown = !v||type==='text' ? '' : (type==='tel' ? telLink(v) : `<a class="tel" href="${esc(v)}" target="_blank" rel="noopener">Abrir ↗</a>`);
     return `<li class="myc" data-k="${k}"><span><b>${label}</b><small>${v?esc(v):'Sin rellenar'}</small></span>${shown}<button type="button" class="edit">${v?'Editar':'Añadir'}</button>
-      <form class="mycf" hidden><input type="${type==='tel'?'tel':'url'}" ${type==='tel'?'inputmode="tel" placeholder="+94 …"':'placeholder="https://…"'} value="${esc(v)}"><button type="submit">Guardar</button></form></li>`;
+      <form class="mycf" hidden><input type="${type==='tel'?'tel':type==='text'?'text':'url'}" ${type==='tel'?'inputmode="tel" placeholder="+94 …"':type==='text'?'placeholder="Está en el certificado del seguro"':'placeholder="https://…"'} value="${esc(v)}"><button type="submit">Guardar</button></form></li>`;
   }).join('');
   $('#ctMine').querySelectorAll('.myc').forEach(li=>{
     const f=li.querySelector('form'), k=li.dataset.k;
@@ -1794,7 +1856,7 @@ function route(){
   window.scrollTo(0,0);
   if(jumpTo) setTimeout(()=>{ const el=document.getElementById(jumpTo); el && el.scrollIntoView({block:'start'}); },30);
 }
-renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); renderTSum(); initDocs(); initExtra(); initOffline();
+renderHome(); renderFlights(); renderHotels(); renderCheck(); $('#ckHome').hidden=false; ckPaintSummary(); initTools(); renderShopRoute(); initBuys(); initLists(); renderRopa(); renderTSum(); renderPend(); initDocs(); initExtra(); initOffline();
 window.addEventListener('hashchange', route);
 route();
 </script>
